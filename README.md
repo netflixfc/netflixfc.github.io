@@ -1,5 +1,5 @@
-## Hi there 👋
-
+## 👋NETFLIX Fanclub
+NETFLIX Fanclub (netflixfc) ไม่ใช่ Netflix อย่างเป็นทางการ เป็นเพียงผู้ใช้เเละชื่นชอบ Netflix สำหรับพูดคุย แลกเปลี่ยน เกี่ยวกับหนังซีรีย์ 
 <!--
 **netflixfc/netflixfc** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 

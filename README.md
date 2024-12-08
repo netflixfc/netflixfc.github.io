@@ -1,6 +1,8 @@
   <div class="image-container">
     <a href="https://github.com/pripramot/i-studio">
-      <p><img loading="lazy" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1709320098585/ad7c1903-a3fb-4d9b-8408-dcba8d278bbf.png?auto=compress,format&amp;format=webp" alt="" class="image--center mx-auto"></p>
+      <p align="center">
+   <img src="/Ss6405.png" width="100" height="100" alt="Ss6405-logo">
+</p>
     </a>
   </div>
 

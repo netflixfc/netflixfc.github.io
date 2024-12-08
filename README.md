@@ -42,7 +42,7 @@ https://mtify.hashnode.dev/
     <img loading="lazy" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1707950458022/9df4518d-5965-4179-8ea0-709300f11721.png?auto=compress,format&amp;format=webp" alt="" class="image--center mx-auto">
   </a>
 -->
-### support/จ้างงาน FRONT END , BACK END: สนับสนุนทุนการศึกษา/ชานมเย็นสักแก้ว
+### support
 ```bash
 
 

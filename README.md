@@ -1,7 +1,7 @@
   <div class="image-container">
     <a href="https://github.com/pripramot/i-studio">
       <p align="center">
-   <img src="/Ss6405.png" width="100" height="100" alt="Ss6405-logo">
+   <img src="/netflix_2.png" width="100" height="100" alt="netflix-logo">
 </p>
     </a>
   </div>

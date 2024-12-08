@@ -1,5 +1,5 @@
 ## 👋Netflix and chill
-Netflix and chill (netflixfc) ไม่ใช่ Netflix อย่างเป็นทางการ เป็นเพียงผู้ใช้เเละชื่นชอบ Netflix
+
 <!--
 **netflixfc/netflixfc** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 

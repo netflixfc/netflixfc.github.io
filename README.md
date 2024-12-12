@@ -1,11 +1,9 @@
+<p
   <div class="image-container">
     <a href="https://github.com/pripramot/i-studio">
       <p align="center">
    <img src="/netflix_2.png" width="100" height="100" alt="netflix-logo">
-</p>
-    </a>
   </div>
-
   <h4 align="center">
     <a href="https://mtify.hashnode.dev/">Get Started</a> |
     <a href="https://github.com/ai-jiraphinya/ai-jiraphinya/wiki">Docs</a> |

@@ -23,6 +23,53 @@
   </a>
 </div>
 
+## ⚙️ หลักสูตรที่จะเปิดให้เรียนฟรีเร็ว ๆ นี้ (Coming Soon)
+![pending](https://skillicons.dev/icons?i=angular,bun,blender,docker,fastapi,kubernetes,lua,nestjs,nginx,prisma,r,supabase,vscode)
+
+<h2>👋 Netflix Chill</h2>
+<div id="youtube">
+  <a href="https://www.youtube.com/">
+    <img src="./image/xzxz.png" alt="Youtube Badge" width="120"/>
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://www.youtube.com/">
+    <img src="./image/wag2.png" alt="Youtube Badge" width="120"/>
+  </a>
+  <br>
+  <a href="https://www.youtube.com/">
+  <img src="https://img.shields.io/youtube/channel/subscribers/UCQ1r_4x-P-fETLIU4pqf98w" width="120"/>
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://www.youtube.com/">
+  <img src="https://img.shields.io/youtube/channel/subscribers/UCB6eDEzpqpiaZnDMzoje57Q" width="120"/>
+  </a>
+  
+</div>
+<hr>
+<div id="badges" align="center">
+  <a href="https://www.facebook.com/Sparesos/" target="_blank">
+    <img src="https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white"/>
+  </a>
+  <a href="https://www.youtube.com/" target="_blank">
+    <img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white"/>
+  </a>
+  
+  <br>
+ 
+</div>
+
+
+
+
+## :Sparesos: Contact
+
+Your Name - [@Sparesos](https://twitter.com/Sparesos) - xxx@gmail.com
+
+<br />
+
+<div align="center">ตั้มมันร้าย!!!⭐️</div>
+
+
 ## โครงสร้าง JSON ง่ายๆ ที่สร้างขึ้นตามตัวอย่าง XML 
 <details>
 <summary>short-form.🔽</summary>
@@ -244,7 +291,8 @@ Here are some ideas to get you started:
 <br />
 
 <!-- Table of Contents -->
-
+<details>
+<summary>short-form.🔽</summary>
 
 - แนวทางการเรียนรู้การพัฒนาเว็บแอพพลิเคชั่น (Web Development) [อ่านบทความ](#)
 - แนวทางการเรียนรู้สำหรับผู้เริ่มต้นพัฒนาเกม (Game Development) [อ่านบทความ](#)
@@ -265,49 +313,6 @@ Here are some ideas to get you started:
 - หลักสูตรการเขียนโปรแกรมเชิงวัตถุ (Object Oriented Programming) [เข้าเรียน](#)
 - หลักสูตรการพัฒนาเว็บแอพพลิเคชั่นด้วยภาษา PHP & Framework [เข้าเรียน](#)
 - หลักสูตรการจัดการฐานข้อมูล (Database SQL & NOSQL) [เข้าเรียน](#)
-
-## ⚙️ หลักสูตรที่จะเปิดให้เรียนฟรีเร็ว ๆ นี้ (Coming Soon)
-![pending](https://skillicons.dev/icons?i=angular,bun,blender,docker,fastapi,kubernetes,lua,nestjs,nginx,prisma,r,supabase,vscode)
-
-<h2>👋 Netflix Chill</h2>
-<div id="youtube">
-  <a href="https://www.youtube.com/">
-    <img src="./image/xzxz.png" alt="Youtube Badge" width="120"/>
-  </a>
-  &nbsp;&nbsp;
-  <a href="https://www.youtube.com/">
-    <img src="./image/wag2.png" alt="Youtube Badge" width="120"/>
-  </a>
-  <br>
-  <a href="https://www.youtube.com/">
-  <img src="https://img.shields.io/youtube/channel/subscribers/UCQ1r_4x-P-fETLIU4pqf98w" width="120"/>
-  </a>
-  &nbsp;&nbsp;
-  <a href="https://www.youtube.com/">
-  <img src="https://img.shields.io/youtube/channel/subscribers/UCB6eDEzpqpiaZnDMzoje57Q" width="120"/>
-  </a>
+- <details>
   
-</div>
-<hr>
-<div id="badges" align="center">
-  <a href="https://www.facebook.com/Sparesos/" target="_blank">
-    <img src="https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white"/>
-  </a>
-  <a href="https://www.youtube.com/" target="_blank">
-    <img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white"/>
-  </a>
-  
-  <br>
- 
-</div>
 
-
-
-
-## :Sparesos: Contact
-
-Your Name - [@Sparesos](https://twitter.com/Sparesos) - xxx@gmail.com
-
-<br />
-
-<div align="center">ตั้มมันร้าย!!!⭐️</div>

@@ -2,11 +2,7 @@
 
   <img src="https://user-images.githubusercontent.com/99184393/211183762-03b6e9b4-9fcd-4874-a0e4-20cf00537c06.gif" alt="logo" width="400" height="auto" />
 
-  <h1>NETFLIX 2.0 with NEXT.JS!</h1>
-
-  <p>
-NETFLIX Chill
-  </p>
+ <!-- Badges  <h1>NETFLIX!</h1> -->
 
 <!-- Badges -->
 

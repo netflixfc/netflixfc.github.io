@@ -2,16 +2,7 @@
 
   <img src="https://user-images.githubusercontent.com/99184393/211183762-03b6e9b4-9fcd-4874-a0e4-20cf00537c06.gif" alt="logo" width="400" height="auto" />
 
- <!-- Badges  <h1>NETFLIX!</h1> -->
 
-<!-- Badges -->
-
-<a href="#" target="_blank">![](https://img.shields.io/website-up-down-green-red/http/monip.org.svg)</a>
-![](https://img.shields.io/badge/Maintained-Yes-indigo)
-![](https://img.shields.io/github/forks/SashenJayathilaka/NETFLIX-Clone.svg)
-![](https://img.shields.io/github/stars/SashenJayathilaka/NETFLIX-Clone.svg)
-![](https://img.shields.io/github/issues/SashenJayathilaka/NETFLIX-Clone)
-![](https://img.shields.io/github/last-commit/SashenJayathilaka/NETFLIX-Clone)
 
 <h4>
     <a href="#">View Demo</a>
@@ -28,7 +19,7 @@
 
 <!-- Table of Contents -->
 
-## 🎓 บทความยอดนิยมบน [![Medium](#)
+## 🎓 Ok, Coming Soon
 - แนวทางการเรียนรู้การพัฒนาเว็บแอพพลิเคชั่น (Web Development) [อ่านบทความ](#)
 - แนวทางการเรียนรู้สำหรับผู้เริ่มต้นพัฒนาเกม (Game Development) [อ่านบทความ](#)
 - แนวทางการเรียนรู้สำหรับผู้เริ่มต้นพัฒนาแอพบน Android & iOS (Mobile Application) [อ่านบทความ](#)
@@ -52,7 +43,7 @@
 ## ⚙️ หลักสูตรที่จะเปิดให้เรียนฟรีเร็ว ๆ นี้ (Coming Soon)
 ![pending](https://skillicons.dev/icons?i=angular,bun,blender,docker,fastapi,kubernetes,lua,nestjs,nginx,prisma,r,supabase,vscode)
 
-<h2>👋 เรียนเขียนโปรแกรมฟรีผ่านช่อง Youtube ของเรา</h2>
+<h2>👋 Netflix Chill</h2>
 <div id="youtube">
   <a href="https://www.youtube.com/">
     <img src="https://yt3.googleusercontent.com/2eVBbUulBZpKRScD4FPQLIWoDn80C3xirBy9v7ce4rL6qHE3msq-tss64ZTc7ugrsmRRdNa9=s160-c-k-c0x00ffffff-no-rj" alt="Youtube Badge" width="120"/>
@@ -69,6 +60,7 @@
   <a href="https://www.youtube.com/">
   <img src="https://img.shields.io/youtube/channel/subscribers/UCB6eDEzpqpiaZnDMzoje57Q" width="120"/>
   </a>
+  
 </div>
 <hr>
 <div id="badges" align="center">

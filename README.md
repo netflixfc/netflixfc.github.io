@@ -23,16 +23,16 @@
   </a>
 </div>
 
-## ⚙️ หลักสูตรที่จะเปิดให้เรียนฟรีเร็ว ๆ นี้ (Coming Soon)
+## ⚙️ เร็ว ๆ นี้ (Coming Soon)
 ![pending](https://skillicons.dev/icons?i=angular,bun,blender,docker,fastapi,kubernetes,lua,nestjs,nginx,prisma,r,supabase,vscode)
 
 <h2>👋 Netflix Chill</h2>
 <div id="youtube">
-  <a href="https://www.youtube.com/">
+  <a href="https://main.24playerhd.com/index_th.php?id=fb1d8c9ac47d9f2e95dcee40"/>
     <img src="./image/xzxz.png" alt="Youtube Badge" width="120"/>
   </a>
   &nbsp;&nbsp;
-  <a href="https://www.youtube.com/">
+  <a href="https://main.24playerhd.com/index_th.php?id=109779e7d2e8fa11825ccd5e"/>
     <img src="./image/wag2.png" alt="Youtube Badge" width="120"/>
   </a>
   <br>

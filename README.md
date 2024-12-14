@@ -46,11 +46,11 @@
 <h2>👋 Netflix Chill</h2>
 <div id="youtube">
   <a href="https://www.youtube.com/">
-    <img src="https://yt3.googleusercontent.com/2eVBbUulBZpKRScD4FPQLIWoDn80C3xirBy9v7ce4rL6qHE3msq-tss64ZTc7ugrsmRRdNa9=s160-c-k-c0x00ffffff-no-rj" alt="Youtube Badge" width="120"/>
+    <img src="./image/are.png" alt="Youtube Badge" width="120"/>
   </a>
   &nbsp;&nbsp;
   <a href="https://www.youtube.com/">
-    <img src="https://yt3.googleusercontent.com/ytc/AIdro_k_NmcINdh2WOvILC7zrBFAf9R8ymWoiIOlVuefirX96Wg=s160-c-k-c0x00ffffff-no-rj" alt="Youtube Badge" width="120"/>
+    <img src="./image/are.png" alt="Youtube Badge" width="120"/>
   </a>
   <br>
   <a href="https://www.youtube.com/">

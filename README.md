@@ -5,7 +5,7 @@
   <h1>NETFLIX 2.0 with NEXT.JS!</h1>
 
   <p>
-NETFLIX 2.0 with NEXT.JS!(Next.js, NextAuth.js v4, Tailwind CSS, framer-motion, TMDB Api, Google Authentication, primary information about a movies, Users can Add Bookmark in favourite actors and movies)
+NETFLIX Chill
   </p>
 
 <!-- Badges -->

@@ -46,11 +46,11 @@
 <h2>👋 Netflix Chill</h2>
 <div id="youtube">
   <a href="https://www.youtube.com/">
-    <img src="./image/are.png" alt="Youtube Badge" width="120"/>
+    <img src="./image/xzxz.png" alt="Youtube Badge" width="120"/>
   </a>
   &nbsp;&nbsp;
   <a href="https://www.youtube.com/">
-    <img src="./image/are.png" alt="Youtube Badge" width="120"/>
+    <img src="./image/xzxz.png" alt="Youtube Badge" width="120"/>
   </a>
   <br>
   <a href="https://www.youtube.com/">

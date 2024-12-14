@@ -18,13 +18,12 @@
   <a href="https://github.com/ai-jiraphinya">
     <img src="https://img.shields.io/badge/Mint_-Jiraphinya-blue?link=https%3A%2F%2Fgithub.com%2Fai-jiraphinya" alt="Mint_ - Jiraphinya badge">
   </a>
-  <a href="https://github.com/pripramot/pripramot/watchers">
+  <a href="#">
     <img src="https://img.shields.io/github/watchers/pripramot/pripramot" alt="GitHub watchers badge">
   </a>
 </div>
 
-## ⚙️ เร็ว ๆ นี้ (Coming Soon)
-![pending](https://skillicons.dev/icons?i=angular,bun,blender,docker,fastapi,kubernetes,lua,nestjs,nginx,prisma,r,supabase,vscode)
+
 
 <h2>👋 Netflix Chill</h2>
 <div id="youtube">

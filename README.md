@@ -10,7 +10,7 @@ NETFLIX 2.0 with NEXT.JS!(Next.js, NextAuth.js v4, Tailwind CSS, framer-motion, 
 
 <!-- Badges -->
 
-<a href="https://netflix-sclone.netlify.app" target="_blank">![](https://img.shields.io/website-up-down-green-red/http/monip.org.svg)</a>
+<a href="#" target="_blank">![](https://img.shields.io/website-up-down-green-red/http/monip.org.svg)</a>
 ![](https://img.shields.io/badge/Maintained-Yes-indigo)
 ![](https://img.shields.io/github/forks/SashenJayathilaka/NETFLIX-Clone.svg)
 ![](https://img.shields.io/github/stars/SashenJayathilaka/NETFLIX-Clone.svg)
@@ -18,13 +18,13 @@ NETFLIX 2.0 with NEXT.JS!(Next.js, NextAuth.js v4, Tailwind CSS, framer-motion, 
 ![](https://img.shields.io/github/last-commit/SashenJayathilaka/NETFLIX-Clone)
 
 <h4>
-    <a href="https://netflix-sclone.netlify.app">View Demo</a>
+    <a href="#">View Demo</a>
   <span> · </span>
-    <a href="https://github.com/SashenJayathilaka/NETFLIX-Clone/blob/master/README.md">Documentation</a>
+    <a href="#">Documentation</a>
   <span> · </span>
-    <a href="https://github.com/SashenJayathilaka/NETFLIX-Clone/issues">Report Bug</a>
+    <a href="#">Report Bug</a>
   <span> · </span>
-    <a href="https://github.com/SashenJayathilaka/NETFLIX-Clone/issues">Request Feature</a>
+    <a href="#">Request Feature</a>
   </h4>
 </div>
 
@@ -54,7 +54,7 @@ NETFLIX 2.0 with NEXT.JS!(Next.js, NextAuth.js v4, Tailwind CSS, framer-motion, 
 ### :camera: Screenshots
 
 <div align="center">
-<a href="https://netflix-sclone.netlify.app" target="_blank"><img  src='./demo/ezgif-1-2a6c90cdd6.gif' alt='image'/></a>
+<a href="#" target="_blank"><img  src='./demo/ezgif-1-2a6c90cdd6.gif' alt='image'/></a>
 </div>
 
 ## <a href="https://netflix-sclone.netlify.app" target="_blank">LIVE DEMO 💥</a>
@@ -210,7 +210,7 @@ Add the `@tailwind` directives for each of Tailwind’s layers to your `./styles
 
 Install dependencies
 
-<a href="https://github.com/SashenJayathilaka/NETFLIX-Clone/blob/master/package.json" target="_blank">🔶 Other Dependency Info</a>
+<a href="#" target="_blank">🔶 Other Dependency Info</a>
 
 <!-- Run Locally -->
 
@@ -270,7 +270,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## :handshake: Contact
 
-Your Name - [@twitter_handle](https://twitter.com/SashenHasinduJ) - sashenjayathilaka95@gmail.com
+Your Name - [@twitter_handle](https://twitter.com/Sparesos) - xxx@gmail.com
 
 Project Link: [https://github.com/SashenJayathilaka/NETFLIX-Clone.git](https://github.com/SashenJayathilaka/NETFLIX-Clone.git)
 

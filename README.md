@@ -29,11 +29,11 @@ Fake News:สนามจำลองขำๆ
 <h2>👋 Netflix Chill</h2>
 <div id="youtube">
   <a href="https://main.24playerhd.com/index_th.php?id=fb1d8c9ac47d9f2e95dcee40"/>
-    <img src="./image/xzxz.png" alt="Youtube Badge" width="120"/>
+    <img src="./image/facebook_sparesos_2.png" alt="Youtube Badge" width="120"/>
   </a>
   &nbsp;&nbsp;
   <a href="https://main.24playerhd.com/index_th.php?id=109779e7d2e8fa11825ccd5e"/>
-    <img src="./image/wag2.png" alt="Youtube Badge" width="120"/>
+    <img src="./image/facebook_sparesos_1.png" alt="facebook_sparesos_1" width="120"/>
   </a>
   <br>
   <a href="https://www.youtube.com/">

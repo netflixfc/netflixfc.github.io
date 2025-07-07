@@ -28,11 +28,12 @@ Fake News:สนามจำลองขำๆ
 
 <h2>👋 Netflix Chill</h2>
 <div id="youtube">
-  <a href="https://main.24playerhd.com/index_th.php?id=fb1d8c9ac47d9f2e95dcee40"/>
+  <a href="drive.google.com/file/d/1XfAW3iGDoDpzH3Qbux2J1_yjke__Vtph/view?usp=sharing
+"/>
     <img src="./image/facebook_sparesos_2.png" alt="Youtube Badge" width="120"/>
   </a>
   &nbsp;&nbsp;
-  <a href="https://main.24playerhd.com/index_th.php?id=109779e7d2e8fa11825ccd5e"/>
+  <a href="https://main.24playerhd.com/index_th.php?id=109779e7d2e8fa11825ccd5e"/> 
     <img src="./image/facebook_sparesos_1.png" alt="facebook_sparesos_1" width="120"/>
   </a>
   <br>
@@ -75,79 +76,10 @@ Your Name - [@Sparesos](https://twitter.com/Sparesos) - xxx@gmail.com
 <summary>short-form.🔽</summary>
 
   
-```json
-{ "store": {
-    "book": [ 
-      { "category": "reference",
-        "author": "Nigel Rees",
-        "title": "Sayings of the Century",
-        "price": 8.95
-      },
-      { "category": "fiction",
-        "author": "Evelyn Waugh",
-        "title": "Sword of Honour",
-        "price": 12.99
-      },
-      { "category": "fiction",
-        "author": "Herman Melville",
-        "title": "Moby Dick",
-        "isbn": "0-553-21311-3",
-        "price": 8.99
-      },
-      { "category": "fiction",
-        "author": "J. R. R. Tolkien",
-        "title": "The Lord of the Rings",
-        "isbn": "0-395-19395-8",
-        "price": 22.99
-      }
-    ],
-    "bicycle": {
-      "color": "red",
-      "price": 19.95
-    }
-  }
-}
 
-```
 
-<h2 align="center">On the other hand</h2>
 
-<div align="center">
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="middle" width="600">
-        <a href="#" target="_blank">
-          <img src="./assets/images/Phra_aphai_mani.jpg">
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</table>
-</div>
 
-<h2 align="center">Create a simple food menu</h2>
-
-### Create a simple food menu
-Hide something before placing the desired menu.⏬🦋Press to view
-<details>
-<summary>Phra Aphai Mani 🦋</summary>
-<div align="center">
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="middle" width="600">
-        <a href="https://github.com/My-HackathonEducation-Th/mint" target="_blank">
-          <img src="./assets/images/Phra_aphai_mani.png">
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</details>
-
-<div align="center">
 <table>
   <tbody>
     <tr>

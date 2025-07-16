@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitmintGo Car Booking</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://npmcdn.com/flatpickr/dist/l10n/th.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      flatpickr("#start", { dateFormat: "d/m/Y", locale: "th" });
+      flatpickr("#end", { dateFormat: "d/m/Y", locale: "th" });
+    });
+
+    function calculateBooking() {
+      const vehicle = document.getElementById('vehicle');
+      const vehicleName = vehicle.value;
+      const pricePerDay = parseInt(vehicle.selectedOptions[0].dataset.price);
+      const start = flatpickr.parseDate(document.getElementById('start').value, "d/m/Y");
+      const end = flatpickr.parseDate(document.getElementById('end').value, "d/m/Y");
+
+      if (start && end && end > start) {
+        const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+        document.getElementById('selected-car').innerText = vehicleName;
+        document.getElementById('days').innerText = `${days} วัน`;
+        document.getElementById('cost').innerText = `${days * pricePerDay} ฿`;
+        document.querySelector('.summary').style.display = 'flex';
+      } else {
+        alert('กรุณาเลือกวันที่ให้ถูกต้อง');
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-900 text-white font-sans p-4">
+  <div class="w-full max-w-md mx-auto sm:max-w-full">
+    <div class="space-y-2">
+        <div class="flex justify-between items-center bg-gray-800 p-3 rounded-lg"><span>FORDRANGERRAPTOR</span><span class="bg-gradient-to-r from-indigo-500 to-pink-500 text-yellow-300 px-3 py-1 rounded-full font-bold">2,500</span></div>
+        <div class="flex justify-between items-center bg-gray-800 p-3 rounded-lg"><span>TOYOTAVIGOCHAMP</span><span class="bg-gradient-to-r from-indigo-500 to-pink-500 text-yellow-300 px-3 py-1 rounded-full font-bold">2,000</span></div>
+        <div class="flex justify-between items-center bg-gray-800 p-3 rounded-lg"><span>ISUZU M-X</span><span class="bg-gradient-to-r from-indigo-500 to-pink-500 text-yellow-300 px-3 py-1 rounded-full font-bold">1,990</span></div>
+      </div>
+      
+    </div>
+
+    <div class="flex items-center bg-gray-700 rounded-lg mt-5 mb-3 overflow-hidden">
+  <button class="px-3"><img src="https://www.svgrepo.com/show/509420/search.svg" width="20"></button>
+  <input type="text" placeholder="ค้นหาด้วย Copilot" class="flex-1 bg-transparent text-white placeholder-gray-400 py-2 px-2 outline-none">
+  <div class="bg-gradient-to-r from-cyan-400 to-fuchsia-500 text-white font-bold px-3 py-2 rounded-r-lg">GitmintGo</div>
+</div>
+    </div>
+    </div>
+
+    <div class="text-center text-cyan-300 text-sm mb-4">Copilot ของเราช่วยค้นหารถยนต์ที่คุณต้องการ</div>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="summary flex items-center gap-3 bg-gray-800 p-3 rounded-lg mb-4 hidden">
+      <img src="https://www.svgrepo.com/show/509420/car.svg" class="w-14">
+      <div class="text-sm">
+        <h3 id="selected-car" class="text-green-300 font-bold">ISUZU M-X</h3>
+        <div>ระยะเวลา <span id="days">-</span></div>
+        <div>ค่าใช้จ่าย <span class="text-yellow-300 font-bold" id="cost">-</span></div>
+      </div>
+    </div>
+        <div>ค่าใช้จ่าย <span class="price" id="cost">-</span></div>
+      </div>
+    </div>
+
+    <a href="https://m.me/rungroj.co.th" target="_blank">
+      <button class="w-full py-3 bg-green-400 text-black font-bold rounded-lg" onclick="calculateBooking()">BOOK NOW</button>
+    </a>
+  </div>
+</body>
+</html>

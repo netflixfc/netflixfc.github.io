@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GitmintGo V7+V8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body { background-color: #081c2c; color: #fff; font-family: 'Prompt', sans-serif; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    .container { max-width: 440px; width: 100%; text-align: center; }
+    .main-car-image { width: 100%; max-width: 300px; margin: 0 auto 20px; }
+    .search-container, .copilot, .form-group, .summary { margin-bottom: 15px; }
+    .search-container { display: flex; align-items: center; background-color: #0A2239; border: 2px solid #33A3FF; border-radius: 12px; box-shadow: 0 0 15px rgba(51,163,255,0.7); padding: 4px; }
+    .search-icon-wrapper { background-color: #081c2c; padding: 8px 12px; border-radius: 8px; }
+    .search-icon-wrapper img { width: 24px; height: 24px; }
+    .search-container input { flex:1; border:none; background:#fff; color:#333; padding:10px; margin:0 5px; border-radius:8px; }
+    .gitmint-go-btn { background:linear-gradient(to right,#C04848,#480048); border:2px solid #7a5cff; color:#fff; padding:10px 15px; border-radius:8px; font-weight:bold; cursor:pointer; }
+    .copilot { color:#66ccff; font-size:14px; }
+    .form-group { text-align:left; }
+    .form-group label { color:#aadfff; font-size:14px; display:block; margin-bottom:5px; }
+    select, input[type="date"], input[type="time"] { width:100%; padding:10px; border-radius:8px; border:2px solid #7a5cff; background:#0A2239; color:#fff; }
+    .date-time-group { display:flex; gap:10px; }
+    .summary { background:#0b2540; padding:15px; border-radius:10px; border:1px solid #7a5cff; }
+    .summary img { max-width:120px; margin-bottom:10px; }
+    .summary h3 { color:#2bff9d; margin:0 0 10px; }
+    .summary-line { display:flex; justify-content:space-between; font-size:14px; margin:5px 0; }
+    .summary-line .label { color:#aaa; }
+    .summary-line .value { font-weight:bold; }
+    .button-group { display:flex; justify-content: center; gap:10px; margin-top: 10px; }
+    .calculate-btn { background:#7a5cff; border:none; color:#fff; padding:12px 20px; border-radius:8px; font-weight:bold; cursor:pointer; display:flex; align-items:center; }
+    .calculate-btn img { width:16px; height:16px; margin-right:6px; }
+    .book-now-btn { background:linear-gradient(to right,#00d2ff,#3a7bd5); border:2px solid #54e2f1; color:#fff; padding:12px 20px; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer; display:flex; align-items:center; }
+    .book-now-btn img { width:16px; height:16px; margin-left:6px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img id="main-img" src="" alt="Car Image" class="main-car-image">
+    <div class="search-container">
+      <div class="search-icon-wrapper"><img src="https://api.iconify.design/material-symbols:search.svg?color=white" alt="Search"></div>
+      <input type="text" id="search-input" placeholder="ค้นหารุ่นรถ">
+      <button class="gitmint-go-btn">GitmintGo</button>
+    </div>
+    <div class="copilot">Copilot ของเราช่วยค้นหารถยนต์ที่คุณต้องการ</div>
+    <div class="form-group"><label for="car-model">เลือกรุ่นรถยนต์</label><select id="car-model"></select></div>
+    <div class="form-group"><label for="delivery-location">สถานที่ส่งมอบ</label><select id="delivery-location"><option>สาขาหลัก รุ่งโรจน์ คาร์เร้นท์</option><option>สาขาสนามบินอุดรธานี</option><option>อื่นๆ</option></select></div>
+    <div class="form-group"><label>วันและเวลารับรถ</label><div class="date-time-group"><input type="time" id="start-time"><input type="date" id="start-date"></div></div>
+    <div class="form-group"><label>วันและเวลาคืนรถ</label><div class="date-time-group"><input type="time" id="end-time"><input type="date" id="end-date"></div></div>
+    <div class="summary">
+      <img id="summary-img" src="" alt="Summary">
+      <h3 id="summary-name"></h3>
+      <div class="summary-line"><span class="label">ระยะเวลา</span><span class="value" id="summary-duration"></span></div>
+      <div class="summary-line"><span class="label" id="cost-label">ค่าใช้จ่าย</span><span class="value" id="summary-cost"></span></div>
+    </div>
+    <div class="button-group">
+      <button class="calculate-btn" onclick="updateSummary()"><img src="https://api.iconify.design/mdi:calculator.svg" alt="Calc">คำนวณ</button>
+      <button class="book-now-btn" onclick="notifyBooking()">จองเลย<img src="https://api.iconify.design/mdi:rocket.svg" alt="Go"></button>
+    </div>
+  </div>
+  <script>
+    const cars = [
+      { name: 'New Yaris Sport', price: 800 },
+      { name: 'Almera Sportech', price: 800 },
+      { name: 'Ciaz', price: 800 },
+      { name: 'City Turbo', price: 1000 },
+      { name: 'New Yaris Ativ', price: 900 },
+      { name: 'Veloz', price: 1499 },
+      { name: 'Cross', price: 1499 },
+      { name: 'Xpander', price: 1499 },
+      { name: 'Toyota revo 4door', price: 1499 },
+      { name: 'ISUZU M-X', price: 1990 },
+      { name: 'FORD RANGER RAPTOR', price: 2500 },
+      { name: 'Pajero Sport Elite Edition', price: 1999 }
+    ];
+
+    const carSelect = document.getElementById('car-model'),
+          mainImg = document.getElementById('main-img'),
+          summaryImg = document.getElementById('summary-img'),
+          summaryName = document.getElementById('summary-name'),
+          summaryDuration = document.getElementById('summary-duration'),
+          summaryCost = document.getElementById('summary-cost'),
+          costLabel = document.getElementById('cost-label'),
+          startDate = document.getElementById('start-date'),
+          startTime = document.getElementById('start-time'),
+          endDate = document.getElementById('end-date'),
+          endTime = document.getElementById('end-time');
+
+    function pad(n) { return n < 10 ? '0' + n : n; }
+
+    function getLocalDate() {
+      const now = new Date(),
+            tz = now.getTimezoneOffset() * 60000,
+            local = new Date(now.getTime() - tz + 7 * 3600000);
+      return local;
+    }
+
+    function initDateTime() {
+      const now = getLocalDate(),
+            tom = new Date(now);
+      tom.setDate(now.getDate() + 1);
+      startDate.value = now.toISOString().split('T')[0];
+      endDate.value = tom.toISOString().split('T')[0];
+      const t = pad(now.getHours()) + ':' + pad(now.getMinutes());
+      startTime.value = endTime.value = t;
+    }
+
+    function formatImage(n) {
+      const key = n === 'ISUZU M-X' ? 'Isuzu-MU-X_RungrojCarrent.png' : n.replace(/\s+/g, '-').replace(/[^\w\-]/g, '') + '_RungrojCarrent.png';
+      return `https://res.cloudinary.com/dcwjok3nu/image/upload/v1752730830/${key}`;
+    }
+
+    cars.forEach(c => {
+      const o = document.createElement('option');
+      o.value = c.price;
+      o.textContent = c.name;
+      carSelect.appendChild(o);
+    });
+
+    function updateSummary() {
+      const name = carSelect.options[carSelect.selectedIndex].text,
+            price = parseFloat(carSelect.value),
+            imgUrl = formatImage(name);
+      summaryName.textContent = name;
+      mainImg.src = imgUrl;
+      summaryImg.src = imgUrl;
+      const s = new Date(startDate.value),
+            e = new Date(endDate.value),
+            d = Math.ceil((e - s) / 86400000) || 1;
+      summaryDuration.textContent = d + ' วัน';
+      const total = price * d;
+      costLabel.textContent = `${d} × ${price.toLocaleString('th-TH')} =`;
+      summaryCost.textContent = total.toLocaleString('th-TH') + ' ฿';
+    }
+
+    function notifyBooking() {
+      updateSummary();
+      window.open('https://m.me/rungroj.co.th', '_blank');
+      window.open('https://page.line.me/rungroj', '_blank');
+      alert(`📩 แจ้งเตือนการจอง:\nModel: ${summaryName.textContent}\nระยะเวลา: ${summaryDuration.textContent}\nค่าใช้จ่าย: ${summaryCost.textContent}`);
+    }
+
+    window.onload = () => {
+      initDateTime();
+      updateSummary();
+      carSelect.addEventListener('change', updateSummary);
+      [startDate, endDate, startTime, endTime].forEach(el => el.addEventListener('change', updateSummary));
+    };
+  </script>
+</body>
+</html>

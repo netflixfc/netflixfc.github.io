@@ -182,8 +182,9 @@ gitmintgo/
 
 ---
 
-✅ ขั้นตอนต่อไป
-จะเริ่มจาก pages/index.tsx และ components/SearchBox.tsx
+##✅ยาฮู้
+
+### เริ่มจาก pages/index.tsx และ components/SearchBox.tsx
 
 สร้าง API mock: /api/chatgpt.ts และ /api/gemini.ts
 

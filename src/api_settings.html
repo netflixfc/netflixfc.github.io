@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GitmintGo - การตั้งค่า API</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center justify-start pt-12 px-4">
+  <!-- Title -->
+  <h1 class="text-2xl font-bold text-pink-400 mb-6">การตั้งค่า API สำหรับ GitmintGo</h1>
+
+  <!-- Card Container -->
+  <div class="w-full max-w-xl bg-gradient-to-br from-blue-500 via-pink-400 to-purple-500 p-1 rounded-2xl shadow-xl">
+    <div class="bg-gray-900 p-6 rounded-xl">
+      <form id="apiSettingsForm" class="space-y-4">
+
+        <!-- Dropdown -->
+        <div>
+          <label for="model" class="block text-sm font-medium text-white mb-1">เลือกโมเดล AI</label>
+          <select id="model" name="model" class="w-full bg-gray-800 border border-gray-600 text-white p-2 rounded">
+            <option value="chatgpt">ChatGPT (OpenAI)</option>
+            <option value="gemini">Gemini (Google)</option>
+            <option value="phi">Phi (Microsoft)</option>
+            <option value="llama3">LLaMA 3 (Meta)</option>
+            <option value="other">อื่นๆ</option>
+          </select>
+        </div>
+
+        <!-- API Key -->
+        <div>
+          <label for="apiKey" class="block text-sm font-medium text-white mb-1">API Key ของคุณ</label>
+          <input type="text" id="apiKey" name="apiKey" class="w-full bg-gray-800 border border-gray-600 text-white p-2 rounded" placeholder="ใส่ API Key ที่นี่">
+        </div>
+
+        <!-- Save Button -->
+        <button type="submit" class="w-full bg-pink-500 hover:bg-pink-600 transition text-white font-bold py-2 px-4 rounded">
+          บันทึกการตั้งค่า
+        </button>
+
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('apiSettingsForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const model = document.getElementById('model').value;
+      const apiKey = document.getElementById('apiKey').value;
+
+      // Store in localStorage (can replace with Supabase or secure backend later)
+      localStorage.setItem('gitmintgo_model', model);
+      localStorage.setItem('gitmintgo_apiKey', apiKey);
+
+      alert('✅ ตั้งค่าสำเร็จแล้ว!');
+    });
+  </script>
+</body>
+
+</html>

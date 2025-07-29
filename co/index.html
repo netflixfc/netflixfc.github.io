@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FB Engagement — JSON Batch Runner</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    body { background:#192131; color:#fff; }
+    .card { background:#1e2a3a; border:1px solid #22a7f0; }
+    select, input[type="text"], input[type="number"], textarea { color:#111; }
+  </style>
+</head>
+<body class="min-h-screen p-4">
+  <div class="max-w-6xl mx-auto">
+    <header class="flex items-center justify-between mb-4">
+      <h1 class="text-2xl font-bold text-[#22a7f0]">📦 FB Engagement — JSON Batch Preview</h1>
+      <a class="text-sm text-pink-400 hover:underline" href="#help">วิธีใช้</a>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <!-- LEFT: Controls -->
+      <section class="card rounded-xl p-4 space-y-4">
+        <div>
+          <label class="block text-sm">📥 โหลด JSON (accounts.json)</label>
+          <input id="jsonFile" type="file" accept="application/json" class="w-full" />
+          <p class="text-xs text-gray-300 mt-1">หรือวาง JSON ด้านล่าง</p>
+          <textarea id="jsonText" class="w-full mt-2 p-2 rounded h-40" placeholder='{"accounts":[],"proxies":{}}'></textarea>
+          <button id="loadJson" class="mt-2 px-3 py-2 rounded bg-[#22a7f0] text-white">โหลดข้อมูล</button>
+        </div>
+
+        <div>
+          <label class="block text-sm">🎯 Action</label>
+          <select id="action" class="w-full p-2 rounded">
+            <option value="view">เพิ่มยอดรับชม (Views)</option>
+            <option value="like" disabled>เพิ่มไลก์ (เตรียมไว้)</option>
+            <option value="share" disabled>เพิ่มแชร์ (เตรียมไว้)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm">🎯 Target URL (Desktop เท่านั้น)</label>
+          <input id="targetUrl" type="text" class="w-full p-2 rounded" placeholder="https://www.facebook.com/gitmintapp" />
+        </div>
+
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label class="block text-sm">Primary Profiles</label>
+            <input id="nPrimProf" type="number" min="0" value="1" class="w-full p-2 rounded" />
+          </div>
+          <div>
+            <label class="block text-sm">Primary Pages</label>
+            <input id="nPrimPages" type="number" min="0" value="3" class="w-full p-2 rounded" />
+          </div>
+          <div>
+            <label class="block text-sm">Support Profiles</label>
+            <input id="nSuppProf" type="number" min="0" value="1" class="w-full p-2 rounded" />
+          </div>
+        </div>
+
+        <div>
+          <button id="buildPlan" class="w-full mt-2 px-3 py-2 rounded bg-[#ff00f5] text-white">✅ สร้างแผนงาน & Preview</button>
+        </div>
+
+        <div>
+          <button id="exportPlan" class="w-full mt-2 px-3 py-2 rounded bg-green-500 text-white" disabled>⬇️ ส่งออกเป็น plan.json</button>
+        </div>
+      </section>
+
+      <!-- RIGHT: Preview -->
+      <section class="lg:col-span-2 card rounded-xl p-4">
+        <h2 class="text-lg font-semibold text-[#22a7f0] mb-2">🔎 Preview รายการที่จะรัน</h2>
+        <div class="overflow-auto">
+          <table class="min-w-full text-sm">
+            <thead>
+              <tr class="bg-[#0f1622]">
+                <th class="p-2 text-left">Email</th>
+                <th class="p-2 text-left">Role</th>
+                <th class="p-2 text-left">Type</th>
+                <th class="p-2 text-left">Entity</th>
+                <th class="p-2 text-left">Proxy</th>
+              </tr>
+            </thead>
+            <tbody id="previewBody"></tbody>
+          </table>
+        </div>
+
+        <div class="mt-4">
+          <h3 class="font-semibold text-[#22a7f0]">🧪 Plan JSON</h3>
+          <pre id="planJson" class="bg-[#0f1622] text-xs p-3 rounded overflow-auto"></pre>
+        </div>
+      </section>
+    </div>
+
+    <section id="help" class="card rounded-xl p-4 mt-4">
+      <h2 class="text-lg font-semibold text-[#22a7f0]">วิธีใช้ย่อ</h2>
+      <ol class="list-decimal ml-6 text-sm space-y-1">
+        <li>เลือกไฟล์ <code>accounts.json</code> หรือวาง JSON แล้วกด "โหลดข้อมูล"</li>
+        <li>ตั้งค่า Action/Target และจำนวนสุ่ม</li>
+        <li>กด "สร้างแผนงาน & Preview" เพื่อดูตัวอย่าง</li>
+        <li>กด "ส่งออกเป็น plan.json" เพื่อใช้ใน Colab Executor</li>
+      </ol>
+    </section>
+  </div>
+
+  <script>
+    let accounts=[], proxyMap={}, likeShareTarget='https://www.facebook.com/gitmintapp';
+
+    function normalizeUrl(url){
+      if(!url) return '';
+      url = url.trim();
+      url = url.replace(/^http:\/\//i,'https://');
+      url = url.replace(/^https:\/\/m\.facebook\.com/i,'https://www.facebook.com');
+      url = url.replace(/^https:\/\/facebook\.com/i,'https://www.facebook.com');
+      return url;
+    }
+
+    function flatten(json){
+      const rows=[];
+      (json.accounts||[]).forEach(acc=>{
+        const email=acc.email, role=acc.role, proxyGroup=acc.proxyGroup, cred=acc.credentialRef;
+        (acc.entities||[]).forEach(ent=>{
+          rows.push({
+            Email: email,
+            Role: role,
+            EntityType: ent.type,
+            EntityName: ent.name,
+            FacebookURL: normalizeUrl(ent.url),
+            OwnerEmail: email,
+            Active: ent.active===false? 'FALSE':'TRUE',
+            ProxyGroup: proxyGroup,
+            CredentialRef: cred
+          });
+        })
+      });
+      const pm={};
+      const proxies=json.proxies||{};
+      Object.keys(proxies).forEach(g=>{ pm[g]=[...proxies[g]]; });
+      likeShareTarget=(json.target && json.target.like_share_target) || likeShareTarget;
+      return {rows, pm};
+    }
+
+    function samplePlan(rows, pm, nPrimProf, nPrimPages, nSuppProf){
+      const active = rows.filter(r=> r.Active==='TRUE' && r.FacebookURL.startsWith('https://www.facebook.com'));
+      const primProf = active.filter(r=> r.Role==='primary' && r.EntityType==='Profile');
+      const primPages= active.filter(r=> r.Role==='primary' && r.EntityType==='Page');
+      const suppProf = active.filter(r=> r.Role==='support' && r.EntityType==='Profile');
+
+      function pick(arr, n, seed){
+        if(arr.length<=n) return [...arr];
+        // Fisher–Yates with seed-like randomness (simple)
+        const a=[...arr];
+        for(let i=a.length-1;i>0;i--){
+          const j=Math.floor(Math.random()* (i+1));
+          [a[i],a[j]]=[a[j],a[i]];
+        }
+        return a.slice(0,n);
+      }
+
+      const plan = [
+        ...pick(primProf, Math.max(0, nPrimProf)),
+        ...pick(primPages, Math.max(0, nPrimPages)),
+        ...pick(suppProf, Math.max(0, nSuppProf))
+      ];
+
+      plan.forEach(row=>{
+        const pool = pm[row.ProxyGroup]||[];
+        row.AssignedProxy = pool.length? pool[Math.floor(Math.random()*pool.length)]: null;
+      });
+      return plan;
+    }
+
+    function renderPreview(plan){
+      const tbody=document.getElementById('previewBody');
+      tbody.innerHTML='';
+      plan.forEach(p=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML = `
+          <td class='p-2'>${p.Email}</td>
+          <td class='p-2'>${p.Role}</td>
+          <td class='p-2'>${p.EntityType}</td>
+          <td class='p-2'>${p.EntityName}</td>
+          <td class='p-2'>${p.AssignedProxy||'-'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+      document.getElementById('planJson').textContent = JSON.stringify(plan, null, 2);
+      document.getElementById('exportPlan').disabled = plan.length===0;
+    }
+
+    // Events
+    document.getElementById('jsonFile').addEventListener('change', (e)=>{
+      const file=e.target.files[0];
+      if(!file) return;
+      const reader=new FileReader();
+      reader.onload=()=>{ document.getElementById('jsonText').value=reader.result; };
+      reader.readAsText(file);
+    });
+
+    document.getElementById('loadJson').addEventListener('click', ()=>{
+      try{
+        const txt=document.getElementById('jsonText').value.trim();
+        const json = txt? JSON.parse(txt): {accounts:[], proxies:{}};
+        const flat=flatten(json);
+        accounts=flat.rows; proxyMap=flat.pm;
+        document.getElementById('targetUrl').value = (json.target && json.target.like_share_target) || likeShareTarget;
+        alert('โหลดข้อมูลสำเร็จ');
+      }catch(err){ alert('JSON ไม่ถูกต้อง: '+err.message); }
+    });
+
+    document.getElementById('buildPlan').addEventListener('click', ()=>{
+      const nPrimProf = parseInt(document.getElementById('nPrimProf').value||'1',10);
+      const nPrimPages= parseInt(document.getElementById('nPrimPages').value||'3',10);
+      const nSuppProf = parseInt(document.getElementById('nSuppProf').value||'1',10);
+      const plan = samplePlan(accounts, proxyMap, nPrimProf, nPrimPages, nSuppProf)
+        .map(row=>({
+          Email: row.Email,
+          Role: row.Role,
+          EntityType: row.EntityType,
+          EntityName: row.EntityName,
+          Proxy: row.AssignedProxy,
+          Target: document.getElementById('targetUrl').value.trim() || likeShareTarget,
+          Action: document.getElementById('action').value
+        }));
+      renderPreview(plan);
+    });
+
+    document.getElementById('exportPlan').addEventListener('click', ()=>{
+      const planText=document.getElementById('planJson').textContent;
+      if(!planText) return;
+      const blob=new Blob([planText], {type:'application/json'});
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(blob);
+      a.download='plan.json';
+      a.click();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rungroj Car Rental</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind theme colors
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandPrimary: '#18B2D3',
+            brandSecondary: '#7BCFE1',
+            brandAccent: '#F6C9B3',
+            brandBg: '#E4EFF2'
+          },
+          boxShadow: {
+            soft: '0 10px 25px rgba(0,0,0,0.06)'
+          },
+          borderRadius: {
+            '2xl': '1rem'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Mobile-friendly tap targets */
+    .tap { @apply px-4 py-3 rounded-xl text-center font-semibold; }
+  </style>
+</head>
+<body class="bg-brandBg text-gray-900">
+  <!-- Header -->
+  <header class="sticky top-0 z-30 bg-brandPrimary text-white">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="font-extrabold text-xl md:text-2xl">🚗 Rungroj Car Rental</div>
+      <a href="#booking" class="hidden sm:inline-block bg-white/10 hover:bg-white/20 transition tap">จองเลย</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="max-w-6xl mx-auto px-4 py-8 md:py-12 grid md:grid-cols-2 gap-6 items-center">
+    <div>
+      <h1 class="text-3xl md:text-5xl font-extrabold text-brandPrimary leading-tight">
+        เช่ารถง่าย ราคาโปร่งใส รับ-คืนได้ทั้งสาขาหลัก & สนามบิน
+      </h1>
+      <p class="mt-3 text-gray-600">เลือกวัน เวลา และสถานที่ แล้วกดจองได้ทันทีบน Messenger</p>
+      <div class="mt-5 flex gap-3">
+        <a href="#booking" class="tap bg-brandPrimary text-white hover:bg-brandSecondary transition">เริ่มจอง</a>
+        <a href="#fleet" class="tap bg-white text-brandPrimary border border-brandPrimary hover:bg-brandSecondary/10 transition">ดูรถทั้งหมด</a>
+      </div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-soft p-4">
+      <img src="https://res.cloudinary.com/dcwjok3nu/image/upload/v1756904687/toyotax4_zmr0lh.webp" alt="รถเช่า" class="w-full h-56 object-contain"/>
+    </div>
+  </section>
+
+  <!-- Booking Card -->
+  <section id="booking" class="max-w-6xl mx-auto px-4">
+    <div class="bg-white rounded-2xl shadow-soft p-5 md:p-6">
+      <h2 class="text-2xl font-bold text-brandPrimary mb-4">🔎 ค้นหารถเช่า</h2>
+      <form id="searchForm" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">สถานที่รับรถ</label>
+          <select id="pickup" class="w-full border rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brandSecondary">
+            <option value="">เลือกสถานที่</option>
+            <option>สาขาหลัก</option>
+            <option>สาขาสนามบิน</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">สถานที่คืนรถ</label>
+          <select id="dropoff" class="w-full border rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brandSecondary">
+            <option value="">เลือกสถานที่</option>
+            <option>สาขาหลัก</option>
+            <option>สาขาสนามบิน</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">วันที่รับรถ</label>
+          <input id="pickupDate" type="date" class="w-full border rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brandSecondary"/>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">วันที่คืนรถ</label>
+          <input id="returnDate" type="date" class="w-full border rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brandSecondary"/>
+        </div>
+      </form>
+      <div class="mt-4 flex flex-col sm:flex-row gap-3">
+        <button id="searchBtn" class="tap bg-brandPrimary text-white hover:bg-brandSecondary transition">ค้นหารถ</button>
+        <button id="clearBtn" class="tap bg-white text-brandPrimary border border-brandPrimary hover:bg-brandSecondary/10 transition">ล้างข้อมูล</button>
+      </div>
+      <p id="daysInfo" class="mt-3 text-sm text-gray-600 hidden"></p>
+    </div>
+  </section>
+
+  <!-- Fleet -->
+  <section id="fleet" class="max-w-6xl mx-auto px-4 py-8">
+    <h2 class="text-2xl font-bold text-brandPrimary mb-4">รถพร้อมให้บริการ</h2>
+    <div id="carsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    <p id="emptyMsg" class="hidden text-gray-500">ยังไม่มีรายการรถสำหรับตัวกรองนี้</p>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-brandPrimary text-white mt-10">
+    <div class="max-w-6xl mx-auto px-4 py-6 grid md:grid-cols-2 gap-4 items-center">
+      <div>
+        <p class="font-semibold">ติดต่อ: 086 6348619 <span class="opacity-80">(บริการตลอด 24 ชั่วโมง)</span></p>
+        <p class="opacity-90">📍 12/6 ม.7 ต.หมูม่น อ.เมืองอุดรธานี จ.อุดรธานี</p>
+      </div>
+      <div class="md:justify-self-end">
+        <div class="flex items-center gap-3">
+          <a class="tap bg-white/10 hover:bg-white/20" href="https://www.facebook.com/sharer/sharer.php?u=https://yourwebsite.com" target="_blank" rel="noopener">Facebook</a>
+          <a class="tap bg-white/10 hover:bg-white/20" href="https://twitter.com/intent/tweet?url=https://yourwebsite.com" target="_blank" rel="noopener">X</a>
+          <a class="tap bg-white/10 hover:bg-white/20" href="https://linevoom.line.me/" target="_blank" rel="noopener">LINE VOOM</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Data + Logic -->
+  <script>
+    // สำหรับเดโม: คุณสามารถย้ายไฟล์นี้ไปไว้ที่ /public/data/cars.json และ fetch แทนได้
+    const DATA = {
+      cars: [
+        { name: "TOYOTA ATIVI", qty: 5, price: 800,  img: "https://res.cloudinary.com/dcwjok3nu/image/upload/v1756904687/toyotax4_zmr0lh.webp" },
+        { name: "HONDA CITY",       qty: 5, price: 800,  img: "https://res.cloudinary.com/dcwjok3nu/image/upload/v1756904687/toyotax4_zmr0lh.webp" },
+        { name: "FORD RANGER RAPTOR",qty: 1, price: 2500, img: "https://res.cloudinary.com/dcwjok3nu/image/upload/v1756904687/toyotax4_zmr0lh.webp" },
+        { name: "SUV ISUZU M-X",    qty: 1, price: 1999, img: "https://res.cloudinary.com/dcwjok3nu/image/upload/v1756904687/toyotax4_zmr0lh.webp" },
+        { name: "TOYOTA VIGO",       qty: 1, price: 2000, img: "https://res.cloudinary.com/dcwjok3nu/image/upload/v1756904687/toyotax4_zmr0lh.webp" }
+      ]
+    };
+
+    const carsGrid   = document.getElementById('carsGrid');
+    const emptyMsg   = document.getElementById('emptyMsg');
+    const pickupEl   = document.getElementById('pickup');
+    const dropoffEl  = document.getElementById('dropoff');
+    const pickupDate = document.getElementById('pickupDate');
+    const returnDate = document.getElementById('returnDate');
+    const daysInfo   = document.getElementById('daysInfo');
+
+    function dayDiff(a,b){
+      const da = new Date(a), db = new Date(b);
+      if(isNaN(da)||isNaN(db)) return 0;
+      const ms = db - da;
+      return ms > 0 ? Math.ceil(ms/86400000) : 0;
+    }
+
+    function renderCars(list){
+      carsGrid.innerHTML = '';
+      if(!list || !list.length){
+        emptyMsg.classList.remove('hidden');
+        return;
+      }
+      emptyMsg.classList.add('hidden');
+      const nights = dayDiff(pickupDate.value, returnDate.value);
+      list.forEach(car => {
+        const total = nights ? (car.price * nights) : null;
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-2xl shadow-soft p-4 flex flex-col';
+        card.innerHTML = `
+          <img src="${car.img}" alt="${car.name}" class="rounded-xl mb-4 h-44 w-full object-contain" />
+          <h3 class="text-lg font-bold text-brandPrimary">${car.name}</h3>
+          <p class="text-sm text-gray-500">จำนวน: ${car.qty} คัน</p>
+          <p class="mt-1 text-brandAccent font-semibold">฿${car.price.toLocaleString()} / วัน</p>
+          ${total ? `<p class="text-sm text-gray-600">ราคารวม ~ ฿${total.toLocaleString()} (${nights} วัน)</p>`:''}
+          <div class="mt-4 grid grid-cols-2 gap-2">
+            <a href="#" class="tap bg-white text-brandPrimary border border-brandPrimary hover:bg-brandSecondary/10 transition" data-type="details">รายละเอียด</a>
+            <a href="#" class="tap bg-brandPrimary text-white hover:bg-brandSecondary transition" data-type="book" data-name="${car.name}">จองเลย</a>
+          </div>
+        `;
+        carsGrid.appendChild(card);
+      });
+    }
+
+    // Initial render
+    renderCars(DATA.cars);
+
+    // Search & clear
+    document.getElementById('searchBtn').addEventListener('click', () => {
+      const nights = dayDiff(pickupDate.value, returnDate.value);
+      if(nights>0){
+        daysInfo.textContent = `ระยะเวลาเช่า ${nights} วัน`;
+        daysInfo.classList.remove('hidden');
+      } else {
+        daysInfo.classList.add('hidden');
+      }
+      // เดโม่: ยังไม่กรองตามสาขา เพราะรถพร้อมทุกสาขา
+      renderCars(DATA.cars);
+    });
+
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      pickupEl.value = dropoffEl.value = pickupDate.value = returnDate.value = '';
+      daysInfo.classList.add('hidden');
+      renderCars(DATA.cars);
+    });
+
+    // Delegate booking button -> open Messenger with prefilled ref
+    carsGrid.addEventListener('click', (e) => {
+      const a = e.target.closest('a');
+      if(!a) return;
+      const type = a.dataset.type;
+      if(type === 'book'){
+        e.preventDefault();
+        const name = a.dataset.name;
+        const params = new URLSearchParams({
+          ref: JSON.stringify({
+            car: name,
+            pickup: pickupEl.value,
+            dropoff: dropoffEl.value,
+            pickupDate: pickupDate.value,
+            returnDate: returnDate.value
+          })
+        });
+        // เปิดแชตเพจ Facebook Messenger พร้อมส่ง ref
+        const url = `https://m.me/RungrojCarRental?${params.toString()}`;
+        window.open(url, '_blank');
+      }
+    });
+  </script>
+</body>
+</html>

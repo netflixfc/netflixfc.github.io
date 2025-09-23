@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>gitmini-jav</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-white">
+  <header class="bg-blue-700 text-white p-4 text-center shadow-md">
+    <h1 class="text-2xl font-bold">gitmini-jav</h1>
+  </header>
+
+  <!-- Filter -->
+  <div class="flex flex-wrap justify-center gap-4 mt-4">
+    <select id="categoryFilter" class="p-2 border rounded-md">
+      <option value="">ทั้งหมด</option>
+      <option value="censored">Censored</option>
+      <option value="uncensored">Uncensored</option>
+      <option value="asian">Asian</option>
+      <option value="western">Western</option>
+    </select>
+    <input type="text" id="searchInput" placeholder="ค้นหา..." class="p-2 border rounded-md" />
+  </div>
+
+  <!-- Video Container -->
+  <div id="videoContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4 max-w-screen-xl mx-auto"></div>
+
+  <!-- Modal -->
+  <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
+    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg max-w-3xl w-full relative">
+      <button onclick="closeModal()" class="absolute top-2 right-2 text-red-600 text-xl">&times;</button>
+      <iframe id="modalVideo" class="w-full aspect-video rounded" allowfullscreen loading="lazy"></iframe>
+      <div class="mt-4 flex justify-center gap-4">
+        <button id="shareMessenger" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Messenger</button>
+        <button id="shareTelegram" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Telegram</button>
+        <button id="shareFacebook" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">Facebook</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-gray-800 text-white text-center p-4 mt-10">
+    &copy; 2025 เว็บไซต์วีดีโอ
+  </footer>
+
+  <script>
+    let currentPage = 1;
+    const perPage = 4;
+    let loading = false;
+    let totalPages = 999;
+
+    const videoContainer = document.getElementById("videoContainer");
+    const searchInput = document.getElementById("searchInput");
+    const categoryFilter = document.getElementById("categoryFilter");
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !loading && currentPage <= totalPages) {
+        loadPage();
+      }
+    }, { threshold: 1 });
+
+    const sentinel = document.createElement("div");
+    videoContainer.appendChild(sentinel);
+    observer.observe(sentinel);
+
+    async function loadPage() {
+      loading = true;
+      try {
+        const category = categoryFilter.value;
+        const search = searchInput.value.trim();
+        let url = `https://avdbapi.com/api.php/provide/vod/at/json?ac=detail&pg=${currentPage}&limit=${perPage}`;
+        if (category) url += `&t=${encodeURIComponent(category)}`;
+        if (search) url += `&wd=${encodeURIComponent(search)}`;
+
+        const res = await fetch(url);
+        const data = await res.json();
+        const list = data.list || [];
+
+        list.forEach(video => {
+          const title = video.name.split(".")[0].trim();
+
+          const card = document.createElement("div");
+          card.className = "bg-white dark:bg-gray-800 p-2 rounded-lg shadow-md flex flex-col items-center";
+
+          const img = document.createElement("img");
+          img.src = video.poster_url;
+          img.loading = "lazy";
+          img.className = "rounded w-full object-cover aspect-video";
+
+          const titleEl = document.createElement("p");
+          titleEl.textContent = title;
+          titleEl.className = "mt-2 font-semibold text-center";
+
+          const playBtn = document.createElement("button");
+          playBtn.textContent = "ดูวีดีโอ";
+          playBtn.className = "mt-2 bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-600 w-full";
+          playBtn.onclick = () => openModal(video.episodes?.server_data?.Full?.link_embed || "");
+
+          const shareBtnGroup = document.createElement("div");
+          shareBtnGroup.className = "mt-2 flex gap-2";
+
+          const shareMessenger = document.createElement("button");
+          shareMessenger.textContent = "Messenger";
+          shareMessenger.className = "bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700";
+          shareMessenger.onclick = () => {
+            const messengerUrl = `https://www.facebook.com/dialog/send?app_id=YOUR_APP_ID&link=${encodeURIComponent(video.episodes?.server_data?.Full?.link_embed)}&redirect_uri=${encodeURIComponent(location.href)}`;
+            window.open(messengerUrl, '_blank');
+          };
+
+          const shareTelegram = document.createElement("button");
+          shareTelegram.textContent = "Telegram";
+          shareTelegram.className = "bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600";
+          shareTelegram.onclick = () => {
+            const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(video.episodes?.server_data?.Full?.link_embed)}`;
+            window.open(telegramUrl, '_blank');
+          };
+
+          const shareFacebook = document.createElement("button");
+          shareFacebook.textContent = "Facebook";
+          shareFacebook.className = "bg-blue-700 text-white px-2 py-1 rounded hover:bg-blue-800";
+          shareFacebook.onclick = () => {
+            const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(video.episodes?.server_data?.Full?.link_embed)}`;
+            window.open(facebookUrl, '_blank');
+          };
+
+          shareBtnGroup.appendChild(shareMessenger);
+          shareBtnGroup.appendChild(shareTelegram);
+          shareBtnGroup.appendChild(shareFacebook);
+
+          card.appendChild(img);
+          card.appendChild(titleEl);
+          card.appendChild(playBtn);
+          card.appendChild(shareBtnGroup);
+
+          videoContainer.insertBefore(card, sentinel);
+        });
+
+        currentPage++;
+      } catch (e) {
+        console.error("Error loading videos", e);
+      }
+      loading = false;
+    }
+
+    function openModal(videoUrl) {
+      document.getElementById("modalVideo").src = videoUrl;
+      document.getElementById("videoModal").classList.remove("hidden");
+    }
+
+    function closeModal() {
+      document.getElementById("videoModal").classList.add("hidden");
+      document.getElementById("modalVideo").src = "";
+    }
+
+    categoryFilter.addEventListener("change", () => {
+      currentPage = 1;
+      videoContainer.innerHTML = "";
+      videoContainer.appendChild(sentinel);
+      loadPage();
+    });
+
+    searchInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        currentPage = 1;
+        videoContainer.innerHTML = "";
+        videoContainer.appendChild(sentinel);
+        loadPage();
+      }
+    });
+
+    // Initial load
+    loadPage();
+  </script>
+</body>
+</html>

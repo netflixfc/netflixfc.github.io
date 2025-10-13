@@ -10,12 +10,10 @@
             theme: {
                 extend: {
                     colors: {
-                        // ใช้โทนสี Cyan/Teal ที่ดูสดใสและเป็นมืออาชีพ
                         'primary': '#06b6d4', // sky-500
                         'secondary': '#f0f9ff', // sky-50
                     },
                     fontFamily: {
-                        // ใช้ Mitr ตามที่กำหนด
                         sans: ['Mitr', 'sans-serif'],
                     },
                 }
@@ -25,19 +23,17 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;700&display=swap');
         
-        /* Custom scrollbar for a cleaner, professional look */
         .scroll-area::-webkit-scrollbar {
             width: 6px;
         }
         .scroll-area::-webkit-scrollbar-thumb {
-            background-color: #94a3b8; /* slate-400 */
+            background-color: #94a3b8;
             border-radius: 10px;
         }
         .scroll-area::-webkit-scrollbar-track {
             background-color: transparent;
         }
 
-        /* Full height for the container, centered on the screen */
         .web-app-container {
             height: 95vh;
             max-height: 1000px;
@@ -45,363 +41,266 @@
             max-width: 1400px;
         }
 
-        /* Message bubble styles */
         .message-incoming {
             background-color: #ffffff;
-            border-radius: 1.5rem; /* rounded-3xl */
-            border-top-left-radius: 0.5rem; /* rounded-lg */
+            border-radius: 1.5rem;
+            border-top-left-radius: 0.5rem;
         }
         .message-outgoing {
-            background-color: #06b6d4; /* primary */
-            border-radius: 1.5rem; /* rounded-3xl */
-            border-top-right-radius: 0.5rem; /* rounded-lg */
+            background-color: #06b6d4;
+            border-radius: 1.5rem;
+            border-top-right-radius: 0.5rem;
         }
 
-        /* Mobile View: By default, we hide the chat panel and show the sidebar */
-        /* JS will toggle these classes */
-        #main-chat.mobile-hidden {
-            display: none;
+        /* Mobile View Specific Styles */
+        /* View wrapper holds the two main panels (List & Chat) side-by-side */
+        #view-wrapper {
+            transition: transform 0.3s ease-in-out;
+            will-change: transform;
         }
-        #sidebar.mobile-hidden {
-            display: none;
+
+        /* Mobile: Both panels take up the full container width */
+        @media (max-width: 767px) {
+            #view-wrapper {
+                width: 200%; /* Total width of sidebar + chat area */
+                transform: translateX(0); /* Default: Show Sidebar */
+            }
+            .panel-mobile-full {
+                width: 50%;
+            }
+            /* Ensure the sidebar takes 100% of the mobile screen width */
+            #sidebar {
+                 width: 50%; /* It's 50% of the 200% view-wrapper, meaning 100% of the container */
+            }
+             /* Ensure the details sidebar is always hidden on mobile */
+            #details-sidebar {
+                display: none;
+            }
         }
-        /* Mobile: Ensure the one visible panel takes up the full container width */
-        .web-app-container > div {
-            flex-shrink: 0;
-            flex-grow: 1;
+
+        /* Desktop View Styles (md and up) */
+        @media (min-width: 768px) {
+            #view-wrapper {
+                width: 100%; /* Standard flex container */
+                transform: translateX(0) !important; /* Lock position */
+            }
         }
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-0 md:p-4 font-sans">
 
     <!-- Web Application Container -->
-    <!-- On mobile, the main container will house only one visible panel at a time (Sidebar or Chat) -->
-    <div id="app-container" class="web-app-container bg-white rounded-xl shadow-2xl overflow-hidden flex">
+    <div id="app-container" class="web-app-container bg-white rounded-xl shadow-2xl overflow-hidden flex relative">
 
-        <!-- 1. Left Sidebar (Contact List, Friends & Groups) -->
-        <!-- On MD screens and above, it is always visible. On mobile, it's visible by default and covers the whole screen. -->
-        <div id="sidebar" class="w-full md:w-80 lg:w-96 flex-shrink-0 border-r border-gray-200 flex flex-col transition-all duration-300">
+        <!-- View Wrapper (Handles Sliding on Mobile) -->
+        <div id="view-wrapper" class="flex flex-1 md:flex-none">
             
-            <!-- User Profile & Search Header -->
-            <div class="p-4 flex items-center justify-between shadow-sm border-b border-gray-100">
-                <img src="https://i.pravatar.cc/60?u=myprofile" alt="My Avatar" class="w-10 h-10 rounded-full border-2 border-primary">
-                <h1 class="text-xl font-bold text-gray-800 ml-3 flex-1">Maew Mwng 🐱</h1>
-                <button class="text-primary hover:text-primary-dark ml-auto p-2 rounded-full hover:bg-gray-100">
-                    <!-- New Chat/Group Icon (Plus) -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
-                </button>
-            </div>
-
-            <!-- Tab Navigation (Friends/Groups) -->
-            <div class="p-4 flex space-x-2 border-b border-gray-100">
-                <button class="flex-1 py-2 text-sm font-semibold rounded-full bg-primary text-white shadow-md transition duration-150">
-                    เพื่อน (3)
-                </button>
-                <button class="flex-1 py-2 text-sm font-semibold rounded-full text-gray-600 hover:bg-gray-100 transition duration-150">
-                    กลุ่ม (1)
-                </button>
-            </div>
-
-            <!-- Conversation List -->
-            <div class="flex-1 overflow-y-auto scroll-area">
-                <!-- Active Chat Item - Added click handler to switch to chat view -->
-                <div class="chat-item flex items-center p-4 bg-secondary border-l-4 border-primary cursor-pointer transition duration-150" onclick="showChat('เจ้าเหมียวเพื่อนซี้', 'https://i.pravatar.cc/60?u=friend1', 'ออนไลน์')">
-                    <img src="https://i.pravatar.cc/60?u=friend1" alt="Friend 1" class="w-12 h-12 rounded-full mr-4 shadow-md">
-                    <div class="flex-1 truncate">
-                        <div class="flex justify-between items-center">
-                            <h2 class="font-bold text-gray-800 truncate">เจ้าเหมียวเพื่อนซี้</h2>
-                            <span class="text-xs text-primary font-semibold">14:35</span>
-                        </div>
-                        <div class="flex justify-between items-center mt-1">
-                            <p class="text-gray-600 text-sm truncate">เดี๋ยวไปหาที่บ้านนะ ซื้อหนม...</p>
-                            <span class="bg-primary text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-bold shadow-sm">2</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Inactive Chat Item -->
-                <div class="chat-item flex items-center p-4 hover:bg-gray-50 cursor-pointer transition duration-150" onclick="showChat('ทาสแมวหมายเลขหนึ่ง', 'https://i.pravatar.cc/60?u=friend2', 'ออฟไลน์')">
-                    <img src="https://i.pravatar.cc/60?u=friend2" alt="Friend 2" class="w-12 h-12 rounded-full mr-4">
-                    <div class="flex-1 truncate">
-                        <div class="flex justify-between items-center">
-                            <h2 class="font-semibold text-gray-800 truncate">ทาสแมวหมายเลขหนึ่ง</h2>
-                            <span class="text-xs text-gray-400">เมื่อวาน</span>
-                        </div>
-                        <p class="text-gray-500 text-sm truncate mt-1">โอเคคคคคค</p>
-                    </div>
-                </div>
-
-                <!-- Group Chat Item -->
-                <div class="chat-item flex items-center p-4 hover:bg-gray-50 cursor-pointer transition duration-150" onclick="showChat('กลุ่มคนรักแมวเหมียว', 'GROUP_ICON', 'สมาชิก 5 คน')">
-                    <div class="relative w-12 h-12 mr-4 flex items-center justify-center bg-gray-200 rounded-full shadow-md">
-                        <!-- Group Icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                    </div>
-                    <div class="flex-1 truncate">
-                        <div class="flex justify-between items-center">
-                            <h2 class="font-semibold text-gray-800 truncate">กลุ่มคนรักแมวเหมียว</h2>
-                            <span class="text-xs text-gray-400">10:00</span>
-                        </div>
-                        <p class="text-gray-500 text-sm truncate mt-1">น้องเหมียว: รูปนี้ถ่ายที่ไหนคะ?</p>
-                    </div>
-                </div>
+            <!-- 1. Left Sidebar (Contact List, Friends & Groups) -->
+            <!-- On mobile, this acts as the "first screen" -->
+            <div id="sidebar" class="panel-mobile-full md:w-80 lg:w-96 flex-shrink-0 border-r border-gray-200 flex flex-col transition-all duration-300">
                 
-                <!-- More Friends -->
-                 <div class="chat-item flex items-center p-4 hover:bg-gray-50 cursor-pointer transition duration-150" onclick="showChat('แมวอ้วนที่บ้าน', 'https://i.pravatar.cc/60?u=friend3', 'ออฟไลน์')">
-                    <img src="https://i.pravatar.cc/60?u=friend3" alt="Friend 3" class="w-12 h-12 rounded-full mr-4">
-                    <div class="flex-1 truncate">
-                        <div class="flex justify-between items-center">
-                            <h2 class="font-semibold text-gray-800 truncate">แมวอ้วนที่บ้าน</h2>
-                            <span class="text-xs text-gray-400">2 วันที่แล้ว</span>
-                        </div>
-                        <p class="text-gray-500 text-sm truncate mt-1">ส่งรูปมาให้ดูหน่อย</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Sidebar Footer -->
-             <div class="p-3 border-t border-gray-200 flex justify-center text-sm text-gray-500">
-                <p>Maew Mwng Chat v1.0</p>
-            </div>
-
-        </div>
-
-        <!-- 2. Main Chat Area (Conversation) -->
-        <!-- On mobile, this is hidden by default and shown when a chat is selected. On MD screens, it is always visible. -->
-        <div id="main-chat" class="flex-1 flex flex-col bg-secondary mobile-hidden md:flex">
-
-            <!-- Chat Header -->
-            <header class="bg-white p-4 shadow-md z-10 flex items-center border-b border-gray-200">
-                <!-- Back Button (Visible on mobile only, hides sidebar on desktop) -->
-                <button id="back-button" class="md:hidden text-gray-500 mr-3 p-1 rounded-full hover:bg-gray-100" onclick="showSidebar()">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
-                </button>
-                
-                <img id="chat-avatar" src="https://i.pravatar.cc/50?u=friend1" alt="Chat Avatar" class="w-10 h-10 rounded-full mr-3 shadow-sm">
-                <div class="flex-1">
-                    <h2 id="chat-title" class="font-bold text-gray-800">เจ้าเหมียวเพื่อนซี้</h2>
-                    <p id="chat-status" class="text-xs text-green-500 flex items-center">
-                        <span class="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
-                        ออนไลน์
-                    </p>
-                </div>
-                
-                <!-- Action Buttons -->
-                <div class="flex space-x-2">
-                    <button class="text-gray-500 hover:text-primary p-2 rounded-full hover:bg-gray-100 transition duration-150">
-                        <!-- Video Call Icon -->
-                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    </button>
-                    <!-- Show details sidebar button (only on MD/LG screens, or to show the hidden right sidebar on mobile) -->
-                    <button id="details-toggle" class="text-gray-500 hover:text-primary p-2 rounded-full hover:bg-gray-100 transition duration-150" onclick="toggleDetailsSidebar()">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <!-- User Profile & Search Header -->
+                <div class="p-4 flex items-center justify-between shadow-sm border-b border-gray-100">
+                    <img src="https://i.pravatar.cc/60?u=myprofile" alt="รูปโปรไฟล์ของฉัน" class="w-10 h-10 rounded-full border-2 border-primary">
+                    <h1 class="text-xl font-bold text-gray-800 ml-3 flex-1">Maew Mwng 🐱</h1>
+                    <button class="text-primary hover:text-primary-dark ml-auto p-2 rounded-full hover:bg-gray-100" aria-label="สร้างแชทใหม่">
+                        <!-- New Chat/Group Icon (Plus) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
                     </button>
                 </div>
-            </header>
 
-            <!-- Message Display Area -->
-            <div id="message-area" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 scroll-area">
+                <!-- Tab Navigation (Friends/Groups) -->
+                <div class="p-4 flex space-x-2 border-b border-gray-100">
+                    <button class="flex-1 py-2 text-sm font-semibold rounded-full bg-primary text-white shadow-md transition duration-150">
+                        เพื่อน (3)
+                    </button>
+                    <button class="flex-1 py-2 text-sm font-semibold rounded-full text-gray-600 hover:bg-gray-100 transition duration-150">
+                        กลุ่ม (1)
+                    </button>
+                </div>
+
+                <!-- Conversation List -->
+                <div class="flex-1 overflow-y-auto scroll-area">
+                    <!-- Active Chat Item - Added click handler to switch to chat view -->
+                    <div class="chat-item flex items-center p-4 bg-secondary border-l-4 border-primary cursor-pointer transition duration-150" onclick="showChat('เจ้าเหมียวเพื่อนซี้', 'https://i.pravatar.cc/60?u=friend1', 'ออนไลน์')">
+                        <img src="https://i.pravatar.cc/60?u=friend1" alt="เพื่อนที่ 1" class="w-12 h-12 rounded-full mr-4 shadow-md">
+                        <div class="flex-1 truncate">
+                            <div class="flex justify-between items-center">
+                                <h2 class="font-bold text-gray-800 truncate">เจ้าเหมียวเพื่อนซี้</h2>
+                                <span class="text-xs text-primary font-semibold">14:35</span>
+                            </div>
+                            <div class="flex justify-between items-center mt-1">
+                                <p class="text-gray-600 text-sm truncate">เดี๋ยวไปหาที่บ้านนะ ซื้อหนม...</p>
+                                <span class="bg-primary text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-bold shadow-sm">2</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Inactive Chat Items (Placeholder structure) -->
+                    <div class="chat-item flex items-center p-4 hover:bg-gray-50 cursor-pointer transition duration-150" onclick="showChat('ทาสแมวหมายเลขหนึ่ง', 'https://i.pravatar.cc/60?u=friend2', 'ออฟไลน์')">
+                        <img src="https://i.pravatar.cc/60?u=friend2" alt="เพื่อนที่ 2" class="w-12 h-12 rounded-full mr-4">
+                        <div class="flex-1 truncate">
+                            <div class="flex justify-between items-center">
+                                <h2 class="font-semibold text-gray-800 truncate">ทาสแมวหมายเลขหนึ่ง</h2>
+                                <span class="text-xs text-gray-400">เมื่อวาน</span>
+                            </div>
+                            <p class="text-gray-500 text-sm truncate mt-1">โอเคคคคคค</p>
+                        </div>
+                    </div>
+                </div>
                 
-                <!-- Mock Messages (Can be dynamically loaded later) -->
-                <div class="flex justify-center my-4">
-                    <span class="text-xs text-gray-500 bg-gray-200 px-3 py-1 rounded-full shadow-sm">
-                        25 ตุลาคม 2568
-                    </span>
+                <!-- Sidebar Footer -->
+                 <div class="p-3 border-t border-gray-200 flex justify-center text-sm text-gray-500">
+                    <p>Maew Mwng Chat v1.0</p>
                 </div>
-                <div class="flex justify-start">
-                    <div class="max-w-[75%] lg:max-w-[60%] flex flex-col items-start">
-                        <div class="message-incoming p-4 shadow-md">
-                            <p class="text-sm text-gray-800">ว่าไงงงงงงงง สบายดีไหมคะ หายไปนานเลยนะ ไม่เห็นออนไลน์หลายวันแล้ว</p>
-                        </div>
-                        <span class="text-xs text-gray-500 mt-1 ml-3">14:32</span>
-                    </div>
-                </div>
-                <div class="flex justify-end">
-                    <div class="max-w-[75%] lg:max-w-[60%] flex flex-col items-end">
-                        <div class="message-outgoing p-4 shadow-md text-white">
-                            <p class="text-sm">เดี๋ยวไปหาที่บ้านนะ ซื้อหนมไปฝากแมวเมิงด้วย คิดถึงมากๆ เลย!</p>
-                        </div>
-                        <span class="text-xs text-gray-300 mt-1 mr-3">14:35 · อ่านแล้ว</span>
-                    </div>
-                </div>
-                <div class="flex justify-start">
-                    <div class="max-w-[75%] lg:max-w-[60%] flex flex-col items-start">
-                        <div class="message-incoming p-2 shadow-md">
-                            <img src="https://placehold.co/200x150/dbeafe/1e40af?text=Cute+Cat" onerror="this.src='https://placehold.co/200x150/dbeafe/1e40af?text=รูปน้องเหมียว';" alt="รูปน้องเหมียว" class="rounded-xl">
-                            <p class="text-xs mt-2 text-gray-700">ดูรูปแมวที่บ้านหน่อย ตัวอ้วนขึ้นเยอะเลย!</p>
-                        </div>
-                        <span class="text-xs text-gray-500 mt-1 ml-3">14:36</span>
-                    </div>
-                </div>
+
             </div>
 
-            <!-- Chat Footer (Input Area) -->
-            <footer class="bg-white p-4 flex items-center border-t border-gray-200 z-10 shadow-lg">
-                <!-- Attachment Button -->
-                <button class="text-gray-500 p-3 rounded-full hover:bg-gray-100 transition duration-150 hover:text-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
-                </button>
+            <!-- 2. Main Chat Area (Conversation) -->
+            <!-- On mobile, this acts as the "second screen" (right) -->
+            <div id="main-chat" class="panel-mobile-full flex flex-col bg-secondary flex-1">
 
-                <!-- Text Input -->
-                <input type="text" placeholder="พิมพ์ข้อความที่นี่..." class="flex-1 mx-3 p-3 text-base bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-primary transition duration-150 shadow-inner" aria-label="พิมพ์ข้อความ">
-                
-                <!-- Send Button -->
-                <button class="bg-primary text-white p-3 rounded-full hover:bg-sky-600 shadow-md transition duration-150 transform hover:scale-105">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
-                </button>
-            </footer>
+                <!-- Chat Header -->
+                <header class="bg-white p-4 shadow-md z-10 flex items-center border-b border-gray-200">
+                    <!-- Back Button (Visible on mobile only to slide back to list) -->
+                    <button id="back-button" class="md:hidden text-gray-500 mr-3 p-1 rounded-full hover:bg-gray-100" onclick="showList()" aria-label="กลับสู่รายชื่อแชท">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    
+                    <img id="chat-avatar" src="https://i.pravatar.cc/50?u=friend1" alt="รูปโปรไฟล์แชท" class="w-10 h-10 rounded-full mr-3 shadow-sm">
+                    <div class="flex-1">
+                        <h2 id="chat-title" class="font-bold text-gray-800">เจ้าเหมียวเพื่อนซี้</h2>
+                        <p id="chat-status" class="text-xs text-green-500 flex items-center">
+                            <span class="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
+                            ออนไลน์
+                        </p>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="flex space-x-2">
+                        <button class="text-gray-500 hover:text-primary p-2 rounded-full hover:bg-gray-100 transition duration-150" aria-label="โทรวิดีโอ">
+                            <!-- Video Call Icon -->
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        </button>
+                        <!-- Detail Icon (Toggle for desktop, but not implemented for sliding in this mobile fix version) -->
+                        <button id="details-toggle" class="text-gray-500 hover:text-primary p-2 rounded-full hover:bg-gray-100 transition duration-150 lg:hidden" aria-label="ดูรายละเอียดแชท">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Message Display Area -->
+                <div id="message-area" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 scroll-area">
+                    <!-- Message content goes here... -->
+                    <div class="flex justify-center my-4">
+                        <span class="text-xs text-gray-500 bg-gray-200 px-3 py-1 rounded-full shadow-sm">
+                            25 ตุลาคม 2568
+                        </span>
+                    </div>
+
+                    <div class="flex justify-start">
+                        <div class="max-w-[75%] lg:max-w-[60%] flex flex-col items-start">
+                            <div class="message-incoming p-4 shadow-md">
+                                <p class="text-sm text-gray-800">ว่าไงงงงงงงง สบายดีไหมคะ หายไปนานเลยนะ ไม่เห็นออนไลน์หลายวันแล้ว</p>
+                            </div>
+                            <span class="text-xs text-gray-500 mt-1 ml-3">14:32</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <div class="max-w-[75%] lg:max-w-[60%] flex flex-col items-end">
+                            <div class="message-outgoing p-4 shadow-md text-white">
+                                <p class="text-sm">เดี๋ยวไปหาที่บ้านนะ ซื้อหนมไปฝากแมวเมิงด้วย คิดถึงมากๆ เลย!</p>
+                            </div>
+                            <span class="text-xs text-gray-300 mt-1 mr-3">14:35 · อ่านแล้ว</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Footer (Input Area) -->
+                <footer class="bg-white p-4 flex items-center border-t border-gray-200 z-10 shadow-lg">
+                    <!-- Attachment Button -->
+                    <button class="text-gray-500 p-3 rounded-full hover:bg-gray-100 transition duration-150 hover:text-primary" aria-label="แนบไฟล์">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
+                    </button>
+
+                    <!-- Text Input -->
+                    <input type="text" placeholder="พิมพ์ข้อความที่นี่..." class="flex-1 mx-3 p-3 text-base bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-primary transition duration-150 shadow-inner" aria-label="ช่องป้อนข้อความ">
+                    
+                    <!-- Send Button -->
+                    <button class="bg-primary text-white p-3 rounded-full hover:bg-sky-600 shadow-md transition duration-150 transform hover:scale-105" aria-label="ส่งข้อความ">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
+                    </button>
+                </footer>
+            </div>
+            
         </div>
-
-        <!-- 3. Right Sidebar (Chat Details/Info) -->
-        <!-- Always hidden by default on mobile. On LG screens, it's always visible. -->
+        
+        <!-- 3. Right Sidebar (Chat Details/Info) - Always hidden on mobile/md, shown on lg screens -->
         <div id="details-sidebar" class="hidden lg:block w-72 flex-shrink-0 border-l border-gray-200 p-4 bg-gray-50 overflow-y-auto scroll-area transition-all duration-300">
-            <header class="flex items-center justify-between lg:hidden border-b pb-2 mb-4">
-                <h3 class="text-lg font-bold text-gray-800">ข้อมูล</h3>
-                <button class="text-gray-500 p-1 rounded-full hover:bg-gray-200" onclick="toggleDetailsSidebar()">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
-            </header>
-
+            <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">ข้อมูลการสนทนา</h3>
             <div id="detail-content">
                 <div class="flex flex-col items-center mb-6">
-                    <img id="detail-avatar" src="https://i.pravatar.cc/100?u=friend1" alt="Friend 1 Profile" class="w-24 h-24 rounded-full mb-3 shadow-lg border-4 border-white">
+                    <img id="detail-avatar" src="https://i.pravatar.cc/100?u=friend1" alt="รูปโปรไฟล์เพื่อน" class="w-24 h-24 rounded-full mb-3 shadow-lg border-4 border-white">
                     <p id="detail-name" class="text-xl font-semibold text-gray-800">เจ้าเหมียวเพื่อนซี้</p>
                     <span class="text-sm text-gray-500">@meow_buddy</span>
-                </div>
-
-                <div class="space-y-4">
-                    <button class="w-full flex items-center justify-center p-3 rounded-xl text-white bg-green-500 hover:bg-green-600 font-semibold shadow-md transition duration-150">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
-                        โทรศัพท์
-                    </button>
-                    
-                    <!-- Shared Media/Files -->
-                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                        <h4 class="font-semibold text-gray-700 mb-2">สื่อที่แชร์</h4>
-                        <div class="grid grid-cols-3 gap-2">
-                            <img src="https://placehold.co/80x80/dbeafe/1e40af?text=Photo+1" alt="Photo 1" class="w-full h-auto rounded-lg object-cover cursor-pointer hover:opacity-80 transition">
-                            <img src="https://placehold.co/80x80/dbeafe/1e40af?text=Photo+2" alt="Photo 2" class="w-full h-auto rounded-lg object-cover cursor-pointer hover:opacity-80 transition">
-                            <div class="w-full h-[80px] rounded-lg bg-gray-200 flex items-center justify-center text-xs text-gray-600 cursor-pointer hover:bg-gray-300 transition">+12</div>
-                        </div>
-                    </div>
-                    
-                    <!-- Settings -->
-                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 space-y-2">
-                        <h4 class="font-semibold text-gray-700 mb-2">ตั้งค่า</h4>
-                        <p class="text-sm text-primary flex items-center hover:bg-secondary p-1 rounded-md cursor-pointer">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.405L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-                            ตั้งค่าการแจ้งเตือน
-                        </p>
-                        <p class="text-sm text-red-500 flex items-center hover:bg-red-50 p-1 rounded-md cursor-pointer">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>
-                            บล็อกผู้ใช้
-                        </p>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const sidebar = document.getElementById('sidebar');
-        const mainChat = document.getElementById('main-chat');
-        const detailsSidebar = document.getElementById('details-sidebar');
+        const viewWrapper = document.getElementById('view-wrapper');
         const chatTitle = document.getElementById('chat-title');
         const chatAvatar = document.getElementById('chat-avatar');
         const chatStatus = document.getElementById('chat-status');
         const detailAvatar = document.getElementById('detail-avatar');
         const detailName = document.getElementById('detail-name');
-        const appContainer = document.getElementById('app-container');
 
         // Function to check if the screen is mobile based on Tailwind's 'md' breakpoint (768px)
         const isMobile = () => window.innerWidth < 768;
 
-        // 1. Initial setup on load
-        window.onload = () => {
-            // Check if we are on a mobile screen
-            if (isMobile()) {
-                // On mobile, start by showing only the sidebar (list of chats)
-                mainChat.classList.add('mobile-hidden');
-                detailsSidebar.classList.add('mobile-hidden');
-            } else {
-                // On desktop, show all three panels (or two, since LG handles details sidebar)
-                mainChat.classList.remove('mobile-hidden');
-            }
-        };
-
-        // 2. Show the Chat Panel (when user clicks a contact)
+        // 1. Show the Chat Panel (Slides to the left)
         window.showChat = (name, avatar, status) => {
-            // Update chat header details
+            // Update chat header details and detail panel
             chatTitle.textContent = name;
             chatStatus.textContent = status;
             detailName.textContent = name;
-            
-            // Handle avatar updates (check for group icon placeholder)
+
+            // Update avatar images
             if (avatar === 'GROUP_ICON') {
-                 // For the chat header, use a default person icon for the group
                 chatAvatar.src = 'https://i.pravatar.cc/50?u=group_default'; 
                 detailAvatar.src = 'https://i.pravatar.cc/100?u=group_default';
             } else {
                 chatAvatar.src = avatar;
-                detailAvatar.src = avatar.replace('60', '100'); // Use larger size for detail
+                detailAvatar.src = avatar.replace('60', '100');
             }
 
-            // Only switch views if on a mobile screen
+            // If mobile, slide to the chat view
             if (isMobile()) {
-                sidebar.classList.add('mobile-hidden');
-                mainChat.classList.remove('mobile-hidden');
-                detailsSidebar.classList.add('mobile-hidden'); // Ensure details is hidden
+                viewWrapper.style.transform = 'translateX(-50%)';
             }
-            // If desktop, both are visible, no class changes needed.
         };
 
-        // 3. Show the Sidebar (when user clicks back button on mobile)
-        window.showSidebar = () => {
+        // 2. Show the Sidebar (Slides back to the right)
+        window.showList = () => {
             if (isMobile()) {
-                mainChat.classList.add('mobile-hidden');
-                detailsSidebar.classList.add('mobile-hidden');
-                sidebar.classList.remove('mobile-hidden');
+                viewWrapper.style.transform = 'translateX(0)';
             }
         };
         
-        // 4. Toggle the Details Sidebar
-        window.toggleDetailsSidebar = () => {
-             // On large screens, this button doesn't do anything as the panel is managed by Tailwind's 'lg:block'
-             if (window.innerWidth >= 1024) return; 
-
-             // On mobile/md screens, manually toggle the display of the details sidebar
-             if (detailsSidebar.classList.contains('mobile-hidden')) {
-                // Show details sidebar
-                detailsSidebar.classList.remove('hidden', 'mobile-hidden');
-                mainChat.classList.add('mobile-hidden');
-                sidebar.classList.add('mobile-hidden');
-                // Make details sidebar take full width on mobile
-                detailsSidebar.classList.add('w-full');
-             } else {
-                // Hide details sidebar and return to main chat view
-                detailsSidebar.classList.add('mobile-hidden', 'hidden');
-                mainChat.classList.remove('mobile-hidden');
-                detailsSidebar.classList.remove('w-full');
-             }
-        };
-        
-        // Handle window resize to switch between mobile and desktop states smoothly
+        // 3. Handle window resize to reset the sliding behavior when transitioning to/from desktop
+        let resizeTimeout;
         window.addEventListener('resize', () => {
-            // Reset state if transitioning between mobile/desktop breakpoints
-            if (window.innerWidth >= 768) {
-                // Desktop: Ensure main elements are visible
-                sidebar.classList.remove('mobile-hidden');
-                mainChat.classList.remove('mobile-hidden');
-                detailsSidebar.classList.remove('mobile-hidden');
-            } else {
-                // Mobile: Enforce mobile view state (showing sidebar or chat only)
-                if (!sidebar.classList.contains('mobile-hidden') && !mainChat.classList.contains('mobile-hidden')) {
-                    // If both are visible (e.g., resized from desktop), hide chat to show sidebar default
-                    mainChat.classList.add('mobile-hidden');
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                // If desktop size, ensure transform is reset so layout works via flexbox
+                if (!isMobile()) {
+                    viewWrapper.style.transform = 'translateX(0)';
                 }
-            }
+            }, 100); // Debounce resize event
         });
-
+        
     </script>
 </body>
 </html>

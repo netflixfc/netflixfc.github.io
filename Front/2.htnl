@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สร้างเอเจนต์ AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* * CSS Stylesheet เพื่อจัดหน้าตาให้เหมือนในภาพ
+         */
+
+        :root {
+            --primary-color: #4285f4; /* สีน้ำเงินหลัก (คล้ายๆ Google) */
+            --border-color: #dfe1e5;
+            --background-color: #f8f9fa;
+            --form-background: #ffffff;
+            --text-color: #202124;
+            --label-color: #5f6368;
+            --input-focus-border: #4285f4;
+        }
+
+        body {
+            font-family: 'Sarabun', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: var(--form-background);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            padding: 24px 32px;
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 0 0 4px 0;
+        }
+
+        header p {
+            font-size: 14px;
+            color: var(--label-color);
+            margin: 0 0 24px 0;
+        }
+
+        .form-grid {
+            display: grid;
+            /* สร้าง 2 คอลัมน์เท่าๆ กัน */
+            grid-template-columns: repeat(2, 1fr);
+            /* เว้นช่องว่างระหว่างช่อง */
+            gap: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-group .label-note {
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--label-color);
+        }
+
+        /* สไตล์สำหรับ Input, Textarea, Select */
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: 'Sarabun', sans-serif;
+            box-sizing: border-box; /* ป้องกัน padding ทำให้ล้นกรอบ */
+            transition: border-color 0.2s ease;
+        }
+
+        input[type="text"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--input-focus-border);
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* สำหรับช่องที่กินความกว้าง 2 คอลัมน์ */
+        .full-width {
+            grid-column: 1 / -1; /* เริ่มจาก 1 ถึงคอลัมน์สุดท้าย */
+        }
+
+        .textarea-large {
+            min-height: 250px;
+        }
+
+        /* กล่อง "มาตรฐาน" */
+        .info-box {
+            background-color: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 16px;
+            font-size: 13px;
+            color: var(--label-color);
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        .info-box strong {
+            color: var(--text-color);
+            font-weight: 500;
+        }
+        
+        /* สไตล์สำหรับ Checkbox */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 4px 0;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary-color);
+        }
+
+        .checkbox-group label {
+            font-weight: 400;
+            margin-bottom: 0;
+            user-select: none; /* ป้องกันการเลือกข้อความตอนคลิก */
+            cursor: pointer;
+        }
+
+        hr.divider {
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 32px 0 24px 0;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end; /* จัดปุ่มไปทางขวา */
+            gap: 12px;
+        }
+
+        button {
+            padding: 10px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'Sarabun', sans-serif;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        button.btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        button.btn-primary:hover {
+            background-color: #1a73e8; /* สีเข้มขึ้นเมื่อ hover */
+        }
+
+        button.btn-secondary {
+            background-color: var(--form-background);
+            color: var(--primary-color);
+            border-color: var(--border-color);
+        }
+        
+        button.btn-secondary:hover {
+            background-color: #f1f3f4;
+        }
+
+        /* สำหรับหน้าจอมือถือ ให้เป็น 1 คอลัมน์ */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 16px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>สร้างเอเจนต์ AI</h1>
+            <p>สร้างเอเจนต์ AI ใหม่สำหรับธุรกิจของคุณ</p>
+        </header>
+
+        <form action="#" method="post">
+            
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="name-th">ชื่อ (Thai)</label>
+                    <input type="text" id="name-th" placeholder="เช่น มิ้นท์">
+                </div>
+                
+                <div class="form-group">
+                    <label for="name-en">ชื่อ (English (US))</label>
+                    <input type="text" id="name-en">
+                </div>
+
+                <div class="form-group">
+                    <label for="prompt-th">คำสั่งเริ่มต้น (Thai)</label>
+                    <textarea id="prompt-th" placeholder="คำสั่งเริ่มต้นคือ สิ่งที่คุณใช้คุยกับ AI ..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="prompt-en">คำสั่งเริ่มต้น (English (US))</label>
+                    <textarea id="prompt-en"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="ai-model">รุ่นเซลล์ AI</label>
+                    <select id="ai-model">
+                        <option value="gpt-4o">GPT-4o</option>
+                        <option value="gpt-4">GPT-4</option>
+                        <option value="gpt-3.5">GPT-3.5</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>มาตรฐาน</label>
+                    <div class="info-box">
+                        รุ่นนี้ถูกจำกัดโดยมาตรฐานขององค์กรและอาจจำกัดการใช้ความสามารถบางอย่าง
+                        <br><br>
+                        <strong>Pricing:</strong>
+                        <div>Per message: 0.25/1000/2000 THB</div>
+                        <div>Per message large: 1.25/1000/2000 THB</div>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="details">รายละเอียดเพิ่มเติมสำหรับโมเดล</label>
+                    <input type="text" id="details" value="มาตรฐาน">
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="instructions">คำแนะนำ</label>
+                    <textarea id="instructions" class="textarea-large" placeholder="คุณคือผู้ช่วยแชทบอทชื่อ {INSERT_YOUR_ASSISTANT_NAME} ... (คัดลอกข้อความจากในภาพมาใส่ที่นี่)"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="hide-greeting" checked>
+                        <label for="hide-greeting">ซ่อนข้อความแจ้งคำทักทาย</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="enable-memory">
+                        <label for="enable-memory">ความสามารถในการจดจำเรื่องราว (ขึ้นกับบริบท)</label>
+                    </div>
+                    <div class="form-group" style="margin-top: 16px;">
+                        <label for="memory-context">ความสามารถในการจดจำเรื่องราว (ขึ้นกับบริบท)</label>
+                        <input type="text" id="memory-context" value="0">
+                    </div>
+                    <div class="checkbox-group" style="margin-top: 16px;">
+                        <input type="checkbox" id="allow-upload" checked>
+                        <label for="allow-upload">อนุญาตให้อัปโหลดไฟล์</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="link-upload" checked>
+                        <label for="link-upload">เชื่อมโยงการอัปโหลดไฟล์</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="upload-info">ข้อมูลการอัปโหลดไฟล์</label>
+                    <textarea id="upload-info"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="initial-content">ป้อนเนื้อหาเริ่มต้น</label>
+                    <textarea id="initial-content"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    </div>
+
+            </div> <hr class="divider">
+
+            <div class="form-actions">
+                <button type="button" class="btn-secondary">ยกเลิก</button>
+                <button type="submit" class="btn-primary">สร้างเอเจนต์</button>
+            </div>
+
+        </form>
+    </div>
+
+</body>
+</html>

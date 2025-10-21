@@ -1,0 +1,225 @@
+    
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitmintAPI Agent</title>
+    
+    <!-- Tailwind CSS จาก CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts (Sarabun สำหรับภาษาไทย) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Library (Lucide Icons) -->
+    <script src="https://unpkg.com/lucide-react@latest/dist/lucide-react.js"></script>
+
+    <!-- ตั้งค่า Tailwind CSS และ Theme สีใหม่ -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Sarabun', 'sans-serif'],
+                    },
+                    colors: {
+                        // ชุดสีใหม่ที่ได้แรงบันดาลใจจาก Adobe
+                        'brand-bg': '#181818',
+                        'brand-surface': '#262626',
+                        'brand-card': '#2f2f2f',
+                        'brand-border': '#424242',
+                        'brand-accent-red': '#e11d48',
+                        'brand-accent-blue': '#3b82f6',
+                        'text-primary': '#f5f5f5',
+                        'text-secondary': '#a3a3a3',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* CSS สำหรับ Scrollbar และปรับปรุง UI เล็กน้อย */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #181818; }
+        ::-webkit-scrollbar-thumb { background: #424242; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        .nav-link.active { background-color: #3f3f3f; color: #f5f5f5; }
+    </style>
+</head>
+<body class="bg-brand-bg text-text-primary font-sans antialiased">
+
+    <div class="flex flex-col h-screen">
+        <!-- ==== Top Navigation Bar (แถบเมนูด้านบน) ==== -->
+        <header class="bg-brand-surface w-full h-16 flex items-center px-6 border-b border-brand-border shrink-0 z-10">
+            <div class="flex items-center space-x-2">
+                <svg class="w-8 h-8 text-brand-accent-red" viewBox="0 0 24 24" fill="currentColor"><path d="M16.88,6.72,14.22,3.35a1,1,0,0,0-1.41,0L5.35,13.2a2,2,0,0,0-.56,1.18L4,21l6.62-.79a2,2,0,0,0,1.18-.56L21.65,9.8a1,1,0,0,0,0-1.41Z"/></svg>
+                <span class="font-bold text-xl text-text-primary">GitmintAPI</span>
+            </div>
+            <nav class="ml-10 hidden md:flex items-center space-x-1">
+                <a href="#" class="px-4 py-2 text-sm font-semibold rounded-full bg-brand-card text-text-primary">หน้าหลัก</a>
+                <a href="#" class="px-4 py-2 text-sm font-semibold rounded-full hover:bg-brand-card text-text-secondary">ผลิตภัณฑ์</a>
+                <a href="#" class="px-4 py-2 text-sm font-semibold rounded-full hover:bg-brand-card text-text-secondary">โซลูชั่น</a>
+                <a href="#" class="px-4 py-2 text-sm font-semibold rounded-full hover:bg-brand-card text-text-secondary">ราคา</a>
+            </nav>
+            <div class="ml-auto flex items-center space-x-4">
+                <button class="p-2 rounded-full hover:bg-brand-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </button>
+                <button class="px-5 py-2 text-sm font-semibold bg-white text-black rounded-full hover:bg-gray-200">เข้าสู่ระบบ</button>
+                 <div class="w-9 h-9 bg-pink-500 rounded-full flex items-center justify-center font-bold text-white">?</div>
+            </div>
+        </header>
+
+        <!-- ==== Main Layout (ส่วนเนื้อหาหลัก) ==== -->
+        <div class="flex flex-1 overflow-hidden">
+            <!-- Left Sidebar (เมนูย่อยด้านซ้าย) -->
+            <aside class="w-60 bg-brand-surface p-4 flex flex-col shrink-0 overflow-y-auto">
+                <nav class="flex flex-col space-y-2">
+                    <a href="#" id="nav-home" class="nav-link active flex items-center space-x-3 p-3 rounded-lg text-text-secondary" onclick="showPage('home')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        <span>หน้าแรก</span>
+                    </a>
+                    <a href="#" id="nav-projects" class="nav-link flex items-center space-x-3 p-3 rounded-lg text-text-secondary" onclick="showPage('projects')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                        <span>โปรเจกต์</span>
+                    </a>
+                     <a href="#" class="nav-link flex items-center space-x-3 p-3 rounded-lg text-text-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        <span>ไฟล์</span>
+                    </a>
+                    <!-- ... เพิ่มเมนูอื่นๆ ... -->
+                </nav>
+            </aside>
+
+            <!-- Center Content (ส่วนแสดงผลกลาง) -->
+            <main class="flex-1 p-8 overflow-y-auto">
+                <div id="page-container" class="max-w-7xl mx-auto">
+                    <!-- PAGE 1: หน้าแรก (Home) -->
+                    <div id="home" class="page-content">
+                        <!-- Prompt Input Card -->
+                        <div class="bg-brand-card rounded-2xl p-6 mb-10" style="background-image: url('https://placehold.co/1200x300/181818/424242?text=..'); background-size: cover; background-position: center;">
+                            <h2 class="text-2xl font-semibold mb-3 text-text-primary">เริ่มต้นสร้างสรรค์ผลงานของคุณ</h2>
+                            <p class="text-text-secondary mb-5">เพียงอธิบายสิ่งที่คุณต้องการ แล้วให้ Agent ของเราจัดการที่เหลือ</p>
+                            <div class="flex items-center bg-brand-surface p-2 rounded-full border border-brand-border focus-within:border-brand-accent-blue">
+                                <div class="flex items-center space-x-2 px-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                                    <span class="text-sm font-medium">รูปภาพ</span>
+                                </div>
+                                <input type="text" class="flex-grow bg-transparent focus:outline-none p-2 text-text-primary" placeholder="เช่น 'นักบินอวกาศขี่ม้าบนดาวอังคาร สไตล์ภาพวาดสีน้ำมัน'">
+                                <button class="bg-brand-accent-blue text-white font-semibold py-2 px-6 rounded-full hover:opacity-90 transition-opacity">สร้าง</button>
+                            </div>
+                        </div>
+
+                        <!-- Action Cards -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="bg-brand-card p-6 rounded-2xl flex flex-col">
+                                <div class="w-12 h-12 bg-pink-500 rounded-lg mb-4"></div>
+                                <h3 class="font-semibold text-lg text-text-primary">GitmintAPI Agent Pro</h3>
+                                <p class="text-text-secondary text-sm mb-6">ปลดล็อกความสามารถเต็มรูปแบบ ทั้ง Firefly, Express, Photoshop และอีกมากมาย</p>
+                                <div class="mt-auto flex items-center space-x-3">
+                                    <button class="flex-1 bg-brand-surface hover:bg-brand-border text-text-primary text-sm font-semibold py-2 rounded-full">ทดลองใช้ฟรี</button>
+                                    <button class="flex-1 bg-brand-accent-blue hover:opacity-90 text-white text-sm font-semibold py-2 rounded-full">ซื้อ</button>
+                                </div>
+                            </div>
+                             <div class="bg-brand-card p-6 rounded-2xl flex flex-col">
+                                <div class="w-12 h-12 bg-sky-500 rounded-lg mb-4"></div>
+                                <h3 class="font-semibold text-lg text-text-primary">สร้างวิดีโออวตาร</h3>
+                                <p class="text-text-secondary text-sm mb-6">เปลี่ยนข้อความเป็นวิดีโอพรีเซนเทชั่นคุณภาพสูง พร้อมลิปซิงค์ตามเสียงพูด</p>
+                                <div class="mt-auto flex items-center space-x-3">
+                                     <button class="w-full bg-brand-surface hover:bg-brand-border text-text-primary text-sm font-semibold py-2 rounded-full">ทดลองใช้ฟรี</button>
+                                </div>
+                            </div>
+                             <div class="bg-brand-card p-6 rounded-2xl flex flex-col">
+                                <div class="w-12 h-12 bg-purple-500 rounded-lg mb-4"></div>
+                                <h3 class="font-semibold text-lg text-text-primary">จัดการเอกสารอัตโนมัติ</h3>
+                                <p class="text-text-secondary text-sm mb-6">สรุป, แก้ไข และสร้างเอกสาร PDF อย่างรวดเร็วด้วย AI อัจฉริยะจากเรา</p>
+                                <div class="mt-auto flex items-center space-x-3">
+                                     <button class="w-full bg-brand-surface hover:bg-brand-border text-text-primary text-sm font-semibold py-2 rounded-full">ทดลองใช้ฟรี</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PAGE 2: โปรเจกต์ (Projects) -->
+                    <div id="projects" class="page-content hidden">
+                        <h1 class="text-3xl font-bold mb-6 text-text-primary">โปรเจกต์ของคุณ</h1>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                            <!-- Placeholder project card -->
+                            <div class="aspect-square bg-brand-card rounded-lg flex items-center justify-center text-text-secondary">โปรเจกต์ 1</div>
+                            <div class="aspect-square bg-brand-card rounded-lg flex items-center justify-center text-text-secondary">โปรเจกต์ 2</div>
+                            <div class="aspect-square bg-brand-card rounded-lg flex items-center justify-center text-text-secondary">โปรเจกต์ 3</div>
+                            <div class="aspect-square bg-brand-card rounded-lg border-2 border-dashed border-brand-border flex items-center justify-center text-text-secondary hover:bg-brand-card cursor-pointer">สร้างใหม่</div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Right Sidebar (แถบไฟล์ล่าสุดด้านขวา) -->
+            <aside class="w-80 bg-brand-surface p-4 shrink-0 hidden lg:flex flex-col border-l border-brand-border overflow-y-auto">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-semibold text-text-primary">ไฟล์ล่าสุด</h3>
+                    <div class="flex items-center space-x-1">
+                        <button class="p-2 rounded hover:bg-brand-card"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4 M14 3h4a2 2 0 0 1 2 2v2 M14 21h4a2 2 0 0 0 2-2v-2 M10 21v-4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4"/></svg></button>
+                        <button class="p-2 rounded hover:bg-brand-card"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-2 cursor-pointer group">
+                        <div class="aspect-video bg-brand-card rounded-md overflow-hidden"><img src="https://placehold.co/400x225/e11d48/white?text=Video" class="object-cover w-full h-full"></div>
+                        <p class="text-sm text-text-secondary group-hover:text-text-primary">LISA_MOONLIGHT.MP4</p>
+                    </div>
+                     <div class="space-y-2 cursor-pointer group">
+                        <div class="aspect-video bg-brand-card rounded-md overflow-hidden"><img src="https://placehold.co/400x225/3b82f6/white?text=API" class="object-cover w-full h-full"></div>
+                        <p class="text-sm text-text-secondary group-hover:text-text-primary">Backendsparesos</p>
+                    </div>
+                     <div class="space-y-2 cursor-pointer group">
+                        <div class="aspect-video bg-brand-card rounded-md overflow-hidden flex items-center justify-center p-4"><div class="w-12 h-12 bg-red-800 flex items-center justify-center text-white font-bold rounded-md">PDF</div></div>
+                        <p class="text-sm text-text-secondary group-hover:text-text-primary">Untitled - 09.pdf</p>
+                    </div>
+                     <div class="space-y-2 cursor-pointer group">
+                        <div class="aspect-video bg-brand-card rounded-md overflow-hidden flex items-center justify-center p-4"><div class="w-12 h-12 bg-red-800 flex items-center justify-center text-white font-bold rounded-md">PDF</div></div>
+                        <p class="text-sm text-text-secondary group-hover:text-text-primary">automated-dat...</p>
+                    </div>
+                </div>
+                 <div class="mt-auto p-4 bg-brand-card rounded-xl flex items-center justify-center text-center cursor-pointer hover:bg-brand-border">
+                    <span class="text-sm text-text-secondary">Your Library</span>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- JavaScript สำหรับสลับหน้า -->
+    <script>
+        function showPage(pageId) {
+            // ซ่อนทุกหน้า
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.classList.add('hidden');
+            });
+
+            // แสดงหน้าที่เลือก
+            const activePage = document.getElementById(pageId);
+            if (activePage) {
+                activePage.classList.remove('hidden');
+            }
+
+            // อัปเดต Active State ของเมนู
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            const activeLink = document.getElementById('nav-' + pageId);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+        }
+
+        // ตั้งค่าหน้าเริ่มต้น
+        document.addEventListener('DOMContentLoaded', () => {
+            showPage('home');
+        });
+    </script>
+
+</body>
+</html>

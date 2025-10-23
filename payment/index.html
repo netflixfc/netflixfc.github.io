@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Cwallet Button</title>
+    <style>
+        /* จัดให้อยู่ตรงกลางและปรับขนาดตามหน้าจอ */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+
+        .ccwallet__tipbox__button {
+            max-width: 90%; /* ปรับขนาดตามหน้าจอ */
+            width: 300px; /* ขนาดพื้นฐาน */
+            height: auto;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .ccwallet__tipbox__button {
+                width: 80%; /* สำหรับแท็บเล็ต */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ccwallet__tipbox__button {
+                width: 95%; /* สำหรับมือถือ */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ccwallet__tipbox__button" data-code="KZHDMWWV" data-button-type="button" data-button-text="Pay with Cwallet" data-button-style="black"></div>
+    <script async src="https://cwallet.com/opencc.js"></script>
+</body>
+</html>

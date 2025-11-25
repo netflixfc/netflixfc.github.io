@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gitisak - Agent AI ที่พร้อมสำหรับคุณ</title>
+    <style>
+        :root {
+            --color-white: rgba(255, 255, 255, 1);
+            --color-black: rgba(0, 0, 0, 1);
+            --color-cream-50: rgba(252, 252, 249, 1);
+            --color-gray-200: rgba(245, 245, 245, 1);
+            --color-gray-300: rgba(167, 169, 169, 1);
+            --color-gray-400: rgba(119, 124, 124, 1);
+            --color-charcoal-700: rgba(31, 33, 33, 1);
+            --color-charcoal-800: rgba(38, 40, 40, 1);
+            --color-teal-300: rgba(50, 184, 198, 1);
+            --color-teal-500: rgba(33, 128, 141, 1);
+            --color-teal-600: rgba(29, 116, 128, 1);
+            
+            --color-background: #0d1117;
+            --color-surface: #161b22;
+            --color-text: var(--color-gray-200);
+            --color-text-secondary: var(--color-gray-300);
+            --color-primary: #238636;
+            --color-primary-hover: #2ea043;
+            --color-border: rgba(240, 246, 252, 0.1);
+            --color-card-bg: #1c2128;
+            
+            --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            --radius-base: 6px;
+            --radius-lg: 12px;
+            --space-8: 8px;
+            --space-12: 12px;
+            --space-16: 16px;
+            --space-24: 24px;
+            --space-32: 32px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family-base);
+            background-color: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-16) var(--space-32);
+            background-color: var(--color-surface);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-12);
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .logo svg {
+            width: 32px;
+            height: 32px;
+            fill: var(--color-text);
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: var(--space-12);
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: var(--radius-base);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-signin {
+            background: transparent;
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+        }
+
+        .btn-signin:hover {
+            background: rgba(240, 246, 252, 0.05);
+        }
+
+        .btn-signup {
+            background: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .btn-signup:hover {
+            background: var(--color-primary-hover);
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-32);
+            text-align: center;
+        }
+
+        .hero-icon {
+            margin: var(--space-32) auto;
+            width: 80px;
+            height: 80px;
+            background: var(--color-card-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--color-border);
+        }
+
+        .hero-icon svg {
+            width: 48px;
+            height: 48px;
+            fill: var(--color-gray-300);
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 600;
+            margin-bottom: var(--space-16);
+            color: var(--color-text);
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-32);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .input-container {
+            max-width: 960px;
+            margin: 0 auto var(--space-32);
+            position: relative;
+        }
+
+        .main-input-wrapper {
+            position: relative;
+            background: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-16) var(--space-24);
+            display: flex;
+            align-items: center;
+            gap: var(--space-12);
+        }
+
+        .main-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--color-text);
+            font-size: 16px;
+            outline: none;
+        }
+
+        .main-input::placeholder {
+            color: var(--color-text-secondary);
+        }
+
+        .model-dropdown {
+            position: relative;
+        }
+
+        .model-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--space-8);
+            background: transparent;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            padding: 6px 12px;
+            color: var(--color-text);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .model-btn:hover {
+            background: rgba(240, 246, 252, 0.05);
+        }
+
+        .model-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            min-width: 250px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            z-index: 100;
+        }
+
+        .model-menu.active {
+            display: block;
+        }
+
+        .model-menu-header {
+            padding: var(--space-12) var(--space-16);
+            border-bottom: 1px solid var(--color-border);
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--color-text-secondary);
+        }
+
+        .model-option {
+            display: flex;
+            align-items: center;
+            gap: var(--space-12);
+            padding: var(--space-12) var(--space-16);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .model-option:hover {
+            background: rgba(240, 246, 252, 0.05);
+        }
+
+        .model-option.selected {
+            background: rgba(35, 134, 54, 0.15);
+        }
+
+        .model-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .model-info {
+            flex: 1;
+        }
+
+        .model-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--color-text);
+        }
+
+        .model-provider {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+        }
+
+        .checkmark {
+            width: 16px;
+            height: 16px;
+            color: var(--color-primary);
+        }
+
+        .submit-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: var(--space-8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-base);
+            transition: background 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: rgba(240, 246, 252, 0.05);
+        }
+
+        .submit-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--color-text-secondary);
+        }
+
+        .platform-section {
+            margin-top: var(--space-32);
+        }
+
+        .platform-title {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-16);
+        }
+
+        .platform-icons {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-16);
+            flex-wrap: wrap;
+        }
+
+        .platform-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .platform-icon:hover {
+            background: rgba(240, 246, 252, 0.05);
+            border-color: var(--color-text-secondary);
+        }
+
+        .footer {
+            text-align: center;
+            padding: var(--space-24);
+            color: var(--color-text-secondary);
+            font-size: 12px;
+        }
+
+        .footer a {
+            color: #539bf5;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .sign-in-link {
+            color: #539bf5;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .sign-in-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-32);
+            max-width: 440px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: var(--space-16);
+            right: var(--space-16);
+            background: transparent;
+            border: none;
+            color: var(--color-text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-base);
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: rgba(240, 246, 252, 0.1);
+            color: var(--color-text);
+        }
+
+        .modal-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto var(--space-16);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-icon svg {
+            width: 48px;
+            height: 48px;
+            fill: var(--color-text);
+        }
+
+        .modal-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: var(--space-12);
+            color: var(--color-text);
+        }
+
+        .modal-subtitle {
+            text-align: center;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-24);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .auth-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-12);
+            margin-bottom: var(--space-24);
+        }
+
+        .auth-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-12);
+            padding: var(--space-12) var(--space-16);
+            border-radius: var(--radius-base);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid var(--color-border);
+            background: transparent;
+            color: var(--color-text);
+            transition: all 0.2s;
+        }
+
+        .auth-btn:hover {
+            background: rgba(240, 246, 252, 0.05);
+        }
+
+        .auth-btn-primary {
+            background: var(--color-primary);
+            color: var(--color-white);
+            border-color: var(--color-primary);
+        }
+
+        .auth-btn-primary:hover {
+            background: var(--color-primary-hover);
+        }
+
+        .divider {
+            position: relative;
+            text-align: center;
+            margin: var(--space-24) 0;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--color-border);
+        }
+
+        .divider span {
+            position: relative;
+            background: var(--color-surface);
+            padding: 0 var(--space-12);
+            font-size: 12px;
+            color: var(--color-text-secondary);
+        }
+
+        .social-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-12);
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-12);
+            padding: var(--space-12) var(--space-16);
+            border-radius: var(--radius-base);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            color: white;
+        }
+
+        .facebook-btn {
+            background: #1877f2;
+        }
+
+        .facebook-btn:hover {
+            background: #0c63d4;
+        }
+
+        .google-btn {
+            background: white;
+            color: #3c4043;
+            border: 1px solid #dadce0;
+        }
+
+        .google-btn:hover {
+            background: #f8f9fa;
+        }
+
+        .line-btn {
+            background: #00B900;
+        }
+
+        .line-btn:hover {
+            background: #00a000;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+            </svg>
+            <span>Gitisak</span>
+        </div>
+        <div class="header-buttons">
+            <button class="btn btn-signup" id="signInBtn">เข้าสู่ระบบ</button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="hero-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+            </svg>
+        </div>
+
+        <h1 style="color: #FB6F92;">Agent AI ที่พร้อมสำหรับคุณ</h1>
+
+        <div class="input-container">
+            <div class="main-input-wrapper">
+                <input type="text" class="main-input" placeholder="Ask Gitisak-go">
+                <div class="model-dropdown">
+                    <button class="model-btn" id="modelBtn">
+                        <span id="selectedModel">Models</span>
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                            <path d="M6 9L1 4h10L6 9z"/>
+                        </svg>
+                    </button>
+                    <div class="model-menu" id="modelMenu">
+                        <div class="model-menu-header">เลือกโมเดล AI</div>
+                        <div class="model-option" data-model="ChatGPT" data-needs-api="true">
+                            <div class="model-icon" style="background: #10a37f;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
+                                    <rect width="16" height="16" rx="2"/>
+                                </svg>
+                            </div>
+                            <div class="model-info">
+                                <div class="model-name">ChatGPT</div>
+                                <div class="model-provider">OpenAI</div>
+                            </div>
+                        </div>
+                        <div class="model-option" data-model="Gemini" data-needs-api="true">
+                            <div class="model-icon" style="background: #4285f4;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
+                                    <path d="M8 2L12 8L8 14L4 8L8 2Z"/>
+                                </svg>
+                            </div>
+                            <div class="model-info">
+                                <div class="model-name">Gemini</div>
+                                <div class="model-provider">Google</div>
+                            </div>
+                        </div>
+                        <div class="model-option" data-model="Claude" data-needs-api="true">
+                            <div class="model-icon" style="background: #8b5cf6;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
+                                    <path d="M4 2L8 14L12 2H4Z"/>
+                                </svg>
+                            </div>
+                            <div class="model-info">
+                                <div class="model-name">Claude</div>
+                                <div class="model-provider">Anthropic</div>
+                            </div>
+                        </div>
+                        <div class="model-option" data-model="Llama" data-needs-api="true">
+                            <div class="model-icon" style="background: #0084ff;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
+                                    <circle cx="8" cy="8" r="6"/>
+                                </svg>
+                            </div>
+                            <div class="model-info">
+                                <div class="model-name">Llama</div>
+                                <div class="model-provider">Meta AI</div>
+                            </div>
+                        </div>
+                        <div style="padding: 12px 16px; border-top: 1px solid var(--color-border); font-size: 12px; color: var(--color-text-secondary);">
+                            <p style="margin-bottom: 8px;">กรุณาใส่ API Key สำหรับโมเดลที่เลือก</p>
+                            <input type="text" id="apiKeyInput" placeholder="ใส่ API Key ของคุณ" style="width: 100%; padding: 8px; background: var(--color-background); border: 1px solid var(--color-border); border-radius: 4px; color: var(--color-text); font-size: 12px; margin-bottom: 8px;">
+                            <button id="saveApiKey" class="btn" style="width: 100%; padding: 6px 12px; font-size: 12px; background: var(--color-primary); color: white; border: none; border-radius: 4px; cursor: pointer;">บันทึก API Key</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="submit-btn">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="platform-section">
+            <p class="platform-title">Try GtsAlpha MCP on your favorite platform</p>
+            <div class="platform-icons">
+                <div class="platform-icon" style="background: #2a2e35; border-color: #3d424a; cursor: pointer;" title="File System" onclick="openMCPSettings('filesystem')">
+                    <img src="https://modelcontextprotocol.io/icons/filesystem.svg" alt="File System" style="width: 32px; height: 32px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span style="font-size: 24px; font-weight: 600; color: #fff; display: none;">📁</span>
+                </div>
+                <div class="platform-icon" style="background: #2a2e35; border-color: #3d424a; cursor: pointer;" title="Database" onclick="openMCPSettings('database')">
+                    <img src="https://modelcontextprotocol.io/icons/database.svg" alt="Database" style="width: 32px; height: 32px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span style="font-size: 24px; font-weight: 600; color: #fff; display: none;">🗄️</span>
+                </div>
+                <div class="platform-icon" style="background: #2a2e35; border-color: #3d424a; cursor: pointer;" title="GitHub" onclick="openMCPSettings('github')">
+                    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" style="width: 32px; height: 32px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <svg style="width: 32px; height: 32px; fill: #fff; display: none;" viewBox="0 0 16 16">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                    </svg>
+                </div>
+                <div class="platform-icon" style="background: #2a2e35; border-color: #3d424a; cursor: pointer;" title="Slack" onclick="openMCPSettings('slack')">
+                    <img src="https://a.slack-edge.com/80588/marketing/img/icons/icon_slack_hash_colored.png" alt="Slack" style="width: 32px; height: 32px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span style="font-size: 24px; font-weight: 600; color: #fff; display: none;">💬</span>
+                </div>
+                <div class="platform-icon" style="background: #2a2e35; border-color: #3d424a; cursor: pointer;" title="Google Drive" onclick="openMCPSettings('google-drive')">
+                    <img src="https://ssl.gstatic.com/images/branding/product/2x/drive_2020q4_48dp.png" alt="Google Drive" style="width: 32px; height: 32px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span style="font-size: 24px; font-weight: 600; color: #fff; display: none;">📂</span>
+                </div>
+                <div class="platform-icon" style="background: #2a2e35; border-color: #3d424a; cursor: pointer;" title="API" onclick="openMCPSettings('api')">
+                    <img src="https://modelcontextprotocol.io/icons/api.svg" alt="API" style="width: 32px; height: 32px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span style="font-size: 24px; font-weight: 600; color: #fff; display: none;">🔌</span>
+                </div>
+                <div class="platform-icon" style="background: #2a2e35; border-color: #3d424a; cursor: pointer;" title="LINE" onclick="openMCPSettings('line')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" alt="LINE" style="width: 32px; height: 32px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <svg style="width: 32px; height: 32px; fill: white; display: none;" viewBox="0 0 24 24">
+                        <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </main>        <footer class="footer">
+        <a href="#">Gitisak</a> uses AI. Check for mistakes.
+    </footer>
+
+    <!-- MCP Settings Modal -->
+    <div class="modal" id="mcpSettingsModal">
+        <div class="modal-content" style="max-width: 600px; max-height: 85vh; overflow-y: auto;">
+            <button class="modal-close" id="closeMCPSettings">&times;</button>
+            <div class="modal-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h2 class="modal-title">Model Context Protocol (MCP) Settings</h2>
+            <p class="modal-subtitle" id="mcpPlatformName">กำหนดค่า MCP สำหรับแพลตฟอร์ม</p>
+            
+            <div style="text-align: left; margin-top: 24px;">
+                <div style="background: var(--color-card-bg); border: 1px solid var(--color-border); border-radius: var(--radius-base); padding: 16px; margin-bottom: 16px;">
+                    <h3 style="font-size: 16px; margin-bottom: 12px; color: var(--color-text);">📋 เกี่ยวกับ MCP</h3>
+                    <p style="font-size: 14px; color: var(--color-text-secondary); line-height: 1.6;">
+                        Model Context Protocol (MCP) เป็นโปรโตคอลเปิดที่ให้ AI สามารถเชื่อมต่อกับแหล่งข้อมูลต่างๆ ได้อย่างปลอดภัย 
+                        ช่วยให้คุณสามารถเชื่อมต่อกับ databases, APIs, และเครื่องมืออื่นๆ ได้
+                    </p>
+                    <a href="https://modelcontextprotocol.io" target="_blank" style="color: #539bf5; font-size: 14px; text-decoration: none;">
+                        เรียนรู้เพิ่มเติมที่ modelcontextprotocol.io →
+                    </a>
+                </div>
+
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px;">
+                        <input type="radio" name="connectionType" value="remote" checked style="margin-right: 8px;" onchange="toggleConnectionType()">
+                        Remote Server
+                        <input type="radio" name="connectionType" value="local" style="margin-left: 16px; margin-right: 8px;" onchange="toggleConnectionType()">
+                        Local Server
+                    </label>
+                </div>
+
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px;">MCP Server URL/Path</label>
+                    <input type="text" id="mcpServerUrl" placeholder="https://your-mcp-server.com หรือ localhost:8080" 
+                           style="width: 100%; padding: 10px 12px; background: var(--color-background); border: 1px solid var(--color-border); border-radius: var(--radius-base); color: var(--color-text); font-size: 14px;">
+                    <p id="localHint" style="font-size: 12px; color: var(--color-text-secondary); margin-top: 4px; display: none;">
+                        💡 สำหรับ Local: ใช้ localhost:port หรือ 127.0.0.1:port (เช่น localhost:3000)
+                    </p>
+                </div>
+
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px;">Authentication Token</label>
+                    <input type="password" id="mcpAuthToken" placeholder="ใส่ Token สำหรับการยืนยันตัวตน" 
+                           style="width: 100%; padding: 10px 12px; background: var(--color-background); border: 1px solid var(--color-border); border-radius: var(--radius-base); color: var(--color-text); font-size: 14px;">
+                    <p style="font-size: 12px; color: var(--color-text-secondary); margin-top: 8px;">
+                        💡 <strong>วิธีสร้าง Token:</strong> สำหรับ File System ใช้คำสั่ง <code style="background: rgba(50, 184, 198, 0.15); padding: 2px 6px; border-radius: 3px;">mcp-server generate-token</code> 
+                        หรือตั้งค่าใน environment variable <code style="background: rgba(50, 184, 198, 0.15); padding: 2px 6px; border-radius: 3px;">MCP_AUTH_TOKEN</code>
+                        <br>
+                        <a href="https://modelcontextprotocol.io/docs/tutorials/security/authorization" target="_blank" style="color: #539bf5; text-decoration: none; font-size: 12px;">
+                            → อ่านวิธีสร้าง Token เพิ่มเติม
+                        </a>
+                    </p>
+                </div>
+
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px;">เลือกประเภท MCP Server</label>
+                    <select id="mcpServerType" style="width: 100%; padding: 10px 12px; background: var(--color-background); border: 1px solid var(--color-border); border-radius: var(--radius-base); color: var(--color-text); font-size: 14px;">
+                        <option value="">เลือกประเภท...</option>
+                        <option value="filesystem">📁 File System</option>
+                        <option value="database">🗄️ Database (PostgreSQL, MySQL)</option>
+                        <option value="api">🔌 REST API</option>
+                        <option value="github">🐙 GitHub</option>
+                        <option value="slack">💬 Slack</option>
+                        <option value="google-drive">📂 Google Drive</option>
+                        <option value="line">💚 LINE</option>
+                        <option value="local-ai">🤖 Local AI Model (Ollama, LM Studio)</option>
+                        <option value="custom">⚙️ Custom MCP Server</option>
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px;">
+                        <input type="checkbox" id="mcpEnableSSL" style="margin-right: 8px;">
+                        เปิดใช้งาน SSL/TLS
+                    </label>
+                </div>
+
+                <div style="background: rgba(50, 184, 198, 0.1); border: 1px solid rgba(50, 184, 198, 0.3); border-radius: var(--radius-base); padding: 12px; margin-bottom: 16px;">
+                    <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0; line-height: 1.6;">
+                        💡 <strong>คำแนะนำ:</strong> สำหรับการเชื่อมต่อ Local ควรติดตั้ง MCP Server บนเครื่องของคุณก่อน (เช่น Ollama, LM Studio) 
+                        สำหรับ Remote ต้องมี URL และ Token ที่ถูกต้อง คุณสามารถสร้าง MCP Server ของคุณเองได้ที่ 
+                        <a href="https://modelcontextprotocol.io" target="_blank" style="color: #539bf5; text-decoration: none;">modelcontextprotocol.io</a>
+                    </p>
+                </div>
+
+                <div id="connectionStatus" style="display: none; margin-bottom: 16px; padding: 12px; border-radius: var(--radius-base); font-size: 14px;">
+                    <span id="statusText"></span>
+                </div>
+
+                <div style="display: flex; gap: 12px; margin-top: 24px;">
+                    <button class="btn btn-signin" onclick="closeMCPSettingsModal()" style="flex: 1;">
+                        ← ย้อนกลับ
+                    </button>
+                    <button class="btn btn-signin" onclick="testMCPConnection()" id="testConnectionBtn" style="flex: 1;">
+                        🔍 ตรวจสอบการเชื่อมต่อ
+                    </button>
+                    <button class="btn btn-signup" onclick="saveMCPSettings()" style="flex: 1.5;">
+                        ✓ บันทึก
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sign In Modal -->
+    <div class="modal" id="signInModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeSignIn">&times;</button>
+            <div class="modal-icon">
+                <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                </svg>
+            </div>
+            <h2 class="modal-title">เข้าสู่ระบบเพื่อดำเนินการต่อ</h2>
+            <p class="modal-subtitle">เข้าสู่ระบบหรือสร้างบัญชีเพื่อใช้งาน Gitisak</p>
+            
+            <div class="auth-buttons">
+                <button class="auth-btn">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10 0C4.477 0 0 4.477 0 10c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0110 4.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C17.137 18.163 20 14.418 20 10c0-5.523-4.477-10-10-10z"/>
+                    </svg>
+                    Sign in
+                </button>
+                
+                <button class="auth-btn auth-btn-primary">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10 0C4.477 0 0 4.477 0 10c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0110 4.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C17.137 18.163 20 14.418 20 10c0-5.523-4.477-10-10-10z"/>
+                    </svg>
+                    Create a free account
+                </button>
+            </div>
+
+            <div class="divider">
+                <span>or continue with</span>
+            </div>
+
+            <div class="social-buttons">
+                <button class="social-btn facebook-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                    Facebook
+                </button>
+                
+                <button class="social-btn google-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    Gmail
+                </button>
+                
+                <button class="social-btn line-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                        <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+                    </svg>
+                    LINE
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modelBtn = document.getElementById('modelBtn');
+        const modelMenu = document.getElementById('modelMenu');
+        const selectedModelSpan = document.getElementById('selectedModel');
+        const modelOptions = document.querySelectorAll('.model-option');
+
+        // Toggle dropdown
+        modelBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            modelMenu.classList.toggle('active');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!modelMenu.contains(e.target) && e.target !== modelBtn) {
+                modelMenu.classList.remove('active');
+            }
+        });
+
+        // API Key storage
+        let apiKeys = {};
+
+        // Handle model selection
+        modelOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const modelName = option.getAttribute('data-model');
+                const needsApi = option.getAttribute('data-needs-api');
+                
+                // Update selected state
+                modelOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                
+                // Update button text
+                selectedModelSpan.textContent = modelName;
+                
+                // Check if API key exists
+                if (needsApi && !apiKeys[modelName]) {
+                    document.getElementById('apiKeyInput').placeholder = `ใส่ API Key สำหรับ ${modelName}`;
+                } else if (apiKeys[modelName]) {
+                    document.getElementById('apiKeyInput').value = apiKeys[modelName];
+                }
+            });
+        });
+
+        // Save API Key
+        document.getElementById('saveApiKey').addEventListener('click', () => {
+            const selectedModel = document.querySelector('.model-option.selected');
+            if (selectedModel) {
+                const modelName = selectedModel.getAttribute('data-model');
+                const apiKey = document.getElementById('apiKeyInput').value.trim();
+                
+                if (apiKey) {
+                    apiKeys[modelName] = apiKey;
+                    alert(`API Key สำหรับ ${modelName} บันทึกเรียบร้อยแล้ว`);
+                    modelMenu.classList.remove('active');
+                } else {
+                    alert('กรุณาใส่ API Key');
+                }
+            }
+        });
+
+        // Handle form submission
+        const submitBtn = document.querySelector('.submit-btn');
+        const mainInput = document.querySelector('.main-input');
+
+        submitBtn.addEventListener('click', () => {
+            const query = mainInput.value.trim();
+            if (query) {
+                console.log('Submitting query:', query);
+                console.log('Selected model:', selectedModelSpan.textContent);
+                // Here you would handle the actual submission
+            }
+        });
+
+        mainInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                submitBtn.click();
+            }
+        });
+
+        // Modal functionality
+        const signInBtn = document.getElementById('signInBtn');
+        const signInModal = document.getElementById('signInModal');
+        const closeSignIn = document.getElementById('closeSignIn');
+
+        if (signInBtn && signInModal && closeSignIn) {
+            signInBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                signInModal.classList.add('active');
+            });
+
+            closeSignIn.addEventListener('click', () => {
+                signInModal.classList.remove('active');
+            });
+
+            signInModal.addEventListener('click', (e) => {
+                if (e.target === signInModal) {
+                    signInModal.classList.remove('active');
+                }
+            });
+        }
+
+        // Social login handlers
+        const socialButtons = document.querySelectorAll('.social-btn');
+        socialButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const provider = btn.textContent.trim();
+                console.log('Signing in with:', provider);
+                // Here you would integrate with actual OAuth providers
+            });
+        });
+
+        // MCP Settings Modal functionality
+        const mcpSettingsModal = document.getElementById('mcpSettingsModal');
+        const closeMCPSettings = document.getElementById('closeMCPSettings');
+        let currentMCPPlatform = '';
+        let mcpSettings = {};
+
+        // Make sure this function is available globally
+        window.openMCPSettings = function(platform) {
+            currentMCPPlatform = platform;
+            const platformNames = {
+                'filesystem': 'File System',
+                'database': 'Database',
+                'github': 'GitHub',
+                'slack': 'Slack',
+                'google-drive': 'Google Drive',
+                'api': 'REST API',
+                'line': 'LINE'
+            };
+            const platformName = platformNames[platform] || platform;
+            document.getElementById('mcpPlatformName').textContent = `กำหนดค่า MCP สำหรับ ${platformName}`;
+            
+            // Auto-select the server type based on platform
+            document.getElementById('mcpServerType').value = platform;
+            
+            // Load saved settings if exists
+            if (mcpSettings[platform]) {
+                document.getElementById('mcpServerUrl').value = mcpSettings[platform].serverUrl || '';
+                document.getElementById('mcpAuthToken').value = mcpSettings[platform].authToken || '';
+                document.getElementById('mcpServerType').value = mcpSettings[platform].serverType || '';
+                document.getElementById('mcpEnableSSL').checked = mcpSettings[platform].enableSSL || false;
+            } else {
+                // Clear form
+                document.getElementById('mcpServerUrl').value = '';
+                document.getElementById('mcpAuthToken').value = '';
+                document.getElementById('mcpServerType').value = '';
+                document.getElementById('mcpEnableSSL').checked = false;
+            }
+            
+            mcpSettingsModal.classList.add('active');
+        };
+
+        if (closeMCPSettings && mcpSettingsModal) {
+            closeMCPSettings.addEventListener('click', () => {
+                mcpSettingsModal.classList.remove('active');
+            });
+
+            mcpSettingsModal.addEventListener('click', (e) => {
+                if (e.target === mcpSettingsModal) {
+                    mcpSettingsModal.classList.remove('active');
+                }
+            });
+        }
+
+        window.saveMCPSettings = function() {
+            const serverUrl = document.getElementById('mcpServerUrl').value.trim();
+            const authToken = document.getElementById('mcpAuthToken').value.trim();
+            const serverType = document.getElementById('mcpServerType').value;
+            const enableSSL = document.getElementById('mcpEnableSSL').checked;
+
+            if (!serverUrl) {
+                alert('กรุณาใส่ MCP Server URL');
+                return;
+            }
+
+            if (!serverType) {
+                alert('กรุณาเลือกประเภท MCP Server');
+                return;
+            }
+
+            mcpSettings[currentMCPPlatform] = {
+                serverUrl,
+                authToken,
+                serverType,
+                enableSSL
+            };
+
+            console.log('MCP Settings saved for platform', currentMCPPlatform, mcpSettings[currentMCPPlatform]);
+            alert(`บันทึกการตั้งค่า MCP สำหรับแพลตฟอร์ม ${currentMCPPlatform} เรียบร้อยแล้ว`);
+            mcpSettingsModal.classList.remove('active');
+        };
+
+        window.closeMCPSettingsModal = function() {
+            mcpSettingsModal.classList.remove('active');
+        };
+
+        window.toggleConnectionType = function() {
+            const connectionType = document.querySelector('input[name="connectionType"]:checked').value;
+            const localHint = document.getElementById('localHint');
+            const urlInput = document.getElementById('mcpServerUrl');
+            
+            if (connectionType === 'local') {
+                localHint.style.display = 'block';
+                urlInput.placeholder = 'localhost:8080 หรือ 127.0.0.1:3000';
+            } else {
+                localHint.style.display = 'none';
+                urlInput.placeholder = 'https://your-mcp-server.com';
+            }
+        };
+
+        window.testMCPConnection = function() {
+            const serverUrl = document.getElementById('mcpServerUrl').value.trim();
+            const serverType = document.getElementById('mcpServerType').value;
+            const authToken = document.getElementById('mcpAuthToken').value.trim();
+            const connectionType = document.querySelector('input[name="connectionType"]:checked').value;
+            
+            if (!serverUrl) {
+                showConnectionStatus('error', '❌ กรุณาใส่ MCP Server URL/Path ก่อนทดสอบการเชื่อมต่อ');
+                return;
+            }
+
+            if (!serverType) {
+                showConnectionStatus('error', '❌ กรุณาเลือกประเภท MCP Server');
+                return;
+            }
+
+            // Disable test button and show loading
+            const testBtn = document.getElementById('testConnectionBtn');
+            const originalText = testBtn.innerHTML;
+            testBtn.disabled = true;
+            testBtn.innerHTML = '⏳ กำลังตรวจสอบ...';
+
+            // Simulate connection test (in production, this would be an actual API call)
+            setTimeout(() => {
+                testBtn.disabled = false;
+                testBtn.innerHTML = originalText;
+
+                // Simulate success/failure based on URL format
+                const isValidFormat = connectionType === 'local' 
+                    ? (serverUrl.includes('localhost') || serverUrl.includes('127.0.0.1'))
+                    : serverUrl.startsWith('http://') || serverUrl.startsWith('https://');
+
+                const hasPort = serverUrl.includes(':');
+            const portValidation = connectionType === 'local' ? hasPort : true;
+
+            if (isValidFormat && portValidation) {
+                showConnectionStatus('success', `✅ เชื่อมต่อสำเร็จ! พบ ${serverType} ${connectionType === 'local' ? 'บนเครื่อง Local' : 'บน Remote Server'}`);
+                    console.log('Connection test passed:', {
+                        serverUrl,
+                        serverType,
+                        connectionType,
+                        hasAuth: !!authToken
+                    });
+                } else {
+                    let errorMsg = '❌ เชื่อมต่อล้มเหลว: ';
+                    if (connectionType === 'local' && !hasPort) {
+                        errorMsg += 'Local server ต้องระบุ port (เช่น localhost:3000)';
+                    } else if (connectionType === 'local') {
+                        errorMsg += 'ใช้รูปแบบ localhost:port หรือ 127.0.0.1:port';
+                    } else {
+                        errorMsg += 'Remote server ต้องเริ่มด้วย https:// หรือ http://';
+                    }
+                    showConnectionStatus('error', errorMsg);
+                }
+            }, 1500);
+        };
+
+        function showConnectionStatus(type, message) {
+            const statusDiv = document.getElementById('connectionStatus');
+            const statusText = document.getElementById('statusText');
+            
+            statusDiv.style.display = 'block';
+            statusText.textContent = message;
+            
+            if (type === 'success') {
+                statusDiv.style.background = 'rgba(50, 184, 198, 0.15)';
+                statusDiv.style.border = '1px solid rgba(50, 184, 198, 0.3)';
+                statusDiv.style.color = 'var(--color-teal-300)';
+            } else if (type === 'error') {
+                statusDiv.style.background = 'rgba(255, 84, 89, 0.15)';
+                statusDiv.style.border = '1px solid rgba(255, 84, 89, 0.3)';
+                statusDiv.style.color = '#ff5459';
+            }
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
+

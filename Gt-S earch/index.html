@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard โครงการ ปส. (NSB) — สรุปโครงการ</title>
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Theme colors (กองบัญชาการตำรวจปราบปรามยาเสพติด / ปส.) -->
+  <style>
+    :root{
+      --nsb-blue: #07336A; /* deep navy */
+      --nsb-gold: #F0B429; /* warm gold */
+      --nsb-accent: #0B74D1; /* bright accent */
+      --card-bg: #ffffff;
+    }
+    .nsb-gradient{background:linear-gradient(90deg,var(--nsb-blue),var(--nsb-accent));}
+  </style>
+</head>
+<body class="bg-gray-50 text-slate-800 font-sans">
+  <header class="nsb-gradient text-white p-6 shadow-md">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-bold">กองบัญชาการตำรวจปราบปรามยาเสพติด — Dashboard โครงการ</h1>
+        <p class="text-sm opacity-90 mt-1">สรุปปัญหา · เครื่องมือ · เทคสแตก · ขอบเขต · แผนปฏิบัติการ</p>
+      </div>
+      <div class="text-right text-sm">
+        <div class="font-semibold">ผู้จัดทำ: Gititsak Wannakeeree</div>
+        </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto p-6 grid gap-6">
+    <!-- Summary cards -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="p-4 rounded-lg shadow bg-white">
+        <h2 class="text-lg font-semibold" style="color:var(--nsb-blue)">ปัญหา (Pain Points)</h2>
+        <ul class="mt-3 text-sm list-disc ml-5 space-y-2">
+          <li>ผู้ต้องหาหลบหนีและทิ้งมือถือ ทำให้ข้อมูลสำคัญสูญหาย</li>
+          <li>มือถือถูกล็อก — การถอดข้อมูลเป็นคอขวด</li>
+          <li>ไม่มีระบบเชื่อมพิกัด–คดี–หมายจับแบบรวดเร็ว</li>
+        </ul>
+      </div>
+
+      <div class="p-4 rounded-lg shadow bg-white">
+        <h2 class="text-lg font-semibold" style="color:var(--nsb-blue)">เครื่องมือที่จำเป็น</h2>
+        <ul class="mt-3 text-sm list-disc ml-5 space-y-2">
+          <li>เครื่องมือ extraction/forensic สำหรับมือถือ</li>
+          <li>ระบบวิเคราะห์พิกัด (timeline & geofence)</li>
+          <li>Dashboard สรุปผลการสืบสวนแบบเรียลไทม์</li>
+        </ul>
+      </div>
+
+      <div class="p-4 rounded-lg shadow bg-white">
+        <h2 class="text-lg font-semibold" style="color:var(--nsb-blue)">Tech Stack / Infra</h2>
+        <ul class="mt-3 text-sm list-disc ml-5 space-y-2">
+          <li>ฐานข้อมูลหลักเก็บหลักฐานดิจิทัล (Central Evidence DB)</li>
+          <li>API เชื่อมข้อมูลสัญญาณมือถือและหมายจับ</li>
+          <li>อุปกรณ์ portable extraction สำหรับหน่วยภาคสนาม</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Detailed sections (5 หมวด) -->
+    <section class="grid grid-cols-1 gap-6">
+      <!-- หมวด 1 -->
+      <article class="p-6 bg-white rounded shadow">
+        <h3 class="text-xl font-bold" style="color:var(--nsb-blue)">1) ปัญหาในงานจับกุม (สรุป)</h3>
+        <p class="mt-3 text-sm leading-relaxed">เหตุการณ์ภาคสนามชี้ชัดว่าโทรศัพท์ที่ถูกทิ้งโดยผู้ต้องหาเป็น "จุดชี้" สำคัญ แต่การถูกล็อกทำให้ข้อมูลไม่สามารถนำมาใช้สืบสวนได้ทันเวลา ผลคือเวลาการตอบโต้และจับกุมล่าช้า ข้อมูลเชิงพฤติกรรมสูญหาย และโอกาสจับเครือข่ายลดน้อยลง</p>
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div class="p-3 rounded border">
+            <div class="text-xs text-slate-500">ตัวอย่างผลกระทบ</div>
+            <div class="font-semibold mt-1">ช้าในการจับกุม · หลุดการเชื่อมโยง</div>
+          </div>
+          <div class="p-3 rounded border">
+            <div class="text-xs text-slate-500">ความเสี่ยง</div>
+            <div class="font-semibold mt-1">สูญเสียหลักฐานสำคัญ</div>
+          </div>
+          <div class="p-3 rounded border">
+            <div class="text-xs text-slate-500">ความจำเป็น</div>
+            <div class="font-semibold mt-1">เครื่องมือถอดรหัสข้อมูลมือถือ</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- หมวด 2 -->
+      <article class="p-6 bg-white rounded shadow">
+        <h3 class="text-xl font-bold" style="color:var(--nsb-blue)">2) ขีดความสามารถการเข้าถึงข้อมูลโทรศัพท์</h3>
+        <p class="mt-3 text-sm leading-relaxed">หน่วยงานมีสิทธิ์เข้าถึงพิกัดสัญญาณย้อนหลังและตำแหน่งปัจจุบันของอุปกรณ์บางประเภท ซึ่งเป็นข้อได้เปรียบเชิงยุทธศาสตร์ หากผสานกับข้อมูลคดีจะสามารถติดตามเส้นทางและจุดพักของผู้ต้องหาได้</p>
+        <ul class="mt-3 list-disc ml-5 text-sm space-y-2">
+          <li>เข้าถึงประวัติพิกัด (ยศ.ตามสิทธิ์)</li>
+          <li>ตรวจสอบสถานะการใช้งานเบอร์/เครื่อง</li>
+          <li>ต้องปฏิบัติตามกรอบกฎหมายและบันทึก Audit</li>
+        </ul>
+      </article>
+
+      <!-- หมวด 3 -->
+      <article class="p-6 bg-white rounded shadow">
+        <h3 class="text-xl font-bold" style="color:var(--nsb-blue)">3) โครงการจัดทำตาราง–HTML เพื่อเสนอผู้บังคับบัญชา (ทำไมต้องแยก)</h3>
+        <p class="mt-3 text-sm leading-relaxed">การนำเสนอแผนในรูปแบบหน้าเดียว (One-Page HTML) ช่วยให้ผู้บังคับบัญชาเห็นภาพรวมรวดเร็ว และสามารถตัดสินใจเรื่องทรัพยากร งบประมาณ และการอนุมัติได้ทันที จึงต้องแยกการนำเสนอออกจากเนื้อหาทางเทคนิค เพื่อให้ภาวะผู้นำเห็นผลลัพธ์เชิงนโยบาย</p>
+        <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="p-3 rounded border">
+            <div class="text-xs text-slate-500">เหตุผล</div>
+            <div class="font-semibold mt-1">ตัดสินใจได้เร็ว · ลดการถามกลับ</div>
+          </div>
+          <div class="p-3 rounded border">
+            <div class="text-xs text-slate-500">ผลลัพธ์ที่คาดหวัง</div>
+            <div class="font-semibold mt-1">อนุมัติงบ · เร่งจัดซื้อเครื่องมือ</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- หมวด 4 -->
+      <article class="p-6 bg-white rounded shadow">
+        <h3 class="text-xl font-bold" style="color:var(--nsb-blue)">4) ขอบเขตการเข้��ถึง (Legal & Operational Boundaries)</h3>
+        <p class="mt-3 text-sm leading-relaxed">กำหนดขอบเขตชัดเจนว่าเข้าถึงอะไร เมื่อไร และภายใต้เงื่อนไขใด เพื่อคุ้มครองสิทธิและหลักฐานให้ศาลยอมรับได้ เช่น การขออนุมัติศาล การบันทึก Audit trail และการเก็บรักษาหลักฐานดิจิทัล</p>
+        <ul class="mt-3 list-disc ml-5 text-sm space-y-2">
+          <li>เข้าถึงเฉพาะคดีในอำนาจ ปส.</li>
+          <li>ต้องมีคำสั่ง/หมายหรือกรอบกฎหมายรองรับ</li>
+          <li>การเข้าถึงต้องมีการบันทึกตรวจสอบทุกครั้ง</li>
+        </ul>
+      </article>
+
+      <!-- หมวด 5 -->
+      <article class="p-6 bg-white rounded shadow">
+        <h3 class="text-xl font-bold" style="color:var(--nsb-blue)">5) สิ่งที่จะทำ (Action Plan)</h3>
+        <p class="mt-3 text-sm leading-relaxed">แผนปฏิบัติการสั้น-กลาง-ยาว เพื่อให้เกิดผลแบบจับต้องได้ภายในระยะเวลาที่ผู้บังคับบัญชารับได้</p>
+        <ol class="mt-3 list-decimal ml-5 text-sm space-y-2">
+          <li>Phase 1 (0-3 เดือน): สร้างหน้า HTML One-Page นำเสนอปัญหาและทรัพยากรที่ต้องการ</li>
+          <li>Phase 2 (3-6 เดือน): จัดซื้อ/ทดสอบอุปกรณ์ extraction แบบพกพา และตั้งฐานข้อมูลกลาง</li>
+          <li>Phase 3 (6-12 เดือน): เดินระบบนำเข้าเอกสาร 1,000 ชุด ฝึกโมเดลวิเคราะห์เส้นทาง และเฝ้าดูผลการจับกุม</li>
+          <li>Phase 4 (12+ เดือน): ขยายระบบเป็นระดับภูมิภาค เชื่อม CCTV และระบบพิกัดแบบเรียลไทม์</li>
+        </ol>
+      </article>
+    </section>
+
+    <!-- Footer / Quick actions -->
+    <section class="p-4 bg-white rounded shadow flex items-center justify-between">
+      <div class="text-sm">
+        <div class="font-semibold" style="color:var(--nsb-blue)">พร้อมส่งต่อ</div>
+        <div class="mt-1">ดาวน์โหลด HTML นี้ หรือขอให้ฉันสร้างเป็นไฟล์นำเสนอ (PPTX) หรือพัฒนาเป็นต้นแบบระบบ</div>
+      </div>
+      <div class="space-x-3">
+        <a class="px-4 py-2 rounded bg-[var(--nsb-gold)] text-sm font-semibold" href="#download">ดาวน์โหลด HTML</a>
+        <a class="px-4 py-2 rounded border border-slate-200 text-sm" id="open-source">เปิดดูไฟล์ต้นฉบับ</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Local path to user's uploaded file (will be transformed by environment to URL)
+    const DATA_URL = '/mnt/data/สรุปเนื้อหานี้ เเละสร้างเป็นสไลล์2.txt';
+
+    document.getElementById('open-source').addEventListener('click', ()=>{
+      // open in new tab if environment supports
+      window.open(DATA_URL, '_blank');
+    });
+
+    // smooth download of this HTML page
+    document.querySelector('a[href="#download"]').addEventListener('click', function(e){
+      e.preventDefault();
+      const blob = new Blob([document.documentElement.outerHTML], {type: 'text/html'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'dashboard_nsB_project.html';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>

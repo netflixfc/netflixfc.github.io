@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Gitisak - Agent AI ที่พร้อมสำหรับคุณ</title>
+    <style>
+        :root{
+            --bg: #0b1220;            /* dark navy */
+            --surface: #0f1724;       /* slightly lighter */
+            --card: #111827;          /* card background */
+            --muted: #9ca3af;         /* muted text */
+            --text: #e6eef6;          /* main text */
+            --accent: #1fb6b1;        /* teal accent */
+            --accent-600: #17a199;
+            --accent-700: #0f7a73;
+            --danger: #ff6b6b;
+            --glass: rgba(255,255,255,0.02);
+            --border: rgba(255,255,255,0.06);
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --fw-medium: 600;
+            --space-8: 8px;
+            --space-12: 12px;
+            --space-16: 16px;
+            --space-24: 24px;
+            --font-base: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+        }
+
+        *{box-sizing:border-box}
+        html,body{height:100%}
+        body{
+            margin:0;
+            font-family:var(--font-base);
+            background:linear-gradient(180deg,var(--bg), #07101a 120%);
+            color:var(--text);
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+            line-height:1.45;
+        }
+
+        /* HEADER */
+        .header{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            padding:var(--space-12) var(--space-16);
+            background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            border-bottom:1px solid var(--border);
+            position:sticky;
+            top:0;
+            z-index:60;
+        }
+        .logo{
+            display:flex;
+            align-items:center;
+            gap:12px;
+            font-weight:var(--fw-medium);
+            color:var(--text);
+            font-size:18px;
+        }
+        .logo svg{width:36px;height:36px;fill:var(--accent)}
+        .nav-right{display:flex;align-items:center;gap:12px}
+
+        .nav-actions{display:flex;gap:8px;align-items:center}
+        .btn{
+            background:transparent;
+            color:var(--text);
+            border:1px solid var(--border);
+            padding:8px 12px;
+            border-radius:8px;
+            font-weight:500;
+            cursor:pointer;
+        }
+        .btn.primary{
+            background:linear-gradient(180deg,var(--accent),var(--accent-600));
+            border: none;
+            color:white;
+        }
+        .icon-btn{
+            background:transparent;
+            border:1px solid var(--border);
+            padding:8px;
+            border-radius:8px;
+            cursor:pointer;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            color:var(--muted);
+        }
+
+        /* Hamburger for mobile */
+        .hamburger{
+            display:none;
+            background:transparent;
+            border:none;
+            color:var(--text);
+            padding:8px;
+            border-radius:8px;
+        }
+
+        /* Main container */
+        .container{
+            max-width:1100px;
+            margin:20px auto;
+            padding:24px;
+        }
+
+        .hero{
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+            border:1px solid var(--border);
+            border-radius:var(--radius-md);
+            padding:28px;
+            display:grid;
+            grid-template-columns: 1fr 360px;
+            gap:24px;
+            align-items:center;
+        }
+        .hero-left{
+            text-align:left;
+        }
+        .hero-title{
+            font-size:34px;
+            margin-bottom:8px;
+            color:var(--text);
+        }
+        .hero-sub{
+            color:var(--muted);
+            margin-bottom:20px;
+            max-width:720px;
+        }
+
+        .search-wrapper{
+            background:var(--card);
+            border:1px solid var(--border);
+            padding:12px;
+            border-radius:12px;
+            display:flex;
+            gap:8px;
+            align-items:center;
+        }
+        .search-input{
+            flex:1;
+            background:transparent;
+            border:none;
+            color:var(--text);
+            font-size:16px;
+            outline:none;
+        }
+        .search-actions{display:flex;gap:8px;align-items:center}
+
+        /* Right card */
+        .card{
+            background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+            border:1px solid var(--border);
+            border-radius:12px;
+            padding:16px;
+        }
+        .model-dropdown{position:relative}
+        .model-btn{
+            width:100%;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:8px;
+            padding:8px 12px;
+            border-radius:10px;
+            background:transparent;
+            border:1px solid var(--border);
+            color:var(--text);
+            cursor:pointer;
+        }
+        .model-menu{
+            position:absolute;
+            right:0;
+            top:calc(100% + 8px);
+            background:var(--surface);
+            border:1px solid var(--border);
+            padding:8px;
+            border-radius:10px;
+            min-width:260px;
+            box-shadow:0 8px 32px rgba(0,0,0,0.6);
+            display:none;
+        }
+        .model-menu.active{display:block}
+        .model-option{display:flex;gap:10px;align-items:center;padding:8px;border-radius:8px;cursor:pointer}
+        .model-option:hover{background:rgba(255,255,255,0.02)}
+
+        /* platform icons */
+        .platforms{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+        .platform{
+            width:56px;height:56px;border-radius:10px;background:var(--card);border:1px solid var(--border);
+            display:flex;align-items:center;justify-content:center;cursor:pointer;
+        }
+
+        /* footer */
+        footer.footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px;padding:12px}
+
+        /* Modal base */
+        .modal{
+            display:none;
+            position:fixed;
+            inset:0;
+            background:rgba(2,6,23,0.6);
+            align-items:center;
+            justify-content:center;
+            z-index:120;
+            padding:16px;
+        }
+        .modal.active{display:flex}
+        .modal-card{
+            width:100%;
+            max-width:720px;
+            background:var(--surface);
+            border:1px solid var(--border);
+            border-radius:12px;
+            padding:20px;
+            color:var(--text);
+            max-height:90vh;
+            overflow:auto;
+        }
+        .modal-close{position:absolute;right:18px;top:18px;background:transparent;border:none;color:var(--muted);cursor:pointer;padding:6px;border-radius:8px}
+
+        /* Profile dropdown */
+        .profile-btn{
+            display:flex;
+            align-items:center;
+            gap:8px;
+            cursor:pointer;
+            padding:6px 8px;
+            border-radius:8px;
+            border:1px solid var(--border);
+            background:transparent;
+        }
+        .avatar{
+            width:36px;height:36px;border-radius:50%;
+            background:linear-gradient(180deg,var(--accent),var(--accent-600));
+            display:inline-flex;align-items:center;justify-content:center;color:white;font-weight:600;
+        }
+        .dropdown{
+            position:relative;
+        }
+        .dropdown-menu{
+            position:absolute;
+            right:0;
+            top:calc(100% + 8px);
+            background:var(--surface);
+            border:1px solid var(--border);
+            padding:8px;
+            border-radius:10px;
+            min-width:200px;
+            display:none;
+            box-shadow:0 8px 32px rgba(2,6,23,0.6);
+        }
+        .dropdown-menu.active{display:block}
+        .dropdown-item{padding:10px;border-radius:8px;cursor:pointer;color:var(--text)}
+        .dropdown-item:hover{background:rgba(255,255,255,0.02)}
+
+        /* settings layout */
+        .settings-grid{display:grid;grid-template-columns:1fr 320px;gap:16px}
+        .settings-panel{background:var(--card);border-radius:10px;padding:12px;border:1px solid var(--border)}
+
+        /* social-connected badge */
+        .social-row{display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:8px;background:transparent}
+        .social-left{display:flex;align-items:center;gap:10px}
+        .social-icon{width:36px;height:36;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white}
+        .fb{background:#1877f2}
+        .gg{background:#4285f4}
+        .ln{background:#00B900}
+        .connect-btn{padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer}
+        .disconnect-btn{padding:6px 10px;border-radius:8px;border:1px solid rgba(255,90,90,0.12);background:transparent;color:var(--danger);cursor:pointer}
+
+        /* responsive */
+        @media (max-width: 920px){
+            .hero{grid-template-columns:1fr 300px}
+            .container{padding:16px}
+        }
+        @media (max-width: 768px){
+            .hero{grid-template-columns:1fr;gap:12px;padding:18px}
+            .model-btn{font-size:14px}
+            .hamburger{display:inline-flex}
+            .nav-actions{display:none}
+            .card{padding:12px}
+            .settings-grid{grid-template-columns:1fr}
+            .logo span{display:none}
+        }
+        @media (max-width:480px){
+            .hero-title{font-size:22px}
+            .search-input{font-size:14px}
+            .avatar{width:32px;height:32px;font-size:14px}
+            .model-menu{min-width:220px;right:8px}
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div style="display:flex;align-items:center;gap:12px">
+            <button class="hamburger" id="mobileMenuBtn" aria-label="Open menu">
+                <!-- simple hamburger -->
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+            <div class="logo">
+                <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                <span>Gitisak</span>
+            </div>
+        </div>
+
+        <nav class="nav-right">
+            <div class="nav-actions" id="navActions">
+                <button class="btn" id="settingsBtn">ตั้งค่า</button>
+                <button class="btn" id="helpBtn">ช่วยเหลือ</button>
+                <button class="btn primary" id="signInBtn">เข้าสู่ระบบ</button>
+            </div>
+
+            <div class="dropdown" style="margin-left:8px">
+                <button class="profile-btn" id="profileBtn" aria-haspopup="true" aria-expanded="false">
+                    <div class="avatar" id="avatarInitials">G</div>
+                    <div style="display:flex;flex-direction:column;align-items:flex-start;line-height:1;">
+                        <small style="color:var(--muted);font-size:11px">สวัสดี,</small>
+                        <strong style="font-size:13px">ผู้ใช้</strong>
+                    </div>
+                </button>
+                <div class="dropdown-menu" id="profileMenu" role="menu" aria-hidden="true">
+                    <div class="dropdown-item" id="openProfile">ดูโปรไฟล์</div>
+                    <div class="dropdown-item" id="openSettingsFromProfile">การตั้งค่า</div>
+                    <div class="dropdown-item" id="signOut">ออกจากระบบ</div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="hero" aria-label="Hero">
+            <div class="hero-left">
+                <h1 class="hero-title">Agent AI ที่พร้อมสำหรับคุณ</h1>
+                <p class="hero-sub">ใช้งานง่าย เข้าถึงโมเดลต่าง ๆ และเชื่อมต่อแหล่งข้อมูล (MCP) พร้อมระบบบัญชีโซเชียลสำหรับการเข้าใช้งานอย่างรวดเร็ว</p>
+
+                <div class="search-wrapper" aria-label="Search">
+                    <input type="text" class="search-input" id="mainInput" placeholder="ถาม Gitisak-go ... (กด Enter เพื่อส่ง)">
+                    <div class="search-actions">
+                        <div class="model-dropdown" style="position:relative">
+                            <button class="model-btn" id="modelBtn">
+                                <span id="selectedModel">Models</span>
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 9L1 4h10L6 9z"/></svg>
+                            </button>
+                            <div class="model-menu" id="modelMenu">
+                                <div style="font-size:12px;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--border)">เลือกโมเดล AI</div>
+                                <div class="model-option" data-model="ChatGPT" data-needs-api="true">
+                                    <div style="width:36px;height:28px;background:#10a37f;border-radius:6px;display:flex;align-items:center;justify-content:center;color:white">O</div>
+                                    <div style="flex:1">
+                                        <div style="font-weight:600">ChatGPT</div>
+                                        <div style="font-size:12px;color:var(--muted)">OpenAI</div>
+                                    </div>
+                                </div>
+                                <div class="model-option" data-model="Gemini" data-needs-api="true">
+                                    <div style="width:36px;height:28px;background:#4285f4;border-radius:6px;display:flex;align-items:center;justify-content:center;color:white">G</div>
+                                    <div style="flex:1">
+                                        <div style="font-weight:600">Gemini</div>
+                                        <div style="font-size:12px;color:var(--muted)">Google</div>
+                                    </div>
+                                </div>
+                                <div style="padding:10px;border-top:1px solid var(--border)">
+                                    <input id="apiKeyInput" type="text" placeholder="ใส่ API Key (ถ้ามี)" style="width:100%;padding:8px;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--text)">
+                                    <button id="saveApiKey" class="btn" style="width:100%;margin-top:8px">บันทึก API Key</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="icon-btn" id="submitBtn" title="ส่ง">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M2 12l20-9-9 20-1-7-10-4z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div style="margin-top:18px;color:var(--muted);font-size:13px">
+                    ลองใช้งาน GtsAlpha MCP บนแพลตฟอร์มที่คุณชอบ
+                    <div class="platforms" aria-hidden="false" style="margin-top:10px">
+                        <div class="platform" title="File System" onclick="openMCPSettings('filesystem')">📁</div>
+                        <div class="platform" title="Database" onclick="openMCPSettings('database')">🗄️</div>
+                        <div class="platform" title="GitHub" onclick="openMCPSettings('github')">🐙</div>
+                        <div class="platform" title="Slack" onclick="openMCPSettings('slack')">💬</div>
+                        <div class="platform" title="Google Drive" onclick="openMCPSettings('google-drive')">📂</div>
+                        <div class="platform" title="API" onclick="openMCPSettings('api')">🔌</div>
+                        <div class="platform" title="LINE" onclick="openMCPSettings('line')">💚</div>
+                    </div>
+                </div>
+            </div>
+
+            <aside class="card" aria-label="Right card">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+                    <div>
+                        <div style="font-size:14px;color:var(--muted)">บัญชี</div>
+                        <div style="font-weight:700">โปรไฟล์ผู้ใช้</div>
+                    </div>
+                    <div style="text-align:right">
+                        <button class="btn" id="profileOpenBtn">ดู</button>
+                    </div>
+                </div>
+
+                <div style="margin-top:8px">
+                    <div style="font-size:13px;color:var(--muted);margin-bottom:8px">โมเดลที่บันทึก</div>
+                    <div style="display:flex;gap:8px">
+                        <div style="padding:8px;border-radius:10px;background:rgba(255,255,255,0.02);border:1px solid var(--border)">ChatGPT</div>
+                        <div style="padding:8px;border-radius:10px;background:rgba(255,255,255,0.02);border:1px solid var(--border)">Gemini</div>
+                    </div>
+                </div>
+
+                <div style="margin-top:16px">
+                    <div style="font-size:13px;color:var(--muted);margin-bottom:8px">การเชื่อมต่อโซเชียล</div>
+                    <div id="linkedSocialList">
+                        <!-- JS will render social connections here -->
+                    </div>
+                </div>
+
+                <div style="margin-top:16px;border-top:1px dashed var(--border);padding-top:12px;color:var(--muted);font-size:13px">
+                    เข้าสู่ระบบด้วยบัญชีโซเชียลเพื่อการใช้งานที่เร็วขึ้น
+                </div>
+            </aside>
+        </section>
+
+        <footer class="footer">
+            <small><a href="#" style="color:var(--muted);text-decoration:none">Gitisak</a> uses AI. ตรวจสอบผลลัพธ์ก่อนตัดสินใจ</small>
+        </footer>
+    </main>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+            <button class="modal-close" id="closeSettingsBtn" aria-label="Close">&times;</button>
+            <h2 id="settingsTitle" style="margin-top:0">การตั้งค่า (Settings)</h2>
+            <p style="color:var(--muted)">จัดการการตั้งค่าแอปและการเชื่อมต่อ MCP</p>
+
+            <div class="settings-grid" style="margin-top:12px">
+                <div>
+                    <div class="settings-panel">
+                        <h3 style="margin:0 0 8px 0">Model Context Protocol (MCP)</h3>
+                        <p style="color:var(--muted);font-size:13px">เชื่อมต่อกับแหล่งข้อมูลภายนอกอย่างปลอดภัย</p>
+
+                        <div style="margin-top:12px">
+                            <label style="display:block;margin-bottom:6px;font-weight:600">MCP Server URL/Path</label>
+                            <input id="mcpServerUrl" type="text" placeholder="https://your-mcp-server.com หรือ localhost:8080" style="width:100%;padding:10px;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--text)">
+                        </div>
+
+                        <div style="margin-top:10px">
+                            <label style="display:block;margin-bottom:6px;font-weight:600">Authentication Token</label>
+                            <input id="mcpAuthToken" type="password" placeholder="ใส่ Token" style="width:100%;padding:10px;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--text)">
+                        </div>
+
+                        <div style="display:flex;gap:8px;margin-top:12px">
+                            <button class="btn" id="testConnectionBtn">🔍 ตรวจสอบการเชื่อมต่อ</button>
+                            <button class="btn primary" id="saveMcpBtn">✓ บันทึก</button>
+                        </div>
+                        <div id="connectionStatus" style="display:none;margin-top:12px;padding:8px;border-radius:8px"></div>
+                    </div>
+
+                    <div class="settings-panel" style="margin-top:12px">
+                        <h3 style="margin:0 0 8px 0">ทั่วไป</h3>
+                        <label style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><input type="checkbox" id="enableDark" checked> โหมดมืด</label>
+                        <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="enableNotifications"> แจ้งเตือน</label>
+                    </div>
+                </div>
+
+                <aside>
+                    <div class="settings-panel">
+                        <h4 style="margin:0 0 8px 0">Quick Tips</h4>
+                        <p style="color:var(--muted);font-size:13px;margin:0">• ใช้ Local MCP สำหรับการพัฒนา (localhost:xxxx)<br>• สำหรับ production ให้ตั้งค่า SSL/TLS</p>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal" id="profileModal" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
+            <button class="modal-close" id="closeProfileBtn" aria-label="Close">&times;</button>
+            <h2 id="profileTitle" style="margin-top:0">โปรไฟล์ผู้ใช้</h2>
+            <p style="color:var(--muted)">จัดการบัญชีและการเชื่อมต่อโซเชียล</p>
+
+            <div style="margin-top:12px">
+                <div style="display:flex;gap:12px;align-items:center">
+                    <div class="avatar" id="profileAvatarLarge" style="width:64px;height:64px;font-size:20px">G</div>
+                    <div>
+                        <div style="font-weight:700">ผู้ใช้ ตัวอย่าง</div>
+                        <div style="color:var(--muted);font-size:13px">user@example.com</div>
+                    </div>
+                </div>
+
+                <div style="margin-top:18px">
+                    <h4 style="margin-bottom:8px">บัญชีโซเชียลที่เชื่อมต่อ</h4>
+                    <div id="profileSocialList">
+                        <!-- populated by JS -->
+                    </div>
+                    <div style="margin-top:10px;color:var(--muted);font-size:13px">เชื่อมต่อเพื่อความสะดวกในการลงชื่อเข้าใช้และการแชร์</div>
+                </div>
+
+                <div style="margin-top:18px;display:flex;gap:8px">
+                    <button class="btn" id="editProfileBtn">แก้ไขโปรไฟล์</button>
+                    <button class="btn" id="closeProfileAction">ปิด</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /***********************
+         * Basic UI interactivity
+         ***********************/
+        const modelBtn = document.getElementById('modelBtn');
+        const modelMenu = document.getElementById('modelMenu');
+        const selectedModel = document.getElementById('selectedModel');
+        const modelOptions = document.querySelectorAll('.model-option');
+
+        modelBtn && modelBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            modelMenu.classList.toggle('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!modelMenu.contains(e.target)) modelMenu.classList.remove('active');
+        });
+
+        modelOptions.forEach(opt => {
+            opt.addEventListener('click', () => {
+                const m = opt.getAttribute('data-model');
+                selectedModel.textContent = m;
+                modelOptions.forEach(o => o.style.background = 'transparent');
+                opt.style.background = 'rgba(255,255,255,0.02)';
+            });
+        });
+
+        // API key save (client demo)
+        const apiKeys = {};
+        document.getElementById('saveApiKey').addEventListener('click', () => {
+            const m = selectedModel.textContent;
+            const key = document.getElementById('apiKeyInput').value.trim();
+            if (!m || m === 'Models') return alert('เลือกโมเดลก่อน');
+            if (!key) return alert('กรุณาใส่ API Key');
+            apiKeys[m] = key;
+            alert(`บันทึก API Key สำหรับ ${m}`);
+            modelMenu.classList.remove('active');
+        });
+
+        // Submit (demo)
+        const submitBtn = document.getElementById('submitBtn');
+        const mainInput = document.getElementById('mainInput');
+        submitBtn && submitBtn.addEventListener('click', () => {
+            const q = mainInput.value.trim();
+            if (!q) return alert('กรุณาพิมพ์ข้อความก่อนส่ง');
+            console.log('Query:', q, 'Model:', selectedModel.textContent);
+            alert('ส่งคำถามแล้ว (demo) — ดู console สำหรับข้อมูลเพิ่มเติม');
+        });
+        mainInput && mainInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') submitBtn.click();
+        });
+
+        /***********************
+         * Mobile menu toggle
+         ***********************/
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navActions = document.getElementById('navActions');
+        let mobileOpen = false;
+        mobileMenuBtn && mobileMenuBtn.addEventListener('click', () => {
+            mobileOpen = !mobileOpen;
+            navActions.style.display = mobileOpen ? 'flex' : 'none';
+            navActions.style.flexDirection = 'column';
+            navActions.style.position = mobileOpen ? 'absolute' : 'static';
+            if (mobileOpen) {
+                navActions.style.right = '16px';
+                navActions.style.top = '64px';
+                navActions.style.background = 'var(--surface)';
+                navActions.style.padding = '8px';
+                navActions.style.borderRadius = '8px';
+                navActions.style.boxShadow = '0 8px 32px rgba(0,0,0,0.6)';
+            } else {
+                navActions.removeAttribute('style');
+            }
+        });
+
+        /***********************
+         * Profile dropdown & modal
+         ***********************/
+        const profileBtn = document.getElementById('profileBtn');
+        const profileMenu = document.getElementById('profileMenu');
+        const profileModal = document.getElementById('profileModal');
+        const closeProfileBtn = document.getElementById('closeProfileBtn');
+        const openProfile = document.getElementById('openProfile');
+        const openSettingsFromProfile = document.getElementById('openSettingsFromProfile');
+        const profileOpenBtn = document.getElementById('profileOpenBtn');
+
+        profileBtn && profileBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileMenu.classList.toggle('active');
+        });
+        document.addEventListener('click', (e) => {
+            if (!profileMenu.contains(e.target) && e.target !== profileBtn) profileMenu.classList.remove('active');
+        });
+
+        openProfile && openProfile.addEventListener('click', () => {
+            profileMenu.classList.remove('active');
+            openProfileModal();
+        });
+        profileOpenBtn && profileOpenBtn.addEventListener('click', openProfileModal);
+        function openProfileModal(){
+            profileModal.classList.add('active');
+            renderProfileSocialList();
+        }
+        closeProfileBtn && closeProfileBtn.addEventListener('click', () => profileModal.classList.remove('active'));
+        document.getElementById('closeProfileAction').addEventListener('click', () => profileModal.classList.remove('active'));
+
+        /***********************
+         * Settings modal
+         ***********************/
+        const settingsBtn = document.getElementById('settingsBtn');
+        const settingsModal = document.getElementById('settingsModal');
+        const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+        settingsBtn && settingsBtn.addEventListener('click', () => settingsModal.classList.add('active'));
+        closeSettingsBtn && closeSettingsBtn.addEventListener('click', () => settingsModal.classList.remove('active'));
+        openSettingsFromProfile && openSettingsFromProfile.addEventListener('click', () => { profileModal.classList.remove('active'); settingsModal.classList.add('active'); });
+
+        // MCP functions (demo)
+        const testConnectionBtn = document.getElementById('testConnectionBtn');
+        const saveMcpBtn = document.getElementById('saveMcpBtn');
+        testConnectionBtn && testConnectionBtn.addEventListener('click', () => {
+            const url = document.getElementById('mcpServerUrl').value.trim();
+            if (!url) return showConnectionStatus('error', 'กรุณาใส่ MCP Server URL');
+            showConnectionStatus('loading','กำลังตรวจสอบ...');
+            setTimeout(() => {
+                if (url.startsWith('http') || url.includes('localhost')) showConnectionStatus('success', 'เชื่อมต่อสำเร็จ (ตัวอย่าง)');
+                else showConnectionStatus('error', 'รูปแบบ URL ไม่ถูกต้อง');
+            }, 900);
+        });
+        saveMcpBtn && saveMcpBtn.addEventListener('click', () => {
+            const url = document.getElementById('mcpServerUrl').value.trim();
+            const token = document.getElementById('mcpAuthToken').value.trim();
+            if (!url) return alert('กรุณาใส่ MCP Server URL');
+            // In real app: save to server or localStorage securely
+            alert('บันทึกการตั้งค่า MCP (demo)');
+            settingsModal.classList.remove('active');
+        });
+
+        function showConnectionStatus(type, message){
+            const el = document.getElementById('connectionStatus');
+            el.style.display = 'block';
+            el.textContent = message;
+            if (type === 'success') { el.style.background = 'rgba(31,182,177,0.12)'; el.style.border = '1px solid rgba(31,182,177,0.2)'; el.style.color = 'var(--accent)'; }
+            else if (type === 'error') { el.style.background = 'rgba(255,107,107,0.08)'; el.style.border = '1px solid rgba(255,107,107,0.12)'; el.style.color = 'var(--danger)'; }
+            else { el.style.background = 'transparent'; el.style.border = '1px solid var(--border)'; el.style.color = 'var(--muted)'; }
+            setTimeout(()=>{ el.style.display='none'; }, 4000);
+        }
+
+        /***********************
+         * Social login / linked accounts (client demo)
+         ***********************/
+        // Mock storage of linked social accounts (in real app this comes from server)
+        let linkedSocial = {
+            facebook: false,
+            google: false,
+            line: false
+        };
+
+        // helper to render lists
+        function renderSocialList(containerId){
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = '';
+            const accounts = [
+                {key:'facebook', name:'Facebook', class:'fb'},
+                {key:'google', name:'Google', class:'gg'},
+                {key:'line', name:'LINE', class:'ln'}
+            ];
+            accounts.forEach(a => {
+                const row = document.createElement('div');
+                row.className = 'social-row';
+                row.style.marginBottom = '8px';
+                row.innerHTML = `
+                    <div class="social-left">
+                        <div class="social-icon ${a.class}">${a.name[0]}</div>
+                        <div style="min-width:0">
+                            <div style="font-weight:600">${a.name}</div>
+                            <div style="font-size:12px;color:var(--muted)">${linkedSocial[a.key] ? 'เชื่อมต่อแล้ว' : 'ยังไม่ได้เชื่อม'}</div>
+                        </div>
+                    </div>
+                    <div>
+                        ${linkedSocial[a.key] 
+                            ? `<button class="disconnect-btn" data-key="${a.key}">ยกเลิกเชื่อมต่อ</button>`
+                            : `<button class="connect-btn" data-key="${a.key}">เชื่อมต่อ</button>`
+                        }
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+
+            // attach handlers
+            container.querySelectorAll('.connect-btn').forEach(b => {
+                b.addEventListener('click', (e) => {
+                    const k = e.currentTarget.getAttribute('data-key');
+                    // In real app: start OAuth flow. Here: toggle for demo.
+                    linkedSocial[k] = true;
+                    renderLinkedSocial();
+                    renderProfileSocialList();
+                    renderSocialList(containerId);
+                    alert(`${k} เชื่อมต่อสำเร็จ (demo)`);
+                });
+            });
+            container.querySelectorAll('.disconnect-btn').forEach(b => {
+                b.addEventListener('click', (e) => {
+                    const k = e.currentTarget.getAttribute('data-key');
+                    if (!confirm('ต้องการยกเลิกการเชื่อมต่อบัญชีนี้?')) return;
+                    linkedSocial[k] = false;
+                    renderLinkedSocial();
+                    renderProfileSocialList();
+                    renderSocialList(containerId);
+                });
+            });
+        }
+
+        // Render social area in right card
+        function renderLinkedSocial(){
+            const list = document.getElementById('linkedSocialList');
+            if (!list) return;
+            list.innerHTML = '';
+            const accounts = [
+                {key:'facebook', name:'Facebook', class:'fb'},
+                {key:'google', name:'Gmail', class:'gg'},
+                {key:'line', name:'LINE', class:'ln'}
+            ];
+            accounts.forEach(a => {
+                const el = document.createElement('div');
+                el.style.display = 'flex';
+                el.style.alignItems = 'center';
+                el.style.justifyContent = 'space-between';
+                el.style.padding = '8px';
+                el.style.marginBottom = '8px';
+                el.style.borderRadius = '8px';
+                el.style.background = 'transparent';
+                el.innerHTML = `
+                    <div style="display:flex;gap:10px;align-items:center">
+                        <div class="social-icon ${a.class}">${a.name[0]}</div>
+                        <div>
+                            <div style="font-weight:600">${a.name}</div>
+                            <div style="font-size:12px;color:var(--muted)">${linkedSocial[a.key] ? 'เชื่อมต่อแล้ว' : 'ยังไม่ได้เชื่อม'}</div>
+                        </div>
+                    </div>
+                    <div>
+                        ${linkedSocial[a.key]
+                            ? `<button class="disconnect-btn" data-key="${a.key}">ยกเลิก</button>`
+                            : `<button class="connect-btn" data-key="${a.key}">เชื่อมต่อ</button>`
+                        }
+                    </div>
+                `;
+                list.appendChild(el);
+            });
+
+            // attach handlers
+            list.querySelectorAll('.connect-btn').forEach(b => {
+                b.addEventListener('click', (e) => {
+                    const k = e.currentTarget.getAttribute('data-key');
+                    linkedSocial[k] = true;
+                    renderLinkedSocial();
+                    renderProfileSocialList();
+                    alert(`${k} เชื่อมต่อสำเร็จ (demo)`);
+                });
+            });
+            list.querySelectorAll('.disconnect-btn').forEach(b => {
+                b.addEventListener('click', (e) => {
+                    const k = e.currentTarget.getAttribute('data-key');
+                    if (!confirm('ต้องการยกเลิกการเชื่อมต่อบัญชีนี้?')) return;
+                    linkedSocial[k] = false;
+                    renderLinkedSocial();
+                    renderProfileSocialList();
+                });
+            });
+        }
+
+        // Render social section in profile modal
+        function renderProfileSocialList(){
+            renderSocialList('profileSocialList');
+        }
+
+        // Initialize lists on load
+        renderLinkedSocial();
+
+        // Also populate right-card social area
+        renderSocialList('linkedSocialList');
+
+        /***********************
+         * Sign-in modal (simple demo)
+         ***********************/
+        const signInBtn = document.getElementById('signInBtn');
+        signInBtn && signInBtn.addEventListener('click', () => {
+            // For demo, toggle connected-> set facebook true
+            if (!linkedSocial.facebook){
+                if (confirm('ตัวอย่าง: เชื่อมต่อด้วย Facebook?')) {
+                    linkedSocial.facebook = true;
+                    renderLinkedSocial();
+                    renderProfileSocialList();
+                }
+            } else {
+                alert('คุณได้เชื่อมต่อบัญชี Facebook แล้ว (demo)');
+            }
+        });
+
+        /***********************
+         * Accessibility: close modals with ESC
+         ***********************/
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
+            }
+        });
+
+        /***********************
+         * Small UX: sign out
+         ***********************/
+        document.getElementById('signOut').addEventListener('click', () => {
+            if (!confirm('ต้องการออกจากระบบ?')) return;
+            // demo: clear linked social
+            linkedSocial = {facebook:false, google:false, line:false};
+            renderLinkedSocial();
+            renderProfileSocialList();
+            alert('ออกจากระบบแล้ว (demo)');
+        });
+    </script>
+</body>
+</html>

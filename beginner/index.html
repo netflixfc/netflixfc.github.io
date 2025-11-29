@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GtsAlpha Ecosystem</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Config Tailwind Theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Sarabun', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: '#0dcaf0',  /* สีฟ้าหลัก */
+                        darkbox: '#1e293b', 
+                        cardbg: '#0f172a', /* สีพื้นหลังการ์ด (น้ำเงินเข้ม) */
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            /* ภาพพื้นหลัง */
+            background-image: url('https://res.cloudinary.com/dcwjok3nu/image/upload/v1764411147/Backend-sparesos_gd5myv.jpg');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #0dcaf0; }
+    </style>
+</head>
+<body class="text-white antialiased selection:bg-brand selection:text-black flex flex-col min-h-screen">
+
+    <!-- === Header === -->
+    <header class="bg-[#0f172a]/95 backdrop-blur-sm border-b border-brand/20 sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-4 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <img src="https://res.cloudinary.com/dcwjok3nu/image/upload/t_GitmintGo-Logo/v1763979199/Gitmint_Alphp_mrbxzk.png" 
+                     alt="GtsAlpha Logo" 
+                     class="w-10 h-10 rounded-full border border-brand shadow-[0_0_10px_rgba(13,202,240,0.5)]">
+                <span class="text-2xl font-bold text-white tracking-wider">GtsAlpha</span>
+            </div>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex items-center gap-6">
+                <a href="#" class="bg-gray-700 hover:bg-brand hover:text-black text-white px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 shadow-md transform hover:-translate-y-0.5">
+                    ลงชื่อเข้าใช้
+                </a>
+                <a href="#" class="text-sm font-medium text-brand hover:text-white transition relative group">
+                    บริการ<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all group-hover:w-full"></span>
+                </a>
+                <a href="#" class="text-sm font-medium text-brand hover:text-white transition relative group">
+                    API<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all group-hover:w-full"></span>
+                </a>
+                <a href="#" class="text-sm font-medium text-brand hover:text-white transition relative group">
+                    สมัครใช้งาน<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all group-hover:w-full"></span>
+                </a>
+                <a href="#" class="text-sm font-medium text-gray-300 hover:text-white transition">Terms</a>
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden text-white text-2xl focus:outline-none">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#0f172a] border-t border-brand/20 shadow-xl absolute w-full left-0 top-20">
+            <nav class="flex flex-col p-4 space-y-4">
+                <a href="#" class="block text-center bg-gray-700 hover:bg-brand hover:text-black text-white px-6 py-3 rounded-lg text-sm font-bold transition-all">
+                    ลงชื่อเข้าใช้
+                </a>
+                <a href="#" class="block px-4 py-2 text-sm font-medium text-brand hover:text-white hover:bg-gray-800 rounded transition">
+                    <i class="fa-solid fa-layer-group w-6 text-center"></i> บริการ
+                </a>
+                <a href="#" class="block px-4 py-2 text-sm font-medium text-brand hover:text-white hover:bg-gray-800 rounded transition">
+                    <i class="fa-solid fa-code w-6 text-center"></i> API
+                </a>
+                <a href="#" class="block px-4 py-2 text-sm font-medium text-brand hover:text-white hover:bg-gray-800 rounded transition">
+                    <i class="fa-solid fa-user-plus w-6 text-center"></i> สมัครใช้งาน
+                </a>
+                <a href="#" class="block px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800 rounded transition">
+                    <i class="fa-solid fa-file-contract w-6 text-center"></i> Terms
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- === Hero === -->
+    <section class="container mx-auto px-4 pt-12 pb-8 text-center">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-2 uppercase tracking-tight drop-shadow-xl" style="text-shadow: 2px 2px 10px rgba(0,0,0,1);">
+            GtsAlpha <span class="text-brand">Ecosystem</span>
+        </h1>
+        <p class="text-lg text-white max-w-2xl mx-auto drop-shadow-lg font-medium" style="text-shadow: 1px 1px 5px rgba(0,0,0,1);">
+            API Data Suite Gen 2 & Intelligent AI Models
+        </p>
+    </section>
+
+    <!-- === Main Content === -->
+    <main class="container mx-auto px-4 pb-24 flex-grow">
+        
+        <!-- Main Container -->
+        <div class="max-w-7xl mx-auto border border-brand/30 rounded-xl p-6 backdrop-blur-sm bg-black/20">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- 1. Gt-Studio -->
+                <div class="bg-cardbg/95 backdrop-blur-sm border border-brand/20 p-6 hover:border-brand transition-all duration-300 shadow-xl rounded-lg flex flex-col group">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="text-3xl text-brand group-hover:scale-110 transition-transform"><i class="fa-solid fa-laptop-code"></i></div>
+                        <span class="px-2 py-1 text-[10px] font-bold text-green-400 bg-green-900/30 border border-green-600 rounded">✅ Active</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Gt-Studio</h3>
+                    <div class="space-y-4 text-sm text-white flex-grow">
+                        <div>
+                            <span class="text-xs font-bold text-gray-200 uppercase block mb-1">บริการ (Service)</span>
+                            <p class="font-light">รับออกแบบและพัฒนาเว็บไซต์ (Website) และแอปพลิเคชัน (Application) ครบวงจร</p>
+                            <p class="mt-2 text-brand font-medium"><i class="fa-solid fa-globe mr-1"></i>ปัจจุบัน พัฒนาโดเมนรากบนสุดของแอป th-carrent.com</p>
+                        </div>
+                        <div class="bg-white/10 p-2 border border-brand/20 rounded flex items-center gap-2 mt-auto">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" alt="Line" class="w-5 h-5">
+                            <span class="font-semibold text-white text-xs">Partner กับ LINE ประเทศญี่ปุ่น</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Gt-Subplot Chat Agent -->
+                <div class="bg-cardbg/95 backdrop-blur-sm border border-brand/20 p-6 hover:border-brand transition-all duration-300 shadow-xl rounded-lg flex flex-col group">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="text-3xl text-brand group-hover:scale-110 transition-transform"><i class="fa-solid fa-comments-dollar"></i></div>
+                        <span class="px-2 py-1 text-[10px] font-bold text-green-400 bg-green-900/30 border border-green-600 rounded">✅ Active</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Gt-Subplot Chat Agent</h3>
+                    <p class="text-sm text-gray-100 mb-3">แพลตฟอร์มสร้าง AI Chatbot ผู้ช่วยตอบแชทอัจฉริยะ (No-Code Platform)</p>
+                    <div class="space-y-3 text-sm text-white flex-grow">
+                        <div class="border-t border-brand/20 pt-2">
+                            <span class="text-xs font-bold text-brand block mb-1">User-Friendly</span>
+                            <p class="font-light">ระบบลาก-วาง (Drag & Drop) ไม่ต้องเขียนโค้ด</p>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-brand block mb-1">Custom Context</span>
+                            <p class="font-light">กำหนดความรู้ AI เองได้ รองรับ PDF/Word/Excel</p>
+                        </div>
+                        <div class="bg-slate-800/80 p-2 rounded text-xs border border-brand/20 text-white">
+                            <strong>Target:</strong> ราชการ, เอกชน, ร้านค้าออนไลน์
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Gt-Social Automatic -->
+                <div class="bg-cardbg/95 backdrop-blur-sm border-l-4 border-l-yellow-500 border-y border-r border-brand/20 p-6 hover:bg-slate-800 transition-all duration-300 shadow-xl rounded-r-lg flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="text-3xl text-yellow-500"><i class="fa-solid fa-hashtag"></i></div>
+                        <span class="px-2 py-1 text-[10px] font-bold text-yellow-500 bg-yellow-900/30 border border-yellow-600 rounded">⏸️ Maintenance</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Gt-Social Automatic</h3>
+                    <p class="text-sm text-gray-100 mb-3">แพลตฟอร์มบริหารจัดการโซเชียลมีเดียครบวงจร</p>
+                    <ul class="space-y-1 text-sm text-white mb-3 list-disc list-inside font-light">
+                        <li><strong>Auto Posting:</strong> โพสต์หลายแพลตฟอร์ม</li>
+                        <li><strong>AI Content:</strong> สร้างสื่อ/แคปชั่นอัตโนมัติ</li>
+                        <li><strong>Marketing:</strong> เพิ่มยอดไลค์/แชร์/ติดตาม</li>
+                    </ul>
+                    <div class="bg-black/60 p-2 border border-brand/20 rounded mt-auto">
+                        <p class="text-brand font-bold text-[10px]"><i class="fa-solid fa-chart-line"></i> สถิติ (Hugging Face):</p>
+                        <div class="flex justify-between text-[10px] text-white mt-1">
+                            <span>User: 30k+</span>
+                            <span>Traffic: 100k+</span>
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-gray-400 italic mt-2">*ปิดปรับปรุงชั่วคราว (รอการดำเนินการ)</p>
+                </div>
+
+                <!-- 2. Gt-Search -->
+                <div class="bg-cardbg/95 backdrop-blur-sm border border-brand/20 p-6 hover:border-brand transition-all duration-300 shadow-xl flex flex-col rounded-lg md:col-span-3 lg:col-span-1 border-t-4 border-t-blue-500">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="text-3xl text-blue-400"><i class="fa-solid fa-file-magnifying-glass"></i></div>
+                        <span class="px-2 py-1 text-[10px] font-bold text-blue-400 bg-blue-900/30 border border-blue-600 rounded">✅ Specialized Service</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Gt-Search</h3>
+                    <p class="text-xs font-bold text-blue-400 mb-2 uppercase tracking-wide">Document Intelligence System</p>
+                    <p class="text-sm text-gray-100 mb-4">ระบบจัดการเอกสารอัจฉริยะ (God’s Eye for Docs) ทำงานแบบ Local 100% ไม่ยุ่งข้อมูลส่วนบุคคล</p>
+                    
+                    <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-xs text-white mb-4 flex-grow font-light">
+                        <div class="flex items-start gap-1"><i class="fa-solid fa-layer-group text-brand mt-0.5"></i> <span><strong>Bulk Process:</strong> จัดการภาพ 200k+</span></div>
+                        <div class="flex items-start gap-1"><i class="fa-solid fa-eye text-brand mt-0.5"></i> <span><strong>OCR & Index:</strong> อ่าน Text / แยกฟอร์ม</span></div>
+                        <div class="flex items-start gap-1"><i class="fa-solid fa-fingerprint text-brand mt-0.5"></i> <span><strong>Similarity:</strong> หาเอกสารซ้ำด้วย Vector</span></div>
+                        <div class="flex items-start gap-1"><i class="fa-solid fa-shield-halved text-brand mt-0.5"></i> <span><strong>Privacy First:</strong> Metadata ไม่ระบุตัวตน</span></div>
+                    </div>
+                    <div class="bg-slate-800/80 p-2 rounded text-center text-xs text-blue-200 border border-brand/20">
+                        <i class="fa-solid fa-server mr-1"></i> รองรับ Docker / On-Premise สำหรับองค์กร
+                    </div>
+                </div>
+
+                <!-- 5. Gittisak-Go MCP -->
+                <div class="md:col-span-3 lg:col-span-2 bg-cardbg/95 backdrop-blur-sm border border-brand/20 p-6 hover:border-brand transition-all duration-300 shadow-xl rounded-lg group">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="text-3xl text-brand group-hover:scale-110 transition-transform"><i class="fa-solid fa-microchip"></i></div>
+                        <span class="px-2 py-1 text-[10px] font-bold text-green-400 bg-green-900/30 border border-green-600 rounded">✅ Core Tech</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Gittisak-Go MCP (Model Control Protocol)</h3>
+                    <p class="text-sm text-white mb-4">โมดูลหลักสำหรับควบคุมระบบการทำงานทั้งหมดของโปรแกรม Gts Alpha MCP</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-brand/20 pt-4 mt-2">
+                        <div>
+                            <span class="text-xs font-bold text-gray-200 uppercase block mb-1">กลุ่มเป้าหมาย (Target)</span>
+                            <p class="text-sm text-white font-light"><i class="fa-solid fa-user-gear mr-1"></i>นักพัฒนา (Developers) หรือผู้ใช้งานที่มีทักษะทางเทคนิค</p>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-gray-200 uppercase block mb-1">ความต้องการพื้นฐาน (Prerequisites)</span>
+                            <ul class="text-xs text-white space-y-1 font-light">
+                                <li class="flex items-center"><span class="w-2 h-2 bg-brand rounded-full mr-2"></span><strong>IDE:</strong> VS Code, PyCharm, Atom, Jupyter</li>
+                                <li class="flex items-center"><span class="w-2 h-2 bg-brand rounded-full mr-2"></span><strong>Git:</strong> (จำเป็นต้องใช้)</li>
+                                <li class="flex items-center"><span class="w-2 h-2 bg-brand rounded-full mr-2"></span><strong>Knowledge:</strong> พื้นฐาน LLM และ ML</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- === Footer === -->
+    <footer class="bg-[#0f172a]/95 border-t border-brand/20 py-8 mt-auto">
+        <div class="container mx-auto px-4 text-center">
+            <h3 class="text-base font-bold text-white mb-6">ช่องทางติดต่อและพาร์ทเนอร์</h3>
+            <div class="flex justify-center gap-4 mb-6">
+                <a href="#" class="w-12 h-12 bg-slate-800 rounded hover:bg-brand transition flex items-center justify-center border border-gray-700"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/2023_Facebook_icon.svg" class="w-6 h-6"></a>
+                <a href="#" class="w-12 h-12 bg-slate-800 rounded hover:bg-brand transition flex items-center justify-center border border-gray-700"><img src="https://upload.wikimedia.org/wikipedia/commons/6/63/Facebook_Messenger_logo_2025.svg" class="w-6 h-6"></a>
+                <a href="#" class="w-12 h-12 bg-slate-800 rounded hover:bg-brand transition flex items-center justify-center border border-gray-700"><img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" class="w-6 h-6"></a>
+            </div>
+            <p class="text-gray-400 text-xs">© 2024-2025 GtsAlpha Ecosystem. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Mobile Menu Toggle -->
+    <script>
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

@@ -39,9 +39,9 @@
 
           <div class="mt-3 rounded-xl border border-white/10 bg-black/20 p-4">
             <div class="text-sm font-semibold text-slate-100">พร้อมเพย์ (QR)</div>
-            <div class="mt-1 text-sm text-slate-300">กดปุ่มเพื่อไปหน้า QR และกรอกยอดเงินเอง</div>
+            <div class="mt-1 text-sm text-slate-300">กดปุ่มเพื่อไปหน้า QR และกรอกยอดเงินเอง หรือส่งยอดจากตะกร้า</div>
             <div class="mt-3">
-              <a href="payment.html" class="inline-flex w-full items-center justify-center rounded-xl bg-blue-500 px-4 py-3 text-sm font-semibold text-white no-underline hover:bg-blue-400 focus:outline-none">ไปหน้าชำระเงิน</a>
+              <a id="manualPayment" href="payment.html" class="inline-flex w-full items-center justify-center rounded-xl bg-blue-500 px-4 py-3 text-sm font-semibold text-white no-underline hover:bg-blue-400 focus:outline-none">ไปหน้าชำระเงิน (THB)</a>
             </div>
           </div>
         </aside>
@@ -57,7 +57,7 @@
   <button id="openCartBtn" class="cart-btn" aria-expanded="false" aria-controls="cartDrawer">
     <span class="cart-badge" id="cartCount">0</span>
     ตะกร้าสินค้า
-    <span id="cartTotal" class="ml-2 text-sm opacity-90">0 USD</span>
+    <span id="cartTotal" class="ml-2 text-sm opacity-90">฿0.00</span>
   </button>
 
   <!-- Cart drawer -->
@@ -76,12 +76,12 @@
 
     <div class="cart-footer">
       <div>
-        <div class="text-xs text-slate-300">รวม</div>
-        <div id="cartTotalFooter" class="text-lg font-semibold">0 USD</div>
+        <div class="text-xs text-slate-300">รวม (THB)</div>
+        <div id="cartTotalFooter" class="text-lg font-semibold">฿0.00</div>
       </div>
       <div style="display:flex; gap:8px;">
         <button id="clearCartBtn" class="inline-flex items-center justify-center rounded-lg bg-white/5 px-4 py-2 text-sm">ล้าง</button>
-        <a id="checkoutBtn" href="payment.html" class="inline-flex items-center justify-center rounded-lg bg-blue-500 px-4 py-2 text-sm text-white">ชำระเงิน</a>
+        <a id="checkoutBtn" href="payment.html" class="inline-flex items-center justify-center rounded-lg bg-blue-500 px-4 py-2 text-sm text-white">ชำระเงิน (THB)</a>
       </div>
     </div>
   </aside>
@@ -89,7 +89,9 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
+    const CURRENCY_CODE = 'THB';
     const MARKUP_MULTIPLIER = 3; // +200%
+    const FX_RATE = 36.5; // THB per 1 USD (adjustable)
 
     const escapeHtml = (value) => String(value)
       .replaceAll('&', '&amp;')
@@ -125,9 +127,12 @@
       },
     ];
 
-    const formatUsd = (value) => {
-      const normalized = Number.isInteger(value) ? value.toFixed(0) : value.toFixed(2);
-      return `${normalized} USD`;
+    const formatThb = (value) => {
+      try {
+        return new Intl.NumberFormat('th-TH', { style: 'currency', currency: CURRENCY_CODE }).format(value);
+      } catch (e) {
+        return `฿${Number(value).toFixed(2)}`;
+      }
     };
 
     // --- Cart logic (localStorage) ---
@@ -149,7 +154,7 @@
       let total = 0;
       for (const it of cart) {
         count += it.qty;
-        total += (it.priceUsd * it.qty);
+        total += (it.priceThb * it.qty);
       }
       return { count, total };
     };
@@ -157,13 +162,14 @@
     const updateCartBadge = () => {
       const { count, total } = getCartSummary();
       document.getElementById('cartCount').textContent = count;
-      document.getElementById('cartTotal').textContent = `${total.toFixed(2)} USD`;
-      document.getElementById('cartTotalFooter').textContent = `${total.toFixed(2)} USD`;
-      // update checkout link with amount query param (optional)
+      document.getElementById('cartTotal').textContent = formatThb(total);
+      document.getElementById('cartTotalFooter').textContent = formatThb(total);
+      // update checkout link with amount and currency query params (THB)
       const checkout = document.getElementById('checkoutBtn');
       if (checkout) {
         const url = new URL(checkout.href, location.href);
         url.searchParams.set('amount', total.toFixed(2));
+        url.searchParams.set('currency', CURRENCY_CODE);
         checkout.href = url.toString();
       }
     };
@@ -172,10 +178,11 @@
       const p = products[productIndex];
       if (!p) return;
       const found = cart.find(i => i.id === productIndex);
+      const priceThb = p.baseUsd * MARKUP_MULTIPLIER * FX_RATE;
       if (found) {
         found.qty += qty;
       } else {
-        cart.push({ id: productIndex, title: p.title, priceUsd: p.baseUsd * MARKUP_MULTIPLIER, qty });
+        cart.push({ id: productIndex, title: p.title, priceThb, qty });
       }
       saveCart(cart);
       renderCartItems();
@@ -215,7 +222,7 @@
     const productGrid = document.getElementById('productGrid');
     productGrid.innerHTML = products
       .map((p, idx) => {
-        const newUsd = p.baseUsd * MARKUP_MULTIPLIER;
+        const priceThb = p.baseUsd * MARKUP_MULTIPLIER * FX_RATE;
         const title = escapeHtml(p.title);
         return `
           <div>
@@ -225,8 +232,8 @@
               <div class="mt-2 text-sm text-slate-300">${escapeHtml(p.description || '')}</div>
               <div class="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
                 <div class="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-slate-100">
-                  <span>${formatUsd(newUsd)}</span>
-                  <span class="text-xs font-normal text-slate-400 line-through">${formatUsd(p.baseUsd)}</span>
+                  <span>${formatThb(priceThb)}</span>
+                  <span class="text-xs font-normal text-slate-400 line-through">${formatThb(p.baseUsd * FX_RATE)}</span>
                 </div>
                 <button data-index="${idx}" class="add-to-cart inline-flex w-full items-center justify-center rounded-lg bg-blue-500 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-400 sm:w-auto sm:py-2">เพิ่มลงตะกร้า</button>
               </div>
@@ -261,7 +268,7 @@
             </div>
             <div style="flex:1; min-width:0;">
               <div class="text-sm font-semibold">${escapeHtml(item.title)}</div>
-              <div class="text-xs text-slate-400">${formatUsd(item.priceUsd)} x ${item.qty} = ${(item.priceUsd * item.qty).toFixed(2)} USD</div>
+              <div class="text-xs text-slate-400">${formatThb(item.priceThb)} x ${item.qty} = ${formatThb(item.priceThb * item.qty)}</div>
               <div style="margin-top:6px; display:flex; gap:8px; align-items:center;">
                 <button class="qty-btn" data-act="dec" data-id="${item.id}">−</button>
                 <div style="min-width:30px; text-align:center;">${item.qty}</div>
@@ -330,7 +337,7 @@
       if (!inside) closeCart();
     });
 
-    // Checkout confirmation: show a confirm dialog before navigating away to payment
+    // Checkout confirmation: show a confirm dialog before navigating away to payment (amount in THB)
     const checkoutBtn = document.getElementById('checkoutBtn');
     if (checkoutBtn) {
       checkoutBtn.addEventListener('click', (ev) => {
@@ -341,8 +348,8 @@
           alert('ตะกร้าว่าง — โปรดเพิ่มสินค้าเพื่อชำระเงิน');
           return;
         }
-        const pretty = total.toFixed(2);
-        const ok = confirm(`คุณจะไปยังหน้าชำระเงินและชำระยอด ${pretty} USD\\nต้องการดำเนินการต่อหรือไม่?`);
+        const pretty = formatThb(total);
+        const ok = confirm(`คุณจะไปยังหน้าชำระเงินและชำระยอด ${pretty} \nต้องการดำเนินการต่อหรือไม่?`);
         if (!ok) ev.preventDefault();
       });
     }

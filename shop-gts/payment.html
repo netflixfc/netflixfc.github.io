@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>GtsAlpha IoT • ชำระเงิน</title>
+  <meta name="description" content="หน้าชำระเงิน GtsAlpha IoT" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+</head>
+<body>
+  <div class="min-h-screen bg-slate-950 text-slate-100">
+    <div class="mx-auto max-w-3xl px-4 py-6 pt-[calc(env(safe-area-inset-top)+1.5rem)] pb-[calc(env(safe-area-inset-bottom)+1.5rem)] sm:py-8">
+      <header class="flex flex-col gap-3 rounded-2xl border border-white/10 bg-black/20 p-4 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex items-center gap-3">
+          <a href="shop.html" class="inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-slate-100 hover:bg-white/10">กลับหน้าร้าน</a>
+          <div>
+            <div class="text-base font-semibold">ชำระเงิน</div>
+            <div class="text-sm text-slate-300">GtsAlpha IoT</div>
+          </div>
+        </div>
+      </header>
+
+      <main class="mt-4 grid grid-cols-1 gap-4">
+        <section class="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-5">
+          <div class="text-xs font-semibold tracking-wider text-slate-200">QR ชำระเงิน</div>
+
+          <div class="mt-3 rounded-xl border border-white/10 bg-black/20 p-4">
+            <div class="flex flex-col items-center gap-3 sm:flex-row sm:items-start">
+              <div class="flex h-64 w-64 items-center justify-center rounded-xl border border-white/10 bg-white/5 sm:h-72 sm:w-72">
+                <canvas id="qrCanvas" class="h-60 w-60 sm:h-64 sm:w-64"></canvas>
+              </div>
+
+              <div class="w-full">
+                <div id="qrStatus" class="text-sm text-slate-300"></div>
+                <div id="ppInfo" class="mt-3 rounded-xl border border-white/10 bg-white/5 p-3 text-xs text-slate-300"></div>
+
+                <div class="mt-3 rounded-xl border border-white/10 bg-black/20 p-4">
+                  <label class="block text-xs font-semibold tracking-wider text-slate-200" for="amountInput">ยอดเงิน (บาท)</label>
+                  <div class="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center">
+                    <input
+                      id="amountInput"
+                      inputmode="decimal"
+                      autocomplete="off"
+                      placeholder="ปล่อยว่าง = ไม่ระบุยอด"
+                      class="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-3 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40 sm:py-2"
+                    />
+                    <button
+                      id="clearAmount"
+                      type="button"
+                      class="inline-flex w-full items-center justify-center rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-slate-100 hover:bg-white/10 sm:w-auto sm:py-2"
+                    >
+                      ล้างยอด
+                    </button>
+                  </div>
+                  <div class="mt-2 text-xs text-slate-400">QR จะอัปเดตอัตโนมัติเมื่อกรอกยอดเงิน</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="mt-5 text-center text-xs text-slate-400">
+        © <span id="year"></span> GtsAlpha IoT
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const qrStatus = document.getElementById('qrStatus');
+    const ppInfo = document.getElementById('ppInfo');
+    const canvas = document.getElementById('qrCanvas');
+    const amountInput = document.getElementById('amountInput');
+    const clearAmount = document.getElementById('clearAmount');
+
+    // PromptPay: ใช้เลขบัตรประชาชน (13 หลัก) ตามที่ให้ไว้
+    // หมายเหตุ: หน้าเว็บจะแสดงเป็นแบบปิดบางส่วน (ไม่โชว์เลขเต็ม)
+    const PROMPTPAY_NATIONAL_ID = '3410300017821';
+    const PROMPTPAY_DISPLAY_NAME = 'Mr. Gittisak Wannakeeree';
+
+    const onlyDigits = (value) => String(value).replace(/\D/g, '');
+    const pad2 = (n) => String(n).padStart(2, '0');
+
+    const crc16ccitt = (input) => {
+      let crc = 0xffff;
+      for (let i = 0; i < input.length; i += 1) {
+        crc ^= input.charCodeAt(i) << 8;
+        for (let bit = 0; bit < 8; bit += 1) {
+          if (crc & 0x8000) {
+            crc = ((crc << 1) ^ 0x1021) & 0xffff;
+          } else {
+            crc = (crc << 1) & 0xffff;
+          }
+        }
+      }
+      return crc.toString(16).toUpperCase().padStart(4, '0');
+    };
+
+    const tlv = (tag, value) => `${tag}${pad2(value.length)}${value}`;
+
+    const buildPromptPayPayload = ({ nationalId, amount }) => {
+      const id = onlyDigits(nationalId);
+      if (id.length !== 13) {
+        throw new Error('เลขบัตรประชาชนต้องมี 13 หลัก');
+      }
+
+      // Merchant Account Information (PromptPay)
+      // 29: GUI(A000000677010111) + ID(01)
+      const merchantAccount = tlv('00', 'A000000677010111') + tlv('01', id);
+
+      let payload = '';
+      payload += tlv('00', '01');
+      payload += tlv('01', amount ? '12' : '11');
+      payload += tlv('29', merchantAccount);
+      payload += tlv('52', '0000');
+      payload += tlv('53', '764');
+
+      if (amount) {
+        const amt = Number(amount);
+        if (!Number.isFinite(amt) || amt <= 0) {
+          throw new Error('จำนวนเงินไม่ถูกต้อง');
+        }
+        payload += tlv('54', amt.toFixed(2));
+      }
+
+      payload += tlv('58', 'TH');
+      payload += tlv('59', 'GTSALPHA');
+      payload += tlv('60', 'BANGKOK');
+
+      const payloadForCrc = payload + '6304';
+      const crc = crc16ccitt(payloadForCrc);
+      return payloadForCrc + crc;
+    };
+
+    const maskedId = (() => {
+      const id = onlyDigits(PROMPTPAY_NATIONAL_ID);
+      return id.length === 13 ? `${id.slice(0, 1)}-xxxx-xxxxx-xx-${id.slice(-1)}` : 'ไม่ถูกต้อง';
+    })();
+
+    const normalizeAmount = (raw) => {
+      const trimmed = String(raw ?? '').trim();
+      if (!trimmed) return null;
+      const normalized = trimmed.replace(/,/g, '');
+      const value = Number(normalized);
+      if (!Number.isFinite(value) || value <= 0) return NaN;
+      return value;
+    };
+
+    const render = () => {
+      const amountValue = normalizeAmount(amountInput.value);
+      try {
+        if (Number.isNaN(amountValue)) {
+          throw new Error('ยอดเงินไม่ถูกต้อง');
+        }
+
+        const payload = buildPromptPayPayload({
+          nationalId: PROMPTPAY_NATIONAL_ID,
+          amount: amountValue == null ? null : amountValue,
+        });
+
+        const statusText = amountValue == null
+          ? 'พร้อมเพย์พร้อมใช้งาน (ไม่ระบุยอด)'
+          : `พร้อมเพย์พร้อมใช้งาน (ยอด ${amountValue.toFixed(2)} บาท)`;
+        qrStatus.textContent = statusText;
+        ppInfo.innerHTML = `
+          <div><strong>ชื่อ:</strong> ${PROMPTPAY_DISPLAY_NAME}</div>
+          <div class="mt-1"><strong>พร้อมเพย์ (เลขบัตรประชาชน):</strong> ${maskedId}</div>
+        `;
+
+        QRCode.toCanvas(canvas, payload, {
+          width: 224,
+          margin: 1,
+          color: {
+            dark: '#0b1220',
+            light: '#ffffff',
+          },
+        });
+      } catch (e) {
+        qrStatus.textContent = 'สร้าง QR ไม่สำเร็จ';
+        ppInfo.textContent = e?.message ? String(e.message) : 'เกิดข้อผิดพลาด';
+      }
+    };
+
+    let renderTimer = null;
+    const scheduleRender = () => {
+      if (renderTimer) window.clearTimeout(renderTimer);
+      renderTimer = window.setTimeout(render, 150);
+    };
+
+    amountInput.addEventListener('input', scheduleRender);
+    clearAmount.addEventListener('click', () => {
+      amountInput.value = '';
+      render();
+      amountInput.focus();
+    });
+
+    render();
+  </script>
+</body>
+</html>

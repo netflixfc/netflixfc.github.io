@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>GtsAlpha IoT Shop</title>
+  <meta name="description" content="ร้านค้า GtsAlpha IoT — สั่งซื้อ/ชำระเงินผ่านพร้อมเพย์" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div class="min-h-screen bg-slate-950 text-slate-100">
+    <div class="mx-auto max-w-5xl px-4 py-6 pt-[calc(env(safe-area-inset-top)+1.5rem)] pb-[calc(env(safe-area-inset-bottom)+1.5rem)] sm:py-8">
+      <header class="flex flex-col gap-3 rounded-2xl border border-white/10 bg-black/20 p-4 backdrop-blur md:flex-row md:items-center md:justify-between">
+        <div class="flex items-center gap-3">
+          <img src="GtsAlpha.png" alt="GtsAlpha logo" class="h-11 w-11 rounded-xl border border-white/10 bg-white/5 object-contain" />
+          <div>
+            <div class="text-base font-semibold">GtsAlpha IoT</div>
+            <div class="text-sm text-slate-300">หน้าร้านสำหรับชำระเงินผ่านพร้อมเพย์</div>
+          </div>
+        </div>
+
+        <div class="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs text-slate-200">
+          พร้อมใช้งาน • โอนเงินได้ทันที
+        </div>
+      </header>
+
+      <main class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-5">
+        <section class="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-5 md:col-span-3">
+          <h1 class="text-xl font-semibold leading-snug">ร้านค้า GtsAlpha IoT</h1>
+          <p class="mt-2 text-sm text-slate-300">หน้านี้เป็นหน้าหลัก (สรุป)</p>
+
+          <div class="mt-5 text-xs font-semibold tracking-wider text-slate-200">สินค้า/บริการ</div>
+
+          <div id="productGrid" class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2"></div>
+        </section>
+
+        <aside id="payment" class="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-5 md:col-span-2">
+          <div class="text-xs font-semibold tracking-wider text-slate-200">ชำระเงิน</div>
+
+          <div class="mt-3 rounded-xl border border-white/10 bg-black/20 p-4">
+            <div class="text-sm font-semibold text-slate-100">พร้อมเพย์ (QR)</div>
+            <div class="mt-1 text-sm text-slate-300">กดปุ่มเพื่อไปหน้า QR และกรอกยอดเงินเอง</div>
+            <div class="mt-3">
+              <a href="payment.html" class="inline-flex w-full items-center justify-center rounded-xl bg-blue-500 px-4 py-3 text-sm font-semibold text-white no-underline hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40">ไปหน้าชำระเงิน (พร้อมเพย์)</a>
+            </div>
+          </div>
+        </aside>
+      </main>
+
+      <footer class="mt-5 text-center text-xs text-slate-400">
+        © <span id="year"></span> GtsAlpha IoT • สร้างเป็นไฟล์ HTML ใช้งานง่าย
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const MARKUP_MULTIPLIER = 3; // +200%
+
+    const escapeHtml = (value) => String(value)
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#39;');
+
+    const products = [
+      {
+        title: 'Freedom to Switch',
+        description: 'บริการ/ฟีเจอร์สำหรับสลับโปรไฟล์ซิม (eUICC) และการเชื่อมต่อ IoT (อ้างอิงแพ็กเกจ 15 USD / 10 ปี)',
+        baseUsd: 15,
+        image: 'src/images/Freedom%20to%20Switch.png',
+        detailLabel: 'Freedom to Switch',
+        detailUrl: 'https://www.1nce.com/th-th/1nce-connect/features/sim-cards',
+      },
+      {
+        title: 'IoT SIM Card Business',
+        description: 'IoT SIM Card Business เป็นซิม 3-in-1 ไม่รองรับฟีเจอร์ Freedom to Switch (eUICC) และสามารถใช้งานได้โดยสมัครแพ็กเกจ Lifetime Flat ในราคา 1 USD.',
+        baseUsd: 1,
+        image: 'src/images/IoT%20SIM%20Card%20Business.png',
+        detailLabel: 'Card Business',
+        detailUrl: 'https://www.1nce.com/th-th/1nce-connect/features/sim-cards',
+      },
+      {
+        title: 'IoT SIM Chip Industrial',
+        description: 'IoT SIM Chip Industrial ได้รับการออกแบบมาให้เชื่อมประสานกับอุปกรณ์ IoT อีกทั้งยังมีการเสริมความทนทานที่แข็งแกร่งเพื่อความน่าเชื่อถือสูงสุด\n\nรองรับฟีเจอร์ Freedom to Switch (eUICC) และสามารถใช้ร่วมกับการสมัครแพ็กเกจ Lifetime Flat ในราคา 2.50 USD',
+        baseUsd: 2.5,
+        image: 'src/images/IoT%20SIM%20Chip%20Industrial.png',
+        detailLabel: 'Chip Industrial',
+        detailUrl: 'https://www.1nce.com/th-th/1nce-connect/features/sim-cards',
+      },
+    ];
+
+    const formatUsd = (value) => {
+      const normalized = Number.isInteger(value) ? value.toFixed(0) : value.toFixed(2);
+      return `${normalized} USD`;
+    };
+
+    const productGrid = document.getElementById('productGrid');
+    productGrid.innerHTML = products
+      .map((p) => {
+        const newUsd = p.baseUsd * MARKUP_MULTIPLIER;
+        const title = escapeHtml(p.title);
+        return `
+          <div>
+            <img src="${p.image}" alt="${title}" class="block h-auto w-full bg-transparent object-contain" />
+            <div class="mt-3 rounded-xl border border-white/10 bg-black/20 p-4">
+              <h3 class="text-base font-semibold leading-snug break-words">${title}</h3>
+              <div class="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+                <div class="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-slate-100">
+                  <span>${formatUsd(newUsd)}</span>
+                  <span class="text-xs font-normal text-slate-400 line-through">${formatUsd(p.baseUsd)}</span>
+                </div>
+                <a href="payment.html" class="inline-flex w-full items-center justify-center rounded-lg bg-blue-500 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-400 sm:w-auto sm:py-2">สั่งซื้อ</a>
+              </div>
+            </div>
+          </div>
+        `;
+      })
+      .join('');
+  </script>
+</body>
+</html>

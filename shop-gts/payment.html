@@ -1,226 +1,207 @@
 <!doctype html>
-<html lang="th">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>GtsAlpha IoT • ชำระเงิน</title>
-  <meta name="description" content="หน้าชำระเงิน GtsAlpha IoT" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Payment - Shop GTS</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Roboto, "Helvetica Neue", Arial; margin: 0; padding: 20px; background: #f7f7f8; color: #222; }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 { margin-top: 0; }
+    .top { display: flex; gap: 20px; align-items: start; }
+    .card { background: #fff; padding: 18px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); flex: 1; }
+    .canvas-wrap { width: 360px; height: 220px; }
+    canvas { display: block; width: 100%; height: 100%; border-radius: 6px; }
+    form { display: grid; gap: 10px; margin-top: 12px; }
+    label { font-size: 13px; color: #444; }
+    input[type="text"], input[type="email"], input[type="tel"] { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ddd; }
+    button { padding: 10px 14px; border: none; border-radius: 6px; background: #1f7aec; color: #fff; cursor: pointer; }
+    @media (max-width: 720px) { .top { flex-direction: column; } .canvas-wrap { width: 100%; height: 200px; } }
+  </style>
 </head>
 <body>
-  <div class="min-h-screen bg-slate-950 text-slate-100">
-    <div class="mx-auto max-w-3xl px-4 py-6 pt-[calc(env(safe-area-inset-top)+1.5rem)] pb-[calc(env(safe-area-inset-bottom)+1.5rem)] sm:py-8">
-      <header class="flex flex-col gap-3 rounded-2xl border border-white/10 bg-black/20 p-4 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
-        <div class="flex items-center gap-3">
-          <a href="/shop-gts/" class="inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-slate-100 hover:bg-white/10">
-            ← กลับหน้าร้าน
-          </a>
+  <div class="container">
+    <h1>Complete Payment</h1>
+    <div class="top">
+      <div class="card canvas-wrap">
+        <canvas id="cardCanvas" aria-hidden="true"></canvas>
+      </div>
+      <div class="card">
+        <form id="paymentForm" novalidate>
           <div>
-            <div class="text-base font-semibold">ชำระเงิน</div>
-            <div class="text-sm text-slate-300">GtsAlpha IoT</div>
+            <label for="name">Name on card</label>
+            <input id="name" name="name" type="text" placeholder="Jane Doe" required>
           </div>
-        </div>
-      </header>
-
-      <main class="mt-4 grid grid-cols-1 gap-4">
-        <section class="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-5">
-          <div class="text-xs font-semibold tracking-wider text-slate-200">QR ชำระเงิน</div>
-
-          <div class="mt-3 rounded-xl border border-white/10 bg-black/20 p-4">
-            <div class="flex flex-col items-center gap-3 sm:flex-row sm:items-start">
-              <div class="flex h-64 w-64 items-center justify-center rounded-xl border border-white/10 bg-white/5 sm:h-72 sm:w-72">
-                <!-- เพิ่ม width/height attribute เพื่อให้ canvas มี internal resolution ที่ชัดเจน -->
-                <canvas id="qrCanvas" width="224" height="224" class="h-60 w-60 sm:h-64 sm:w-64"></canvas>
-              </div>
-
-              <div class="w-full">
-                <div id="qrStatus" class="text-sm text-slate-300"></div>
-                <div id="ppInfo" class="mt-3 rounded-xl border border-white/10 bg-white/5 p-3 text-xs text-slate-300"></div>
-
-                <div class="mt-3 rounded-xl border border-white/10 bg-black/20 p-4">
-                  <label class="block text-xs font-semibold tracking-wider text-slate-200" for="amountInput">ยอดเงิน (บาท)</label>
-                  <div class="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center">
-                    <input
-                      id="amountInput"
-                      inputmode="decimal"
-                      autocomplete="off"
-                      placeholder="ปล่อยว่าง = ไม่ระบุยอด"
-                      class="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-3 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40 sm:px-4 sm:py-3"
-                    />
-                    <button
-                      id="clearAmount"
-                      type="button"
-                      class="inline-flex w-full items-center justify-center rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-slate-100 hover:bg-white/10 sm:w-auto sm:px-4 sm:py-3"
-                    >
-                      ล้างยอด
-                    </button>
-                  </div>
-                  <div class="mt-2 text-xs text-slate-400">QR จะอัปเดตอัตโนมัติเมื่อกรอกยอดเงิน</div>
-                </div>
-              </div>
+          <div>
+            <label for="number">Card number</label>
+            <input id="number" name="number" type="text" placeholder="•••• •••• •••• 4242" inputmode="numeric" required>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <div style="flex:1">
+              <label for="exp">Expiry</label>
+              <input id="exp" name="exp" type="text" placeholder="MM/YY" required>
+            </div>
+            <div style="width:110px">
+              <label for="cvc">CVC</label>
+              <input id="cvc" name="cvc" type="text" placeholder="123" inputmode="numeric" required>
             </div>
           </div>
-        </section>
-      </main>
-
-      <footer class="mt-5 text-center text-xs text-slate-400">
-        © <span id="year"></span> GtsAlpha IoT
-      </footer>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="jane@example.com">
+          </div>
+          <div style="margin-top:8px; text-align:right;">
+            <button type="submit">Pay</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+    // Helper: scale canvas for high DPI / Retina displays
+    function scaleCanvasForDPR(canvas) {
+      const ctx = canvas.getContext('2d');
+      // Get the size the canvas is displayed at (CSS pixels)
+      const rect = canvas.getBoundingClientRect();
+      // devicePixelRatio (DPR) may be fractional; use at least 1
+      const dpr = Math.max(window.devicePixelRatio || 1, 1);
 
-    const qrStatus = document.getElementById('qrStatus');
-    const ppInfo = document.getElementById('ppInfo');
-    const canvas = document.getElementById('qrCanvas');
-    const amountInput = document.getElementById('amountInput');
-    const clearAmount = document.getElementById('clearAmount');
+      // Avoid unnecessary reallocation if sizes are already correct
+      const width = Math.round(rect.width * dpr);
+      const height = Math.round(rect.height * dpr);
 
-    // PromptPay: ใช้เลขบัตรประชาชน (13 หลัก) ตามที่ให้ไว้
-    // หมายเหตุ: หน้าเว็บจะแสดงเป็นแบบปิดบางส่วน (ไม่โชว์เลขเต็ม)
-    const PROMPTPAY_NATIONAL_ID = '3410300017821';
-    const PROMPTPAY_DISPLAY_NAME = 'Mr. Gittisak Wannakeeree';
-
-    const onlyDigits = (value) => String(value).replace(/\D/g, '');
-    const pad2 = (n) => String(n).padStart(2, '0');
-
-    const crc16ccitt = (input) => {
-      let crc = 0xffff;
-      for (let i = 0; i < input.length; i += 1) {
-        crc ^= input.charCodeAt(i) << 8;
-        for (let bit = 0; bit < 8; bit += 1) {
-          if (crc & 0x8000) {
-            crc = ((crc << 1) ^ 0x1021) & 0xffff;
-          } else {
-            crc = (crc << 1) & 0xffff;
-          }
-        }
-      }
-      return crc.toString(16).toUpperCase().padStart(4, '0');
-    };
-
-    const tlv = (tag, value) => `${tag}${pad2(value.length)}${value}`;
-
-    const buildPromptPayPayload = ({ nationalId, amount }) => {
-      const id = onlyDigits(nationalId);
-      if (id.length !== 13) {
-        throw new Error('เลขบัตรประชาชนต้องมี 13 หลัก');
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+        // Keep the CSS size as logical pixels
+        canvas.style.width = rect.width + 'px';
+        canvas.style.height = rect.height + 'px';
+        // Scale the drawing context so 1 unit = 1 CSS pixel
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      } else {
+        // Ensure transform matches DPR in case of dynamic DPR changes
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
 
-      // Merchant Account Information (PromptPay)
-      // 29: GUI(A000000677010111) + ID(01)
-      const merchantAccount = tlv('00', 'A000000677010111') + tlv('01', id);
+      return ctx;
+    }
 
-      let payload = '';
-      payload += tlv('00', '01');
-      payload += tlv('01', amount ? '12' : '11');
-      payload += tlv('29', merchantAccount);
-      payload += tlv('52', '0000');
-      payload += tlv('53', '764');
+    function drawCard(canvas) {
+      const ctx = scaleCanvasForDPR(canvas);
+      // Clear with rounded rect background
+      const w = canvas.width / (window.devicePixelRatio || 1);
+      const h = canvas.height / (window.devicePixelRatio || 1);
 
-      if (amount) {
-        const amt = Number(amount);
-        if (!Number.isFinite(amt) || amt <= 0) {
-          throw new Error('จำนวนเงินไม่ถูกต้อง');
-        }
-        payload += tlv('54', amt.toFixed(2));
+      // Clear
+      ctx.clearRect(0, 0, w, h);
+
+      // Background gradient
+      const g = ctx.createLinearGradient(0, 0, w, h);
+      g.addColorStop(0, '#1f7aec');
+      g.addColorStop(1, '#2ec7a7');
+
+      const radius = 12;
+      ctx.fillStyle = g;
+      roundRect(ctx, 0.5, 0.5, w - 1, h - 1, radius, true, false);
+
+      // Card chip
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.fillRect(24, 36, 48, 34);
+
+      // Card number placeholder
+      ctx.fillStyle = 'rgba(255,255,255,0.95)';
+      ctx.font = Math.round(h * 0.12) + 'px system-ui, -apple-system, Roboto, "Helvetica Neue", Arial';
+      ctx.fillText('•••• •••• •••• 4242', 24, Math.round(h * 0.62));
+
+      // Name placeholder
+      ctx.font = Math.round(h * 0.09) + 'px system-ui, -apple-system, Roboto, "Helvetica Neue", Arial';
+      ctx.fillText('JANE DOE', 24, Math.round(h * 0.82));
+
+      // Logo
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.arc(w - 36, h - 48, 14, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(255,255,255,0.55)';
+      ctx.arc(w - 20, h - 48, 14, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Rounded rectangle helper
+    function roundRect(ctx, x, y, width, height, r, fill, stroke) {
+      if (typeof r === 'undefined') r = 5;
+      if (typeof r === 'number') r = {tl: r, tr: r, br: r, bl: r};
+      ctx.beginPath();
+      ctx.moveTo(x + r.tl, y);
+      ctx.lineTo(x + width - r.tr, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + r.tr);
+      ctx.lineTo(x + width, y + height - r.br);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - r.br, y + height);
+      ctx.lineTo(x + r.bl, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - r.bl);
+      ctx.lineTo(x, y + r.tl);
+      ctx.quadraticCurveTo(x, y, x + r.tl, y);
+      ctx.closePath();
+      if (fill) ctx.fill();
+      if (stroke) ctx.stroke();
+    }
+
+    (function init() {
+      const canvas = document.getElementById('cardCanvas');
+      if (!canvas) return;
+
+      // First draw on load
+      function render() {
+        drawCard(canvas);
       }
 
-      payload += tlv('58', 'TH');
-      payload += tlv('59', 'GTSALPHA');
-      payload += tlv('60', 'BANGKOK');
-
-      const payloadForCrc = payload + '6304';
-      const crc = crc16ccitt(payloadForCrc);
-      return payloadForCrc + crc;
-    };
-
-    const maskedId = (() => {
-      const id = onlyDigits(PROMPTPAY_NATIONAL_ID);
-      return id.length === 13 ? `${id.slice(0, 1)}-xxxx-xxxxx-xx-${id.slice(-1)}` : 'ไม่ถูกต้อง';
-    })();
-
-    const normalizeAmount = (raw) => {
-      const trimmed = String(raw ?? '').trim();
-      if (!trimmed) return null;
-      const normalized = trimmed.replace(/,/g, '');
-      const value = Number(normalized);
-      if (!Number.isFinite(value) || value <= 0) return NaN;
-      return value;
-    };
-
-    const render = () => {
-      const amountValue = normalizeAmount(amountInput.value);
-      try {
-        if (Number.isNaN(amountValue)) {
-          throw new Error('ยอดเงินไม่ถูกต้อง');
-        }
-
-        const payload = buildPromptPayPayload({
-          nationalId: PROMPTPAY_NATIONAL_ID,
-          amount: amountValue == null ? null : amountValue,
-        });
-
-        // DEBUG: log payload and QRCode object to console
-        console.log('PromptPay payload:', payload);
-        console.log('QRCode global:', typeof QRCode, QRCode && typeof QRCode.toCanvas);
-
-        const statusText = amountValue == null
-          ? 'พร้อมเพย์พร้อมใช้งาน (ไม่ระบุยอด)'
-          : `พร้อมเพย์พร้อมใช้งาน (ยอด ${amountValue.toFixed(2)} บาท)`;
-        qrStatus.textContent = statusText;
-        ppInfo.innerHTML = `
-          <div><strong>ชื่อ:</strong> ${PROMPTPAY_DISPLAY_NAME}</div>
-          <div class="mt-1"><strong>พร้อมเพย์ (เลขบัตรประชาชน):</strong> ${maskedId}</div>
-        `;
-
-        // ตั้ง internal canvas size ให้แน่นอนก่อนวาด (ป้องกันการ scale แบบ CSS ทำให้ไม่วาด)
-        const targetSize = 224;
-        if (canvas.width !== targetSize || canvas.height !== targetSize) {
-          canvas.width = targetSize;
-          canvas.height = targetSize;
-        }
-
-        // เรียกใช้งานและจับ error แบบ callback เพื่อเห็นปัญหาใน console / UI
-        QRCode.toCanvas(canvas, payload, {
-          width: targetSize,
-          margin: 1,
-          color: {
-            dark: '#0b1220',
-            light: '#ffffff',
-          },
-        }, (err) => {
-          if (err) {
-            console.error('QRCode.toCanvas error:', err);
-            qrStatus.textContent = 'สร้าง QR ไม่สำเร็จ: ' + (err.message || String(err));
-          } else {
-            // สำเร็จ — nothing else needed
-          }
-        });
-      } catch (e) {
-        console.error('render() error:', e);
-        qrStatus.textContent = 'สร้าง QR ไม่สำเร็จ';
-        ppInfo.textContent = e?.message ? String(e.message) : 'เกิดข้อผิดพลาด';
-      }
-    };
-
-    let renderTimer = null;
-    const scheduleRender = () => {
-      if (renderTimer) window.clearTimeout(renderTimer);
-      renderTimer = window.setTimeout(render, 150);
-    };
-
-    amountInput.addEventListener('input', scheduleRender);
-    clearAmount.addEventListener('click', () => {
-      amountInput.value = '';
+      // Initial render once DOM is ready
       render();
-      amountInput.focus();
-    });
 
-    render();
+      // Resize observer to handle layout/CSS size changes responsively
+      const ro = new ResizeObserver(entries => {
+        for (const entry of entries) {
+          if (entry.target === canvas) {
+            render();
+          }
+        }
+      });
+      ro.observe(canvas);
+
+      // Also re-render on window resize and DPR changes
+      window.addEventListener('resize', render, { passive: true });
+      // Some browsers fire a 'change' on matchMedia when DPR changes (experimental), listen to it if available
+      if (window.matchMedia) {
+        const mq = window.matchMedia('(resolution: ' + (window.devicePixelRatio || 1) + 'dppx)');
+        try {
+          if (mq && typeof mq.addEventListener === 'function') {
+            mq.addEventListener('change', render);
+          }
+        } catch (e) {
+          // ignore if not supported
+        }
+      }
+
+      // Basic form handling (no debug logs)
+      const form = document.getElementById('paymentForm');
+      form.addEventListener('submit', function (evt) {
+        evt.preventDefault();
+        // Perform form validation / submit to payment endpoint here
+        // For security, never log payment details in production
+        const data = new FormData(form);
+        const payload = {
+          name: data.get('name') || '',
+          number: data.get('number') || '',
+          exp: data.get('exp') || '',
+          cvc: data.get('cvc') || '',
+          email: data.get('email') || ''
+        };
+        // TODO: send payload to server via fetch/POST
+        alert('Payment submission triggered — implement server-side handling.');
+      });
+    })();
   </script>
 </body>
 </html>

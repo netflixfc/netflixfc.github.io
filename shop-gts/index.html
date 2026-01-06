@@ -6,9 +6,87 @@
   <title>GtsAlpha IoT Shop</title>
   <meta name="description" content="ร้านค้า GtsAlpha IoT — สั่งซื้อ/ชำระเงินผ่านพร้อมเพย์" />
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Fullscreen-friendly container: use svh when available, fallback to 100vh */
+    .app-height {
+      min-height: calc(env(safe-area-inset-top, 0px) + 100svh - env(safe-area-inset-bottom, 0px));
+      min-height: calc(env(safe-area-inset-top, 0px) + 100vh - env(safe-area-inset-bottom, 0px));
+    }
+
+    /* Cart floating button */
+    .cart-btn {
+      position: fixed;
+      right: 16px;
+      bottom: calc(16px + env(safe-area-inset-bottom));
+      z-index: 60;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: linear-gradient(180deg,#0ea5e9,#0369a1);
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 6px 20px rgba(2,6,23,0.4);
+    }
+
+    .cart-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.15);
+      font-size: 13px;
+    }
+
+    /* Drawer: mobile slide-up, desktop slide-in-right */
+    .cart-drawer {
+      position: fixed;
+      z-index: 70;
+      inset: auto 0 0 0;
+      height: 70svh;
+      max-height: 95vh;
+      background: rgba(8,10,12,0.98);
+      color: #e6eef6;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      transform: translateY(100%);
+      transition: transform .28s ease;
+      padding: calc(env(safe-area-inset-top) + 12px) 16px calc(env(safe-area-inset-bottom) + 18px);
+      box-shadow: 0 -20px 40px rgba(2,6,23,0.6);
+    }
+    .cart-drawer.open { transform: translateY(0%); }
+
+    @media(min-width: 900px) {
+      .cart-drawer {
+        inset: 0 0 0 auto;
+        width: 420px;
+        height: 100vh;
+        max-height: none;
+        right: 16px;
+        left: auto;
+        top: 0;
+        bottom: 0;
+        border-radius: 12px;
+        transform: translateX(110%);
+      }
+      .cart-drawer.open { transform: translateX(0%); }
+    }
+
+    .cart-header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
+    .cart-items { overflow:auto; max-height: calc(100% - 140px); padding-right:6px; }
+    .cart-item { display:flex; gap:10px; align-items:center; padding:8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .cart-empty { color: #94a3b8; padding: 20px 0; text-align:center; }
+    .cart-footer { margin-top: 12px; display:flex; justify-content:space-between; align-items:center; gap:8px; }
+    .qty-btn { background: rgba(255,255,255,0.06); padding:6px 8px; border-radius:6px; cursor:pointer; }
+    .remove-btn { color: #f87171; cursor:pointer; font-size:13px; }
+  </style>
 </head>
 <body>
-  <div class="min-h-screen bg-slate-950 text-slate-100">
+  <div class="min-h-screen bg-slate-950 text-slate-100 app-height">
     <div class="mx-auto max-w-5xl px-4 py-6 pt-[calc(env(safe-area-inset-top)+1.5rem)] pb-[calc(env(safe-area-inset-bottom)+1.5rem)] sm:py-8">
       <header class="flex flex-col gap-3 rounded-2xl border border-white/10 bg-black/20 p-4 backdrop-blur md:flex-row md:items-center md:justify-between">
         <div class="flex items-center gap-3">
@@ -41,7 +119,7 @@
             <div class="text-sm font-semibold text-slate-100">พร้อมเพย์ (QR)</div>
             <div class="mt-1 text-sm text-slate-300">กดปุ่มเพื่อไปหน้า QR และกรอกยอดเงินเอง</div>
             <div class="mt-3">
-              <a href="payment.html" class="inline-flex w-full items-center justify-center rounded-xl bg-blue-500 px-4 py-3 text-sm font-semibold text-white no-underline hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40">ไปหน้าชำระเงิน (พร้อมเพย์)</a>
+              <a href="payment.html" class="inline-flex w-full items-center justify-center rounded-xl bg-blue-500 px-4 py-3 text-sm font-semibold text-white no-underline hover:bg-blue-400 focus:outline-none">ไปหน้าชำระเงิน</a>
             </div>
           </div>
         </aside>
@@ -52,6 +130,39 @@
       </footer>
     </div>
   </div>
+
+  <!-- Floating cart button -->
+  <button id="openCartBtn" class="cart-btn" aria-expanded="false" aria-controls="cartDrawer">
+    <span class="cart-badge" id="cartCount">0</span>
+    ตะกร้าสินค้า
+    <span id="cartTotal" class="ml-2 text-sm opacity-90">0 USD</span>
+  </button>
+
+  <!-- Cart drawer -->
+  <aside id="cartDrawer" class="cart-drawer" role="dialog" aria-hidden="true" aria-labelledby="cartTitle">
+    <div class="cart-header">
+      <div>
+        <div id="cartTitle" class="text-base font-semibold">ตะกร้าสินค้า</div>
+        <div id="cartSubtitle" class="text-xs text-slate-300">ตรวจสอบรายการและไปชำระเงิน</div>
+      </div>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <button id="closeCartBtn" class="inline-flex items-center justify-center rounded-md bg-white/5 px-3 py-2 text-sm">ปิด</button>
+      </div>
+    </div>
+
+    <div class="cart-items" id="cartItems"></div>
+
+    <div class="cart-footer">
+      <div>
+        <div class="text-xs text-slate-300">รวม</div>
+        <div id="cartTotalFooter" class="text-lg font-semibold">0 USD</div>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button id="clearCartBtn" class="inline-flex items-center justify-center rounded-lg bg-white/5 px-4 py-2 text-sm">ล้าง</button>
+        <a id="checkoutBtn" href="payment.html" class="inline-flex items-center justify-center rounded-lg bg-blue-500 px-4 py-2 text-sm text-white">ชำระเงิน</a>
+      </div>
+    </div>
+  </aside>
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
@@ -68,7 +179,7 @@
     const products = [
       {
         title: 'Freedom to Switch',
-        description: 'บริการ/ฟีเจอร์สำหรับสลับโปรไฟล์ซิม (eUICC) และการเชื่อมต่อ IoT (อ้างอิงแพ็กเกจ 15 USD / 10 ปี)',
+        description: 'บริการ/ฟีเจอร์สำหรับสลับโปรไฟล์ซิม (eUICC) และการเชื่อมต่อ IoT (อ้างอิงจาก 1NCE)',
         baseUsd: 15,
         image: 'src/images/Freedom%20to%20Switch.png',
         detailLabel: 'Freedom to Switch',
@@ -76,7 +187,7 @@
       },
       {
         title: 'IoT SIM Card Business',
-        description: 'IoT SIM Card Business เป็นซิม 3-in-1 ไม่รองรับฟีเจอร์ Freedom to Switch (eUICC) และสามารถใช้งานได้โดยสมัครแพ็กเกจ Lifetime Flat ในราคา 1 USD.',
+        description: 'IoT SIM Card Business เป็นซิม 3-in-1',
         baseUsd: 1,
         image: 'src/images/IoT%20SIM%20Card%20Business.png',
         detailLabel: 'Card Business',
@@ -84,7 +195,7 @@
       },
       {
         title: 'IoT SIM Chip Industrial',
-        description: 'IoT SIM Chip Industrial ได้รับการออกแบบมาให้เชื่อมประสานกับอุปกรณ์ IoT อีกทั้งยังมีการเสริมความทนทานที่แข็งแกร่งเพื่อความน่าเชื่อถือสูงสุด\n\nรองรับฟีเจอร์ Freedom to Switch (eUICC) และสามารถใช้ร่วมกับการสมัครแพ็กเกจ Lifetime Flat ในราคา 2.50 USD',
+        description: 'IoT SIM Chip Industrial ออกแบบมาให้เชื่อมประสานกับอุปกรณ์ IoT',
         baseUsd: 2.5,
         image: 'src/images/IoT%20SIM%20Chip%20Industrial.png',
         detailLabel: 'Chip Industrial',
@@ -97,9 +208,91 @@
       return `${normalized} USD`;
     };
 
+    // --- Cart logic (localStorage) ---
+    const CART_KEY = 'shopGtsCart_v1';
+    const loadCart = () => {
+      try {
+        const raw = localStorage.getItem(CART_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    };
+    const saveCart = (cart) => localStorage.setItem(CART_KEY, JSON.stringify(cart));
+
+    let cart = loadCart();
+
+    const getCartSummary = () => {
+      let count = 0;
+      let total = 0;
+      for (const it of cart) {
+        count += it.qty;
+        total += (it.priceUsd * it.qty);
+      }
+      return { count, total };
+    };
+
+    const updateCartBadge = () => {
+      const { count, total } = getCartSummary();
+      document.getElementById('cartCount').textContent = count;
+      document.getElementById('cartTotal').textContent = `${total.toFixed(2)} USD`;
+      document.getElementById('cartTotalFooter').textContent = `${total.toFixed(2)} USD`;
+      // update checkout link with amount query param (optional)
+      const checkout = document.getElementById('checkoutBtn');
+      if (checkout) {
+        const url = new URL(checkout.href, location.href);
+        url.searchParams.set('amount', total.toFixed(2));
+        checkout.href = url.toString();
+      }
+    };
+
+    const addToCart = (productIndex, qty = 1) => {
+      const p = products[productIndex];
+      if (!p) return;
+      const found = cart.find(i => i.id === productIndex);
+      if (found) {
+        found.qty += qty;
+      } else {
+        cart.push({ id: productIndex, title: p.title, priceUsd: p.baseUsd * MARKUP_MULTIPLIER, qty });
+      }
+      saveCart(cart);
+      renderCartItems();
+      updateCartBadge();
+      openCart();
+    };
+
+    const removeFromCart = (productIndex) => {
+      cart = cart.filter(i => i.id !== productIndex);
+      saveCart(cart);
+      renderCartItems();
+      updateCartBadge();
+    };
+
+    const changeQty = (productIndex, qty) => {
+      if (qty <= 0) {
+        removeFromCart(productIndex);
+        return;
+      }
+      const it = cart.find(i => i.id === productIndex);
+      if (it) {
+        it.qty = qty;
+        saveCart(cart);
+        renderCartItems();
+        updateCartBadge();
+      }
+    };
+
+    const clearCart = () => {
+      cart = [];
+      saveCart(cart);
+      renderCartItems();
+      updateCartBadge();
+    };
+
+    // --- Render products ---
     const productGrid = document.getElementById('productGrid');
     productGrid.innerHTML = products
-      .map((p) => {
+      .map((p, idx) => {
         const newUsd = p.baseUsd * MARKUP_MULTIPLIER;
         const title = escapeHtml(p.title);
         return `
@@ -107,18 +300,115 @@
             <img src="${p.image}" alt="${title}" class="block h-auto w-full bg-transparent object-contain" />
             <div class="mt-3 rounded-xl border border-white/10 bg-black/20 p-4">
               <h3 class="text-base font-semibold leading-snug break-words">${title}</h3>
+              <div class="mt-2 text-sm text-slate-300">${escapeHtml(p.description || '')}</div>
               <div class="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
                 <div class="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-slate-100">
                   <span>${formatUsd(newUsd)}</span>
                   <span class="text-xs font-normal text-slate-400 line-through">${formatUsd(p.baseUsd)}</span>
                 </div>
-                <a href="payment.html" class="inline-flex w-full items-center justify-center rounded-lg bg-blue-500 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-400 sm:w-auto sm:py-2">สั่งซื้อ</a>
+                <button data-index="${idx}" class="add-to-cart inline-flex w-full items-center justify-center rounded-lg bg-blue-500 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-400 sm:w-auto sm:py-2">เพิ่มลงตะกร้า</button>
               </div>
             </div>
           </div>
         `;
       })
       .join('');
+
+    // Delegate add-to-cart clicks
+    productGrid.addEventListener('click', (ev) => {
+      const btn = ev.target.closest('.add-to-cart');
+      if (!btn) return;
+      const idx = Number(btn.dataset.index);
+      addToCart(idx, 1);
+    });
+
+    // --- Render cart drawer items ---
+    const renderCartItems = () => {
+      const el = document.getElementById('cartItems');
+      if (!el) return;
+      if (cart.length === 0) {
+        el.innerHTML = '<div class="cart-empty">ไม่มีสินค้าในตะกร้า</div>';
+        return;
+      }
+      el.innerHTML = cart.map(item => {
+        const p = products[item.id];
+        return `
+          <div class="cart-item" data-id="${item.id}">
+            <div style="width:56px; height:56px; background: rgba(255,255,255,0.03); border-radius:8px; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+              <img src="${p.image}" alt="${escapeHtml(p.title)}" style="max-width:100%; max-height:100%; object-contain;">
+            </div>
+            <div style="flex:1; min-width:0;">
+              <div class="text-sm font-semibold">${escapeHtml(item.title)}</div>
+              <div class="text-xs text-slate-400">${formatUsd(item.priceUsd)} x ${item.qty} = ${(item.priceUsd * item.qty).toFixed(2)} USD</div>
+              <div style="margin-top:6px; display:flex; gap:8px; align-items:center;">
+                <button class="qty-btn" data-act="dec" data-id="${item.id}">−</button>
+                <div style="min-width:30px; text-align:center;">${item.qty}</div>
+                <button class="qty-btn" data-act="inc" data-id="${item.id}">+</button>
+                <div class="remove-btn" data-act="remove" data-id="${item.id}">ลบ</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    };
+
+    // Quantity / remove delegation inside cart
+    document.getElementById('cartDrawer').addEventListener('click', (ev) => {
+      const btn = ev.target.closest('[data-act]');
+      if (!btn) return;
+      const act = btn.dataset.act;
+      const id = Number(btn.dataset.id);
+      if (act === 'inc') {
+        const it = cart.find(i => i.id === id);
+        if (it) changeQty(id, it.qty + 1);
+      } else if (act === 'dec') {
+        const it = cart.find(i => i.id === id);
+        if (it) changeQty(id, it.qty - 1);
+      } else if (act === 'remove') {
+        removeFromCart(id);
+      }
+    });
+
+    // Drawer open/close
+    const drawer = document.getElementById('cartDrawer');
+    const openBtn = document.getElementById('openCartBtn');
+    const closeBtn = document.getElementById('closeCartBtn');
+
+    function openCart() {
+      drawer.classList.add('open');
+      drawer.setAttribute('aria-hidden', 'false');
+      openBtn.setAttribute('aria-expanded', 'true');
+    }
+    function closeCart() {
+      drawer.classList.remove('open');
+      drawer.setAttribute('aria-hidden', 'true');
+      openBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    openBtn.addEventListener('click', () => {
+      if (drawer.classList.contains('open')) {
+        closeCart();
+      } else {
+        renderCartItems();
+        updateCartBadge();
+        openCart();
+      }
+    });
+    closeBtn.addEventListener('click', closeCart);
+    document.getElementById('clearCartBtn').addEventListener('click', () => { clearCart(); });
+
+    // Initialize UI
+    renderCartItems();
+    updateCartBadge();
+
+    // Ensure cart closes when clicking outside on mobile (optional)
+    document.addEventListener('click', (ev) => {
+      if (!drawer.classList.contains('open')) return;
+      const inside = ev.target.closest('.cart-drawer, .cart-btn, #openCartBtn');
+      if (!inside) closeCart();
+    });
+
+    // Keep cart persist across reloads — already stored in localStorage
   </script>
 </body>
 </html>

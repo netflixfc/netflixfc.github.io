@@ -3,87 +3,164 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Shop GTS - NetflixFC</title>
+  <title>Shop - GTS</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    .product { border: 1px solid #ddd; padding: 12px; margin: 8px 0; }
-    .price { font-weight: bold; color: #111; }
-    .original { text-decoration: line-through; color: #888; margin-left: 8px; }
-    #cart { position: fixed; right: 20px; top: 20px; border: 1px solid #ccc; padding: 10px; background: #fff; }
-    button { padding: 8px 12px; cursor: pointer; }
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;margin:0;padding:0;background:#f6f7fb}
+    header{background:#0b5; padding:1rem 2rem; display:flex;justify-content:space-between;align-items:center}
+    .brand{font-weight:700}
+    .cart-badge{background:#111;color:#fff;padding:.35rem .6rem;border-radius:999px;font-weight:600}
+    main{padding:2rem;max-width:1000px;margin:0 auto}
+    .products{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
+    .card{background:#fff;padding:1rem;border-radius:8px;box-shadow:0 2px 6px rgba(10,10,10,.06)}
+    .price{font-size:1.25rem;font-weight:700;margin:0.5rem 0}
+    .actions{display:flex;gap:.5rem}
+    button{cursor:pointer;padding:.5rem .75rem;border-radius:6px;border:1px solid rgba(0,0,0,.08);background:#0b5;color:#fff}
+    .secondary{background:#fff;color:#0b5;border:1px solid #0b5}
+    footer{padding:2rem;text-align:center;color:#666}
   </style>
 </head>
 <body>
-  <h1>Shop GTS</h1>
-  <p>All prices are shown in THB (฿). Checkout supports PromptPay (experimental) and QR code payment confirmation.</p>
-
-  <div id="products"></div>
-
-  <div id="cart">
-    <h3>Cart</h3>
-    <ul id="cart-items"></ul>
-    <div>Total: <span id="cart-total">฿0.00</span></div>
-    <div style="margin-top:8px;"><a id="checkout" href="/shop-gts/payment.html">Go to payment</a></div>
-  </div>
+  <header>
+    <div class="brand">GTS Store</div>
+    <div>
+      <span id="cartBadge" class="cart-badge">0 • THB 0.00</span>
+      <button id="checkoutBtn" class="secondary" style="margin-left:8px">Checkout</button>
+    </div>
+  </header>
+  <main>
+    <h1>Available Products</h1>
+    <div class="products" id="products"></div>
+  </main>
+  <footer>
+    &copy; GTS - Prices shown in Thai Baht (THB)
+  </footer>
 
   <script>
-    // Products now include THB prices: priceThb and optional originalThb
-    const products = [
-      { id: 1, title: 'GTS T-shirt', priceThb: 350.00, originalThb: 450.00, desc: 'Comfortable cotton tee' },
-      { id: 2, title: 'GTS Sticker Pack', priceThb: 120.00, originalThb: 150.00, desc: 'Set of 5 stickers' },
-      { id: 3, title: 'GTS Hoodie', priceThb: 1500.00, originalThb: 1800.00, desc: 'Warm zip hoodie' }
+    // FX rate from USD to THB (example). Update this constant to change conversion.
+    const FX_RATE = 36.50; // 1 USD = 36.50 THB
+
+    // Format a number as Thai Baht currency
+    function formatThb(amount) {
+      // amount is expected in THB (number)
+      return new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB' }).format(amount);
+    }
+
+    // Sample product data using USD prices (original source currency)
+    const productsData = [
+      { id: 'gts-001', name: 'GTS Premium 1-Year', priceUsd: 9.99 },
+      { id: 'gts-002', name: 'GTS 3-Month', priceUsd: 3.99 },
+      { id: 'gts-003', name: 'GTS Lifetime', priceUsd: 49.99 }
     ];
 
-    const cart = [];
-
-    function formatThb(amount) {
-      return '฿' + Number(amount).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+    // Get cart from localStorage (cart items should store priceThb)
+    function loadCart() {
+      try {
+        const raw = localStorage.getItem('gts_cart');
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        console.error('Failed to parse cart from storage', e);
+        return [];
+      }
     }
 
-    function renderProducts() {
-      const el = document.getElementById('products');
-      el.innerHTML = '';
-      products.forEach(p => {
-        const d = document.createElement('div');
-        d.className = 'product';
-        d.innerHTML = `<h2>${p.title}</h2>
-          <p>${p.desc}</p>
-          <div class="price">${formatThb(p.priceThb)}${p.originalThb ? '<span class="original">'+formatThb(p.originalThb)+'</span>' : ''}</div>
-          <div style="margin-top:8px;"><button onclick="addToCart(${p.id})">Add to cart</button></div>`;
-        el.appendChild(d);
-      });
+    function saveCart(cart) {
+      localStorage.setItem('gts_cart', JSON.stringify(cart));
+      updateBadge(cart);
     }
 
-    function addToCart(productId) {
-      const product = products.find(p => p.id === productId);
-      if (!product) return;
-      const existing = cart.find(c => c.id === productId);
+    // Add product to cart; store price in THB to keep checkout amounts consistent
+    function addToCart(product) {
+      const priceThb = Math.round(product.priceUsd * FX_RATE * 100) / 100; // two decimals
+      const item = {
+        id: product.id,
+        name: product.name,
+        priceUsd: product.priceUsd,
+        priceThb: priceThb,
+        qty: 1
+      };
+
+      const cart = loadCart();
+      // merge if same id
+      const existing = cart.find(i => i.id === item.id);
       if (existing) {
         existing.qty += 1;
       } else {
-        cart.push({ id: product.id, title: product.title, priceThb: product.priceThb, qty: 1 });
+        cart.push(item);
       }
-      renderCart();
+      saveCart(cart);
     }
 
-    function renderCart() {
-      const items = document.getElementById('cart-items');
-      items.innerHTML = '';
-      let total = 0;
-      cart.forEach(item => {
-        const li = document.createElement('li');
-        li.textContent = `${item.title} x${item.qty} - ${formatThb(item.priceThb * item.qty)}`;
-        items.appendChild(li);
-        total += item.priceThb * item.qty;
-      });
-      document.getElementById('cart-total').textContent = formatThb(total);
-      // save pending cart to session so payment page can fetch it
-      sessionStorage.setItem('shopgts_cart', JSON.stringify(cart));
+    function getCartTotals(cart) {
+      const count = cart.reduce((s, i) => s + i.qty, 0);
+      const amountThb = cart.reduce((s, i) => s + i.priceThb * i.qty, 0);
+      return { count, amountThb };
+    }
+
+    // Update badge with item count and total in THB
+    function updateBadge(cart) {
+      const { count, amountThb } = getCartTotals(cart);
+      const badge = document.getElementById('cartBadge');
+      badge.textContent = `${count} • ${formatThb(amountThb)}`;
+    }
+
+    // Build checkout link (example: a URL to external checkout) including THB amount
+    function buildCheckoutLink(cart) {
+      const { amountThb } = getCartTotals(cart);
+      // Example checkout URL — replace with real payment processor if needed
+      const base = 'https://example-checkout.local/checkout';
+      const params = new URLSearchParams({ currency: 'THB', amount: amountThb.toFixed(2) });
+      return `${base}?${params.toString()}`;
+    }
+
+    // On checkout, show confirmation with THB total and open checkout link
+    function checkout() {
+      const cart = loadCart();
+      if (!cart.length) {
+        alert('Your cart is empty.');
+        return;
+      }
+      const { amountThb } = getCartTotals(cart);
+      const confirmation = `You will be charged ${formatThb(amountThb)} (THB) for ${cart.reduce((s,i)=>s+i.qty,0)} item(s). Proceed to checkout?`;
+      if (confirm(confirmation)) {
+        const url = buildCheckoutLink(cart);
+        // For demonstration open the checkout URL in a new tab
+        window.open(url, '_blank');
+      }
+    }
+
+    // Render product list and price converted to THB
+    function renderProducts() {
+      const container = document.getElementById('products');
+      container.innerHTML = '';
+      for (const p of productsData) {
+        const priceThb = Math.round(p.priceUsd * FX_RATE * 100) / 100;
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <h3>${p.name}</h3>
+          <div class="price">${formatThb(priceThb)}</div>
+          <div>Original: $${p.priceUsd.toFixed(2)} USD</div>
+          <div class="actions" style="margin-top:.75rem">
+            <button class="add">Add to cart</button>
+            <button class="buy secondary">Buy now</button>
+          </div>
+        `;
+        card.querySelector('.add').addEventListener('click', () => addToCart(p));
+        card.querySelector('.buy').addEventListener('click', () => {
+          addToCart(p);
+          // Immediately checkout for this item
+          setTimeout(() => checkout(), 150);
+        });
+        container.appendChild(card);
+      }
     }
 
     // Initialize
-    renderProducts();
-    renderCart();
+    (function init() {
+      renderProducts();
+      updateBadge(loadCart());
+      document.getElementById('checkoutBtn').addEventListener('click', checkout);
+    })();
   </script>
 </body>
 </html>

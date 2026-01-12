@@ -1,1 +1,519 @@
 
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrated OSINT Report - emmy.emmy.648 & chatree.kodkan</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+        .section {
+            padding: 30px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .section:last-child {
+            border-bottom: none;
+        }
+        .section h2 {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .info-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .info-box label {
+            font-weight: bold;
+            color: #555;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .info-box value {
+            color: #333;
+            font-size: 1.1em;
+        }
+        .url-list {
+            list-style: none;
+            padding: 0;
+        }
+        .url-list li {
+            background: #f8f9fa;
+            margin: 8px 0;
+            padding: 12px 15px;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+        }
+        .url-list li a {
+            color: #667eea;
+            text-decoration: none;
+            word-break: break-all;
+        }
+        .url-list li a:hover {
+            text-decoration: underline;
+        }
+        .map-link {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 15px;
+        }
+        .map-link:hover {
+            background: #218838;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .warning strong {
+            color: #856404;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .stat-box {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            min-width: 150px;
+        }
+        .stat-box h3 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .stat-box p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Integrated OSINT Report</h1>
+            <p>Username & Phone Number Intelligence</p>
+            <p>Generated: 13 January 2026 03:52:47</p>
+        </div>
+
+        <div class="section">
+            <h2>📊 Overview Statistics</h2>
+            <div class="stats">
+                <div class="stat-box">
+                    <h3>2</h3>
+                    <p>Usernames Scanned</p>
+                </div>
+                <div class="stat-box">
+                    <h3>243</h3>
+                    <p>Accounts Found</p>
+                </div>
+                <div class="stat-box">
+                    <h3>1</h3>
+                    <p>Phone Numbers</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>👤 Target Information</h2>
+            <div class="info-grid">
+                <div class="info-box">
+                    <label>Primary Username:</label>
+                    <value>emmy.emmy.648</value>
+                </div>
+                <div class="info-box">
+                    <label>Secondary Username:</label>
+                    <value>chatree.kodkan</value>
+                </div>
+                <div class="info-box">
+                    <label>Phone Number:</label>
+                    <value>+66 95 182 3459</value>
+                </div>
+                <div class="info-box">
+                    <label>Network:</label>
+                    <value>True (Thailand)</value>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📱 Phone Number OSINT</h2>
+            <div class="info-grid">
+                <div class="info-box">
+                    <label>MSISDN:</label>
+                    <value>+66 95 182 3459</value>
+                </div>
+                <div class="info-box">
+                    <label>IMSI:</label>
+                    <value>520044058596212</value>
+                </div>
+                <div class="info-box">
+                    <label>Network Type:</label>
+                    <value>3G (True Move)</value>
+                </div>
+                <div class="info-box">
+                    <label>Subscriber Status:</label>
+                    <value>Idle</value>
+                </div>
+                <div class="info-box">
+                    <label>MCC/MNC:</label>
+                    <value>520/04</value>
+                </div>
+                <div class="info-box">
+                    <label>LAC/CI:</label>
+                    <value>4602/332</value>
+                </div>
+            </div>
+
+            <h3>📍 Location Information</h3>
+            <div class="info-box" style="margin-top: 15px;">
+                <label>Coordinates:</label>
+                <value>14.408378, 98.904282</value>
+            </div>
+            <div class="info-box" style="margin-top: 15px;">
+                <label>Address:</label>
+                <value>
+                    Thanon Sangchuto, Tambon Sai Yok<br>
+                    Amphoe Sai Yok<br>
+                    Chang Wat Kanchanaburi 71150<br>
+                    Thailand
+                </value>
+            </div>
+            <a href="https://www.google.com/maps/search/14.408378,98.904282" target="_blank" class="map-link">
+                🗺️ View on Google Maps
+            </a>
+        </div>
+
+        <div class="section">
+            <h2>🌐 Discovered Online Accounts</h2>
+            <div class="warning">
+                <strong>⚠️ Note:</strong> These are potential matches. Not all accounts may be active or belong to the same person.
+            </div>
+            <ul class="url-list">
+                <li><a href="https://www.twitch.tv/testuser" target="_blank">https://www.twitch.tv/testuser</a></li>
+                <li><a href="https://www.twitter.com/testuser" target="_blank">https://www.twitter.com/testuser</a></li>
+                <li><a href="https://www.facebook.com/testuser" target="_blank">https://www.facebook.com/testuser</a></li>
+                <li><a href="https://www.stackoverflow.com/testuser" target="_blank">https://www.stackoverflow.com/testuser</a></li>
+                <li><a href="https://buymeacoff.ee/testuser" target="_blank">https://buymeacoff.ee/testuser</a></li>
+                <li><a href="https://monkeytype.com/profile/testuser" target="_blank">https://monkeytype.com/profile/testuser</a></li>
+                <li><a href="https://myanimelist.net/profile/testuser" target="_blank">https://myanimelist.net/profile/testuser</a></li>
+                <li><a href="https://community.native-instruments.com/profile/testuser" target="_blank">https://community.native-instruments.com/profile/testuser</a></li>
+                <li><a href="https://blog.naver.com/testuser" target="_blank">https://blog.naver.com/testuser</a></li>
+                <li><a href="https://ninjakiwi.com/profile/testuser" target="_blank">https://ninjakiwi.com/profile/testuser</a></li>
+                <li><a href="https://www.nitrotype.com/racer/testuser" target="_blank">https://www.nitrotype.com/racer/testuser</a></li>
+                <li><a href="https://nyaa.si/user/testuser" target="_blank">https://nyaa.si/user/testuser</a></li>
+                <li><a href="https://www.openstreetmap.org/user/testuser" target="_blank">https://www.openstreetmap.org/user/testuser</a></li>
+                <li><a href="https://community.oracle.com/people/testuser" target="_blank">https://community.oracle.com/people/testuser</a></li>
+                <li><a href="https://ourdjtalk.com/members?username=testuser" target="_blank">https://ourdjtalk.com/members?username=testuser</a></li>
+                <li><a href="https://forums.pcgamer.com/members/?username=testuser" target="_blank">https://forums.pcgamer.com/members/?username=testuser</a></li>
+                <li><a href="https://pastebin.com/u/testuser" target="_blank">https://pastebin.com/u/testuser</a></li>
+                <li><a href="https://www.patreon.com/testuser" target="_blank">https://www.patreon.com/testuser</a></li>
+                <li><a href="https://pocketstars.com/testuser" target="_blank">https://pocketstars.com/testuser</a></li>
+                <li><a href="https://pokemonshowdown.com/users/testuser" target="_blank">https://pokemonshowdown.com/users/testuser</a></li>
+                <li><a href="https://polarsteps.com/testuser" target="_blank">https://polarsteps.com/testuser</a></li>
+                <li><a href="https://www.polygon.com/users/testuser" target="_blank">https://www.polygon.com/users/testuser</a></li>
+                <li><a href="http://promodj.com/testuser" target="_blank">http://promodj.com/testuser</a></li>
+                <li><a href="https://pypi.org/user/testuser" target="_blank">https://pypi.org/user/testuser</a></li>
+                <li><a href="https://www.reddit.com/user/testuser" target="_blank">https://www.reddit.com/user/testuser</a></li>
+                <li><a href="https://www.reverbnation.com/testuser" target="_blank">https://www.reverbnation.com/testuser</a></li>
+                <li><a href="https://www.roblox.com/user.aspx?username=testuser" target="_blank">https://www.roblox.com/user.aspx?username=testuser</a></li>
+                <li><a href="https://royalcams.com/profile/testuser" target="_blank">https://royalcams.com/profile/testuser</a></li>
+                <li><a href="https://www.twitch.tv/testuser" target="_blank">https://www.twitch.tv/testuser</a></li>
+                <li><a href="https://www.twitter.com/testuser" target="_blank">https://www.twitter.com/testuser</a></li>
+                <li><a href="https://www.facebook.com/testuser" target="_blank">https://www.facebook.com/testuser</a></li>
+                <li><a href="https://www.stackoverflow.com/testuser" target="_blank">https://www.stackoverflow.com/testuser</a></li>
+                <li><a href="https://buymeacoff.ee/testuser" target="_blank">https://buymeacoff.ee/testuser</a></li>
+                <li><a href="https://community.native-instruments.com/profile/testuser" target="_blank">https://community.native-instruments.com/profile/testuser</a></li>
+                <li><a href="https://ninjakiwi.com/profile/testuser" target="_blank">https://ninjakiwi.com/profile/testuser</a></li>
+                <li><a href="https://www.nitrotype.com/racer/testuser" target="_blank">https://www.nitrotype.com/racer/testuser</a></li>
+                <li><a href="https://nyaa.si/user/testuser" target="_blank">https://nyaa.si/user/testuser</a></li>
+                <li><a href="https://www.openstreetmap.org/user/testuser" target="_blank">https://www.openstreetmap.org/user/testuser</a></li>
+                <li><a href="https://community.oracle.com/people/testuser" target="_blank">https://community.oracle.com/people/testuser</a></li>
+                <li><a href="https://ourdjtalk.com/members?username=testuser" target="_blank">https://ourdjtalk.com/members?username=testuser</a></li>
+                <li><a href="https://forums.pcgamer.com/members/?username=testuser" target="_blank">https://forums.pcgamer.com/members/?username=testuser</a></li>
+                <li><a href="https://pastebin.com/u/testuser" target="_blank">https://pastebin.com/u/testuser</a></li>
+                <li><a href="https://www.patreon.com/testuser" target="_blank">https://www.patreon.com/testuser</a></li>
+                <li><a href="https://pocketstars.com/testuser" target="_blank">https://pocketstars.com/testuser</a></li>
+                <li><a href="https://polarsteps.com/testuser" target="_blank">https://polarsteps.com/testuser</a></li>
+                <li><a href="https://www.polygon.com/users/testuser" target="_blank">https://www.polygon.com/users/testuser</a></li>
+                <li><a href="http://promodj.com/testuser" target="_blank">http://promodj.com/testuser</a></li>
+                <li><a href="https://pypi.org/user/testuser" target="_blank">https://pypi.org/user/testuser</a></li>
+                <li><a href="https://www.reddit.com/user/testuser" target="_blank">https://www.reddit.com/user/testuser</a></li>
+                <li><a href="https://www.reverbnation.com/testuser" target="_blank">https://www.reverbnation.com/testuser</a></li>
+                <li><a href="https://www.roblox.com/user.aspx?username=testuser" target="_blank">https://www.roblox.com/user.aspx?username=testuser</a></li>
+                <li><a href="https://royalcams.com/profile/testuser" target="_blank">https://royalcams.com/profile/testuser</a></li>
+                <li><a href="https://www.twitch.tv/chatree.kodkan" target="_blank">https://www.twitch.tv/chatree.kodkan</a></li>
+                <li><a href="https://www.twitch.tv/emmy.emmy.648" target="_blank">https://www.twitch.tv/emmy.emmy.648</a></li>
+                <li><a href="https://www.twitter.com/chatree.kodkan" target="_blank">https://www.twitter.com/chatree.kodkan</a></li>
+                <li><a href="https://www.twitter.com/emmy.emmy.648" target="_blank">https://www.twitter.com/emmy.emmy.648</a></li>
+                <li><a href="https://www.facebook.com/chatree.kodkan" target="_blank">https://www.facebook.com/chatree.kodkan</a></li>
+                <li><a href="https://www.facebook.com/emmy.emmy.648" target="_blank">https://www.facebook.com/emmy.emmy.648</a></li>
+                <li><a href="https://www.stackoverflow.com/chatree.kodkan" target="_blank">https://www.stackoverflow.com/chatree.kodkan</a></li>
+                <li><a href="https://www.stackoverflow.com/emmy.emmy.648" target="_blank">https://www.stackoverflow.com/emmy.emmy.648</a></li>
+                <li><a href="https://buymeacoff.ee/chatree.kodkan" target="_blank">https://buymeacoff.ee/chatree.kodkan</a></li>
+                <li><a href="https://buymeacoff.ee/emmy.emmy.648" target="_blank">https://buymeacoff.ee/emmy.emmy.648</a></li>
+                <li><a href="https://monkeytype.com/profile/chatree.kodkan" target="_blank">https://monkeytype.com/profile/chatree.kodkan</a></li>
+                <li><a href="https://monkeytype.com/profile/emmy.emmy.648" target="_blank">https://monkeytype.com/profile/emmy.emmy.648</a></li>
+                <li><a href="https://ninjakiwi.com/profile/chatree.kodkan" target="_blank">https://ninjakiwi.com/profile/chatree.kodkan</a></li>
+                <li><a href="https://ninjakiwi.com/profile/emmy.emmy.648" target="_blank">https://ninjakiwi.com/profile/emmy.emmy.648</a></li>
+                <li><a href="https://www.nitrotype.com/racer/chatree.kodkan" target="_blank">https://www.nitrotype.com/racer/chatree.kodkan</a></li>
+                <li><a href="https://www.nitrotype.com/racer/emmy.emmy.648" target="_blank">https://www.nitrotype.com/racer/emmy.emmy.648</a></li>
+                <li><a href="https://community.oracle.com/people/chatree.kodkan" target="_blank">https://community.oracle.com/people/chatree.kodkan</a></li>
+                <li><a href="https://community.oracle.com/people/emmy.emmy.648" target="_blank">https://community.oracle.com/people/emmy.emmy.648</a></li>
+                <li><a href="https://ourdjtalk.com/members?username=chatree.kodkan" target="_blank">https://ourdjtalk.com/members?username=chatree.kodkan</a></li>
+                <li><a href="https://ourdjtalk.com/members?username=emmy.emmy.648" target="_blank">https://ourdjtalk.com/members?username=emmy.emmy.648</a></li>
+                <li><a href="https://forums.pcgamer.com/members/?username=chatree.kodkan" target="_blank">https://forums.pcgamer.com/members/?username=chatree.kodkan</a></li>
+                <li><a href="https://forums.pcgamer.com/members/?username=emmy.emmy.648" target="_blank">https://forums.pcgamer.com/members/?username=emmy.emmy.648</a></li>
+                <li><a href="https://pocketstars.com/chatree.kodkan" target="_blank">https://pocketstars.com/chatree.kodkan</a></li>
+                <li><a href="https://pocketstars.com/emmy.emmy.648" target="_blank">https://pocketstars.com/emmy.emmy.648</a></li>
+                <li><a href="https://polarsteps.com/chatree.kodkan" target="_blank">https://polarsteps.com/chatree.kodkan</a></li>
+                <li><a href="https://polarsteps.com/emmy.emmy.648" target="_blank">https://polarsteps.com/emmy.emmy.648</a></li>
+                <li><a href="https://www.polygon.com/users/chatree.kodkan" target="_blank">https://www.polygon.com/users/chatree.kodkan</a></li>
+                <li><a href="https://www.polygon.com/users/emmy.emmy.648" target="_blank">https://www.polygon.com/users/emmy.emmy.648</a></li>
+                <li><a href="http://promodj.com/chatree.kodkan" target="_blank">http://promodj.com/chatree.kodkan</a></li>
+                <li><a href="http://promodj.com/emmy.emmy.648" target="_blank">http://promodj.com/emmy.emmy.648</a></li>
+                <li><a href="https://pypi.org/user/chatree.kodkan" target="_blank">https://pypi.org/user/chatree.kodkan</a></li>
+                <li><a href="https://pypi.org/user/emmy.emmy.648" target="_blank">https://pypi.org/user/emmy.emmy.648</a></li>
+                <li><a href="https://www.reddit.com/user/chatree.kodkan" target="_blank">https://www.reddit.com/user/chatree.kodkan</a></li>
+                <li><a href="https://www.reddit.com/user/emmy.emmy.648" target="_blank">https://www.reddit.com/user/emmy.emmy.648</a></li>
+                <li><a href="https://www.roblox.com/user.aspx?username=chatree.kodkan" target="_blank">https://www.roblox.com/user.aspx?username=chatree.kodkan</a></li>
+                <li><a href="https://www.roblox.com/user.aspx?username=emmy.emmy.648" target="_blank">https://www.roblox.com/user.aspx?username=emmy.emmy.648</a></li>
+                <li><a href="https://royalcams.com/profile/chatree.kodkan" target="_blank">https://royalcams.com/profile/chatree.kodkan</a></li>
+                <li><a href="https://royalcams.com/profile/emmy.emmy.648" target="_blank">https://royalcams.com/profile/emmy.emmy.648</a></li>
+                <li><a href="https://www.twitch.tv/chatree.kodkan" target="_blank">https://www.twitch.tv/chatree.kodkan</a></li>
+                <li><a href="https://www.twitch.tv/emmy.emmy.648" target="_blank">https://www.twitch.tv/emmy.emmy.648</a></li>
+                <li><a href="https://m.twitch.tv/chatree.kodkan" target="_blank">https://m.twitch.tv/chatree.kodkan</a></li>
+                <li><a href="https://m.twitch.tv/emmy.emmy.648" target="_blank">https://m.twitch.tv/emmy.emmy.648</a></li>
+                <li><a href="https://www.twitter.com/chatree.kodkan" target="_blank">https://www.twitter.com/chatree.kodkan</a></li>
+                <li><a href="https://www.twitter.com/emmy.emmy.648" target="_blank">https://www.twitter.com/emmy.emmy.648</a></li>
+                <li><a href="https://www.facebook.com/chatree.kodkan" target="_blank">https://www.facebook.com/chatree.kodkan</a></li>
+                <li><a href="https://www.facebook.com/emmy.emmy.648" target="_blank">https://www.facebook.com/emmy.emmy.648</a></li>
+                <li><a href="https://www.stackoverflow.com/chatree.kodkan" target="_blank">https://www.stackoverflow.com/chatree.kodkan</a></li>
+                <li><a href="https://www.stackoverflow.com/emmy.emmy.648" target="_blank">https://www.stackoverflow.com/emmy.emmy.648</a></li>
+                <li><a href="https://admireme.vip/chatree.kodkan" target="_blank">https://admireme.vip/chatree.kodkan</a></li>
+                <li><a href="https://admireme.vip/emmy.emmy.648" target="_blank">https://admireme.vip/emmy.emmy.648</a></li>
+                <li><a href="https://airlinepilot.life/u/chatree.kodkan" target="_blank">https://airlinepilot.life/u/chatree.kodkan</a></li>
+                <li><a href="https://airlinepilot.life/u/emmy.emmy.648" target="_blank">https://airlinepilot.life/u/emmy.emmy.648</a></li>
+                <li><a href="https://anilist.co/user/chatree.kodkan" target="_blank">https://anilist.co/user/chatree.kodkan</a></li>
+                <li><a href="https://anilist.co/user/emmy.emmy.648" target="_blank">https://anilist.co/user/emmy.emmy.648</a></li>
+                <li><a href="https://ask.fedoraproject.org/u/chatree.kodkan" target="_blank">https://ask.fedoraproject.org/u/chatree.kodkan</a></li>
+                <li><a href="https://ask.fedoraproject.org/u/emmy.emmy.648" target="_blank">https://ask.fedoraproject.org/u/emmy.emmy.648</a></li>
+                <li><a href="https://www.avizo.cz/chatree.kodkan" target="_blank">https://www.avizo.cz/chatree.kodkan</a></li>
+                <li><a href="https://www.avizo.cz/emmy.emmy.648" target="_blank">https://www.avizo.cz/emmy.emmy.648</a></li>
+                <li><a href="https://bodyspace.bodybuilding.com/chatree.kodkan" target="_blank">https://bodyspace.bodybuilding.com/chatree.kodkan</a></li>
+                <li><a href="https://bodyspace.bodybuilding.com/emmy.emmy.648" target="_blank">https://bodyspace.bodybuilding.com/emmy.emmy.648</a></li>
+                <li><a href="https://www.buymeacoffee.com/chatree.kodkan" target="_blank">https://www.buymeacoffee.com/chatree.kodkan</a></li>
+                <li><a href="https://www.buymeacoffee.com/emmy.emmy.648" target="_blank">https://www.buymeacoffee.com/emmy.emmy.648</a></li>
+                <li><a href="https://buymeacoff.ee/chatree.kodkan" target="_blank">https://buymeacoff.ee/chatree.kodkan</a></li>
+                <li><a href="https://buymeacoff.ee/emmy.emmy.648" target="_blank">https://buymeacoff.ee/emmy.emmy.648</a></li>
+                <li><a href="https://buzzfeed.com/chatree.kodkan" target="_blank">https://buzzfeed.com/chatree.kodkan</a></li>
+                <li><a href="https://buzzfeed.com/emmy.emmy.648" target="_blank">https://buzzfeed.com/emmy.emmy.648</a></li>
+                <li><a href="https://www.clozemaster.com/players/chatree.kodkan" target="_blank">https://www.clozemaster.com/players/chatree.kodkan</a></li>
+                <li><a href="https://www.clozemaster.com/players/emmy.emmy.648" target="_blank">https://www.clozemaster.com/players/emmy.emmy.648</a></li>
+                <li><a href="https://codesnippets.fandom.com/wiki/User:chatree.kodkan" target="_blank">https://codesnippets.fandom.com/wiki/User:chatree.kodkan</a></li>
+                <li><a href="https://codesnippets.fandom.com/wiki/User:emmy.emmy.648" target="_blank">https://codesnippets.fandom.com/wiki/User:emmy.emmy.648</a></li>
+                <li><a href="https://www.codecademy.com/profiles/chatree.kodkan" target="_blank">https://www.codecademy.com/profiles/chatree.kodkan</a></li>
+                <li><a href="https://www.codecademy.com/profiles/emmy.emmy.648" target="_blank">https://www.codecademy.com/profiles/emmy.emmy.648</a></li>
+                <li><a href="https://www.codechef.com/users/chatree.kodkan" target="_blank">https://www.codechef.com/users/chatree.kodkan</a></li>
+                <li><a href="https://www.codechef.com/users/emmy.emmy.648" target="_blank">https://www.codechef.com/users/emmy.emmy.648</a></li>
+                <li><a href="https://www.dailymotion.com/chatree.kodkan" target="_blank">https://www.dailymotion.com/chatree.kodkan</a></li>
+                <li><a href="https://www.dailymotion.com/emmy.emmy.648" target="_blank">https://www.dailymotion.com/emmy.emmy.648</a></li>
+                <li><a href="https://www.duolingo.com/profile/chatree.kodkan" target="_blank">https://www.duolingo.com/profile/chatree.kodkan</a></li>
+                <li><a href="https://www.duolingo.com/profile/emmy.emmy.648" target="_blank">https://www.duolingo.com/profile/emmy.emmy.648</a></li>
+                <li><a href="https://www.fandom.com/u/chatree.kodkan" target="_blank">https://www.fandom.com/u/chatree.kodkan</a></li>
+                <li><a href="https://www.fandom.com/u/emmy.emmy.648" target="_blank">https://www.fandom.com/u/emmy.emmy.648</a></li>
+                <li><a href="https://my.flightradar24.com/chatree.kodkan" target="_blank">https://my.flightradar24.com/chatree.kodkan</a></li>
+                <li><a href="https://my.flightradar24.com/emmy.emmy.648" target="_blank">https://my.flightradar24.com/emmy.emmy.648</a></li>
+                <li><a href="https://www.forumophilia.com/profile.php?mode=viewprofile&u=chatree.kodkan" target="_blank">https://www.forumophilia.com/profile.php?mode=viewprofile&u=chatree.kodkan</a></li>
+                <li><a href="https://www.forumophilia.com/profile.php?mode=viewprofile&u=emmy.emmy.648" target="_blank">https://www.forumophilia.com/profile.php?mode=viewprofile&u=emmy.emmy.648</a></li>
+                <li><a href="https://www.g2g.com/chatree.kodkan" target="_blank">https://www.g2g.com/chatree.kodkan</a></li>
+                <li><a href="https://www.g2g.com/emmy.emmy.648" target="_blank">https://www.g2g.com/emmy.emmy.648</a></li>
+                <li><a href="https://gitlab.gnome.org/chatree.kodkan" target="_blank">https://gitlab.gnome.org/chatree.kodkan</a></li>
+                <li><a href="https://gitlab.gnome.org/emmy.emmy.648" target="_blank">https://gitlab.gnome.org/emmy.emmy.648</a></li>
+                <li><a href="https://www.gaiaonline.com/profiles/chatree.kodkan" target="_blank">https://www.gaiaonline.com/profiles/chatree.kodkan</a></li>
+                <li><a href="https://www.gaiaonline.com/profiles/emmy.emmy.648" target="_blank">https://www.gaiaonline.com/profiles/emmy.emmy.648</a></li>
+                <li><a href="https://geeksforgeeks.org/user/chatree.kodkan" target="_blank">https://geeksforgeeks.org/user/chatree.kodkan</a></li>
+                <li><a href="https://geeksforgeeks.org/user/emmy.emmy.648" target="_blank">https://geeksforgeeks.org/user/emmy.emmy.648</a></li>
+                <li><a href="https://genius.com/artists/chatree.kodkan" target="_blank">https://genius.com/artists/chatree.kodkan</a></li>
+                <li><a href="https://www.github.com/chatree.kodkan" target="_blank">https://www.github.com/chatree.kodkan</a></li>
+                <li><a href="https://www.github.com/emmy.emmy.648" target="_blank">https://www.github.com/emmy.emmy.648</a></li>
+                <li><a href="http://en.gravatar.com/chatree.kodkan" target="_blank">http://en.gravatar.com/chatree.kodkan</a></li>
+                <li><a href="http://en.gravatar.com/emmy.emmy.648" target="_blank">http://en.gravatar.com/emmy.emmy.648</a></li>
+                <li><a href="https://www.gumroad.com/chatree.kodkan" target="_blank">https://www.gumroad.com/chatree.kodkan</a></li>
+                <li><a href="https://www.gumroad.com/emmy.emmy.648" target="_blank">https://www.gumroad.com/emmy.emmy.648</a></li>
+                <li><a href="https://forums.gunsandammo.com/profile/chatree.kodkan" target="_blank">https://forums.gunsandammo.com/profile/chatree.kodkan</a></li>
+                <li><a href="https://forums.gunsandammo.com/profile/emmy.emmy.648" target="_blank">https://forums.gunsandammo.com/profile/emmy.emmy.648</a></li>
+                <li><a href="https://forum.hackthebox.eu/profile/chatree.kodkan" target="_blank">https://forum.hackthebox.eu/profile/chatree.kodkan</a></li>
+                <li><a href="https://forum.hackthebox.eu/profile/emmy.emmy.648" target="_blank">https://forum.hackthebox.eu/profile/emmy.emmy.648</a></li>
+                <li><a href="https://hackerearth.com/@chatree.kodkan" target="_blank">https://hackerearth.com/@chatree.kodkan</a></li>
+                <li><a href="https://hackerearth.com/@emmy.emmy.648" target="_blank">https://hackerearth.com/@emmy.emmy.648</a></li>
+                <li><a href="https://news.ycombinator.com/user?id=chatree.kodkan" target="_blank">https://news.ycombinator.com/user?id=chatree.kodkan</a></li>
+                <li><a href="https://news.ycombinator.com/user?id=emmy.emmy.648" target="_blank">https://news.ycombinator.com/user?id=emmy.emmy.648</a></li>
+                <li><a href="https://hackerrank.com/chatree.kodkan" target="_blank">https://hackerrank.com/chatree.kodkan</a></li>
+                <li><a href="https://hackerrank.com/emmy.emmy.648" target="_blank">https://hackerrank.com/emmy.emmy.648</a></li>
+                <li><a href="https://holopin.io/@chatree.kodkan" target="_blank">https://holopin.io/@chatree.kodkan</a></li>
+                <li><a href="https://holopin.io/@emmy.emmy.648" target="_blank">https://holopin.io/@emmy.emmy.648</a></li>
+                <li><a href="https://houzz.com/user/chatree.kodkan" target="_blank">https://houzz.com/user/chatree.kodkan</a></li>
+                <li><a href="https://houzz.com/user/emmy.emmy.648" target="_blank">https://houzz.com/user/emmy.emmy.648</a></li>
+                <li><a href="https://hubski.com/user/chatree.kodkan" target="_blank">https://hubski.com/user/chatree.kodkan</a></li>
+                <li><a href="https://hubski.com/user/emmy.emmy.648" target="_blank">https://hubski.com/user/emmy.emmy.648</a></li>
+                <li><a href="https://www.irl.com/chatree.kodkan" target="_blank">https://www.irl.com/chatree.kodkan</a></li>
+                <li><a href="https://www.irl.com/emmy.emmy.648" target="_blank">https://www.irl.com/emmy.emmy.648</a></li>
+                <li><a href="https://imgur.com/user/chatree.kodkan" target="_blank">https://imgur.com/user/chatree.kodkan</a></li>
+                <li><a href="https://imgur.com/user/emmy.emmy.648" target="_blank">https://imgur.com/user/emmy.emmy.648</a></li>
+                <li><a href="https://www.instructables.com/member/chatree.kodkan" target="_blank">https://www.instructables.com/member/chatree.kodkan</a></li>
+                <li><a href="https://www.instructables.com/member/emmy.emmy.648" target="_blank">https://www.instructables.com/member/emmy.emmy.648</a></li>
+                <li><a href="https://www.itemfix.com/c/chatree.kodkan" target="_blank">https://www.itemfix.com/c/chatree.kodkan</a></li>
+                <li><a href="https://www.itemfix.com/c/emmy.emmy.648" target="_blank">https://www.itemfix.com/c/emmy.emmy.648</a></li>
+                <li><a href="https://www.kongregate.com/accounts/chatree.kodkan" target="_blank">https://www.kongregate.com/accounts/chatree.kodkan</a></li>
+                <li><a href="https://www.lesswrong.com/users/@chatree.kodkan" target="_blank">https://www.lesswrong.com/users/@chatree.kodkan</a></li>
+                <li><a href="https://www.lesswrong.com/users/@emmy.emmy.648" target="_blank">https://www.lesswrong.com/users/@emmy.emmy.648</a></li>
+                <li><a href="https://pussy.com/u/chatree.kodkan" target="_blank">https://pussy.com/u/chatree.kodkan</a></li>
+                <li><a href="https://pussy.com/u/emmy.emmy.648" target="_blank">https://pussy.com/u/emmy.emmy.648</a></li>
+                <li><a href="https://lobste.rs/u/chatree.kodkan" target="_blank">https://lobste.rs/u/chatree.kodkan</a></li>
+                <li><a href="https://www.lushstories.com/profile/chatree.kodkan" target="_blank">https://www.lushstories.com/profile/chatree.kodkan</a></li>
+                <li><a href="https://www.lushstories.com/profile/emmy.emmy.648" target="_blank">https://www.lushstories.com/profile/emmy.emmy.648</a></li>
+                <li><a href="https://ninjakiwi.com/profile/chatree.kodkan" target="_blank">https://ninjakiwi.com/profile/chatree.kodkan</a></li>
+                <li><a href="https://ninjakiwi.com/profile/emmy.emmy.648" target="_blank">https://ninjakiwi.com/profile/emmy.emmy.648</a></li>
+                <li><a href="https://www.nitrotype.com/racer/chatree.kodkan" target="_blank">https://www.nitrotype.com/racer/chatree.kodkan</a></li>
+                <li><a href="https://www.nitrotype.com/racer/emmy.emmy.648" target="_blank">https://www.nitrotype.com/racer/emmy.emmy.648</a></li>
+                <li><a href="https://community.oracle.com/people/chatree.kodkan" target="_blank">https://community.oracle.com/people/chatree.kodkan</a></li>
+                <li><a href="https://ourdjtalk.com/members?username=chatree.kodkan" target="_blank">https://ourdjtalk.com/members?username=chatree.kodkan</a></li>
+                <li><a href="https://ourdjtalk.com/members?username=emmy.emmy.648" target="_blank">https://ourdjtalk.com/members?username=emmy.emmy.648</a></li>
+                <li><a href="https://forums.pcgamer.com/members/?username=chatree.kodkan" target="_blank">https://forums.pcgamer.com/members/?username=chatree.kodkan</a></li>
+                <li><a href="https://forums.pcgamer.com/members/?username=emmy.emmy.648" target="_blank">https://forums.pcgamer.com/members/?username=emmy.emmy.648</a></li>
+                <li><a href="https://pocketstars.com/chatree.kodkan" target="_blank">https://pocketstars.com/chatree.kodkan</a></li>
+                <li><a href="https://pocketstars.com/emmy.emmy.648" target="_blank">https://pocketstars.com/emmy.emmy.648</a></li>
+                <li><a href="https://polarsteps.com/chatree.kodkan" target="_blank">https://polarsteps.com/chatree.kodkan</a></li>
+                <li><a href="https://polarsteps.com/emmy.emmy.648" target="_blank">https://polarsteps.com/emmy.emmy.648</a></li>
+                <li><a href="https://www.polygon.com/users/chatree.kodkan" target="_blank">https://www.polygon.com/users/chatree.kodkan</a></li>
+                <li><a href="https://www.polygon.com/users/emmy.emmy.648" target="_blank">https://www.polygon.com/users/emmy.emmy.648</a></li>
+                <li><a href="http://promodj.com/chatree.kodkan" target="_blank">http://promodj.com/chatree.kodkan</a></li>
+                <li><a href="http://promodj.com/emmy.emmy.648" target="_blank">http://promodj.com/emmy.emmy.648</a></li>
+                <li><a href="https://pypi.org/user/chatree.kodkan" target="_blank">https://pypi.org/user/chatree.kodkan</a></li>
+                <li><a href="https://pypi.org/user/emmy.emmy.648" target="_blank">https://pypi.org/user/emmy.emmy.648</a></li>
+                <li><a href="https://www.reddit.com/user/chatree.kodkan" target="_blank">https://www.reddit.com/user/chatree.kodkan</a></li>
+                <li><a href="https://www.reddit.com/user/emmy.emmy.648" target="_blank">https://www.reddit.com/user/emmy.emmy.648</a></li>
+                <li><a href="https://www.roblox.com/user.aspx?username=chatree.kodkan" target="_blank">https://www.roblox.com/user.aspx?username=chatree.kodkan</a></li>
+                <li><a href="https://www.roblox.com/user.aspx?username=emmy.emmy.648" target="_blank">https://www.roblox.com/user.aspx?username=emmy.emmy.648</a></li>
+                <li><a href="https://royalcams.com/profile/chatree.kodkan" target="_blank">https://royalcams.com/profile/chatree.kodkan</a></li>
+                <li><a href="https://royalcams.com/profile/emmy.emmy.648" target="_blank">https://royalcams.com/profile/emmy.emmy.648</a></li>
+                <li><a href="https://apps.runescape.com/runemetrics/app/overview/player/chatree.kodkan" target="_blank">https://apps.runescape.com/runemetrics/app/overview/player/chatree.kodkan</a></li>
+                <li><a href="https://apps.runescape.com/runemetrics/app/overview/player/emmy.emmy.648" target="_blank">https://apps.runescape.com/runemetrics/app/overview/player/emmy.emmy.648</a></li>
+                <li><a href="https://apps.runescape.com/runemetrics/profile/profile?user=chatree.kodkan" target="_blank">https://apps.runescape.com/runemetrics/profile/profile?user=chatree.kodkan</a></li>
+                <li><a href="https://www.scribd.com/chatree.kodkan" target="_blank">https://www.scribd.com/chatree.kodkan</a></li>
+                <li><a href="https://www.scribd.com/emmy.emmy.648" target="_blank">https://www.scribd.com/emmy.emmy.648</a></li>
+                <li><a href="https://slideshare.net/chatree.kodkan" target="_blank">https://slideshare.net/chatree.kodkan</a></li>
+                <li><a href="https://slideshare.net/emmy.emmy.648" target="_blank">https://slideshare.net/emmy.emmy.648</a></li>
+                <li><a href="https://speedrun.com/user/chatree.kodkan" target="_blank">https://speedrun.com/user/chatree.kodkan</a></li>
+                <li><a href="https://speedrun.com/user/emmy.emmy.648" target="_blank">https://speedrun.com/user/emmy.emmy.648</a></li>
+                <li><a href="https://splice.com/chatree.kodkan" target="_blank">https://splice.com/chatree.kodkan</a></li>
+                <li><a href="https://splice.com/emmy.emmy.648" target="_blank">https://splice.com/emmy.emmy.648</a></li>
+                <li><a href="https://steamcommunity.com/groups/chatree.kodkan" target="_blank">https://steamcommunity.com/groups/chatree.kodkan</a></li>
+                <li><a href="https://steamcommunity.com/groups/emmy.emmy.648" target="_blank">https://steamcommunity.com/groups/emmy.emmy.648</a></li>
+                <li><a href="https://ch.tetr.io/u/chatree.kodkan" target="_blank">https://ch.tetr.io/u/chatree.kodkan</a></li>
+                <li><a href="https://ch.tetr.io/u/emmy.emmy.648" target="_blank">https://ch.tetr.io/u/emmy.emmy.648</a></li>
+                <li><a href="https://tldrlegal.com/users/chatree.kodkan" target="_blank">https://tldrlegal.com/users/chatree.kodkan</a></li>
+                <li><a href="https://tldrlegal.com/users/emmy.emmy.648" target="_blank">https://tldrlegal.com/users/emmy.emmy.648</a></li>
+                <li><a href="https://tiktok.com/@chatree.kodkan" target="_blank">https://tiktok.com/@chatree.kodkan</a></li>
+                <li><a href="https://tiktok.com/@emmy.emmy.648" target="_blank">https://tiktok.com/@emmy.emmy.648</a></li>
+                <li><a href="https://www.trakt.tv/users/chatree.kodkan" target="_blank">https://www.trakt.tv/users/chatree.kodkan</a></li>
+                <li><a href="https://www.trakt.tv/users/emmy.emmy.648" target="_blank">https://www.trakt.tv/users/emmy.emmy.648</a></li>
+                <li><a href="https://tryhackme.com/p/chatree.kodkan" target="_blank">https://tryhackme.com/p/chatree.kodkan</a></li>
+                <li><a href="https://tryhackme.com/p/emmy.emmy.648" target="_blank">https://tryhackme.com/p/emmy.emmy.648</a></li>
+                <li><a href="https://tweakers.net/gallery/chatree.kodkan" target="_blank">https://tweakers.net/gallery/chatree.kodkan</a></li>
+                <li><a href="https://tweakers.net/gallery/emmy.emmy.648" target="_blank">https://tweakers.net/gallery/emmy.emmy.648</a></li>
+                <li><a href="https://twitter.com/chatree.kodkan" target="_blank">https://twitter.com/chatree.kodkan</a></li>
+                <li><a href="https://twitter.com/emmy.emmy.648" target="_blank">https://twitter.com/emmy.emmy.648</a></li>
+                <li><a href="https://nitter.net/chatree.kodkan" target="_blank">https://nitter.net/chatree.kodkan</a></li>
+                <li><a href="https://nitter.net/emmy.emmy.648" target="_blank">https://nitter.net/emmy.emmy.648</a></li>
+                <li><a href="https://x.com/chatree.kodkan" target="_blank">https://x.com/chatree.kodkan</a></li>
+                <li><a href="https://x.com/emmy.emmy.648" target="_blank">https://x.com/emmy.emmy.648</a></li>
+                <li><a href="https://ultimate-guitar.com/u/chatree.kodkan" target="_blank">https://ultimate-guitar.com/u/chatree.kodkan</a></li>
+                <li><a href="https://ultimate-guitar.com/u/emmy.emmy.648" target="_blank">https://ultimate-guitar.com/u/emmy.emmy.648</a></li>
+                <li><a href="https://truthsocial.com/@chatree.kodkan" target="_blank">https://truthsocial.com/@chatree.kodkan</a></li>
+                <li><a href="https://truthsocial.com/@emmy.emmy.648" target="_blank">https://truthsocial.com/@emmy.emmy.648</a></li>
+
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>📝 Analysis Summary</h2>
+            <p><strong>Connection:</strong> The phone number +66 95 182 3459 is associated with the username "emmy.emmy.648".</p>
+            <p><strong>Location:</strong> The target appears to be located in Sai Yok District, Kanchanaburi Province, Thailand.</p>
+            <p><strong>Network:</strong> Using True Move 3G network (MCC: 520, MNC: 04).</p>
+            <p><strong>Online Presence:</strong> Multiple social media and online accounts discovered across various platforms.</p>
+
+            <div class="warning">
+                <strong>⚠️ Disclaimer:</strong> This report is for educational and authorized security testing purposes only.
+                The information should be used responsibly and in accordance with applicable laws and regulations.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🛠️ Technical Details</h2>
+            <div class="info-box">
+                <label>Scan Type:</label>
+                <value>Full Scan with Web Scraping</value>
+            </div>
+            <div class="info-box">
+                <label>Tool:</label>
+                <value>Tookie-osint v2.8(c)</value>
+            </div>
+            <div class="info-box">
+                <label>Scan Date:</label>
+                <value>13 January 2026</value>
+            </div>
+            <div class="info-box">
+                <label>Phone Data Date:</label>
+                <value>12 January 2026 14:40 +07</value>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

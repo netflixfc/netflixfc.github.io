@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายงานการติดตามผู้ต้องหา</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Sarabun', 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 20px;
+            color: #2d3748;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 4px solid #e53e3e;
+        }
+        .header h1 {
+            font-size: 42px;
+            color: #e53e3e;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .timestamp {
+            color: #718096;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 25px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-value {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .stat-label {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        .suspect-card {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            border-left: 6px solid #e53e3e;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .suspect-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .suspect-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        .suspect-id {
+            font-size: 16px;
+            color: #718096;
+            background: #e2e8f0;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+        .threat-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .threat-critical {
+            background: #fc8181;
+            color: #742a2a;
+        }
+        .threat-high {
+            background: #f6ad55;
+            color: #7c2d12;
+        }
+        .threat-medium {
+            background: #f6e05e;
+            color: #744210;
+        }
+        .threat-low {
+            background: #9ae6b4;
+            color: #22543d;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .info-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #4a5568;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .info-value {
+            color: #2d3748;
+            font-size: 16px;
+        }
+        .alert-section {
+            background: #fff5f5;
+            border-left: 4px solid #e53e3e;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .alert-title {
+            color: #e53e3e;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .alert-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #fc8181;
+        }
+        .alert-time {
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+        .alert-location {
+            color: #4a5568;
+            margin-bottom: 5px;
+        }
+        .alert-remark {
+            color: #e53e3e;
+            font-weight: bold;
+        }
+        .map-link {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin: 10px 5px;
+            transition: background 0.3s;
+        }
+        .map-link:hover {
+            background: #5a67d8;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        tr:hover {
+            background: #f7fafc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚨 รายงานการติดตามผู้ต้องหา</h1>
+            <p class="timestamp">สร้างรายงาน: 13/01/2026 09:46:23</p>
+        </div>
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-label">ผู้ต้องหาทั้งหมด</div>
+                <div class="stat-value">4</div>
+                <div class="stat-label">ราย</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">จุดติดตามทั้งหมด</div>
+                <div class="stat-value">29</div>
+                <div class="stat-label">จุด</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">ระยะทางรวม</div>
+                <div class="stat-value">246.6</div>
+                <div class="stat-label">กม.</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">⚠️ พื้นที่เสี่ยง</div>
+                <div class="stat-value">8</div>
+                <div class="stat-label">จุด</div>
+            </div>
+        </div>
+
+        <h2 style="color: #2d3748; margin: 40px 0 20px; font-size: 32px;">📍 รายละเอียดผู้ต้องหา</h2>
+
+        <div class="suspect-card">
+            <div class="suspect-header">
+                <div>
+                    <div class="suspect-name">นาย ชาตรี คดขัน</div>
+                    <span class="suspect-id">TARGET-001</span>
+                    <span class="threat-badge threat-high">HIGH RISK</span>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">📱 หมายเลขโทรศัพท์</div>
+                    <div class="info-value">66951234567</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📁 หมายเลขคดี</div>
+                    <div class="info-value">CASE-2026-001</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">⚖️ ประเภทคดี</div>
+                    <div class="info-value">ยาเสพติด</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📊 สถานะ</div>
+                    <div class="info-value">Active</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🗓️ เริ่มติดตาม</div>
+                    <div class="info-value">2026-01-13 08:00:00</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🕐 อัพเดทล่าสุด</div>
+                    <div class="info-value">2026-01-13 16:00:00</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📍 จุดติดตาม</div>
+                    <div class="info-value">10 จุด</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🛣️ ระยะทาง</div>
+                    <div class="info-value">32.0 กม.</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">⚡ ความเร็วสูงสุด</div>
+                    <div class="info-value">48.8 กม./ชม.</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🚶 เคลื่อนที่</div>
+                    <div class="info-value">6 ครั้ง</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🛑 หยุดนิ่ง</div>
+                    <div class="info-value">4 ครั้ง</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">⚠️ พื้นที่เสี่ยง</div>
+                    <div class="info-value">2 จุด</div>
+                </div>
+            </div>
+
+            <div style="margin: 20px 0; padding: 15px; background: white; border-radius: 10px; border-left: 4px solid #48bb78;">
+                <div class="info-label">📍 ตำแหน่งปัจจุบัน</div>
+                <div class="info-value" style="font-size: 18px; margin-top: 10px;">ตำบลบางเมือง อำเภอเมืองสมุทรปราการ สมุทรปราการ 10270</div>
+                <div style="margin-top: 10px;">
+                    <span style="color: #718096;">สถานะ:</span> 
+                    <span style="font-weight: bold; color: #2d3748;">Stationary</span>
+                </div>
+                <a href="https://www.google.com/maps/search/13.532166,100.623424" 
+                   target="_blank" class="map-link">🗺️ ดูบน Google Maps</a>
+            </div>
+
+            <div class="alert-section">
+                <div class="alert-title">🚨 พื้นที่เสี่ยงสูง (2 จุด)</div>
+
+                <div class="alert-item">
+                    <div class="alert-time">⏰ 2026-01-13 15:45:00</div>
+                    <div class="alert-location">📍 ตำบลบางเมือง อำเภอเมืองสมุทรปราการ สมุทรปราการ 10270</div>
+                    <div class="alert-remark">⚠️ เข้าพื้นที่เฝ้าระวัง - Warehouse District</div>
+                </div>
+
+                <div class="alert-item">
+                    <div class="alert-time">⏰ 2026-01-13 16:00:00</div>
+                    <div class="alert-location">📍 ตำบลบางเมือง อำเภอเมืองสมุทรปราการ สมุทรปราการ 10270</div>
+                    <div class="alert-remark">🚨 ALERT: หยุดนิ่งในพื้นที่ต้องสงสัย - ควรส่งทีมติดตาม</div>
+                </div>
+
+            </div>
+
+            <div style="margin-top: 20px; padding: 15px; background: #fffef0; border-left: 4px solid #f6ad55; border-radius: 10px;">
+                <div class="info-label">📝 หมายเหตุจากเจ้าหน้าที่</div>
+                <div class="info-value" style="margin-top: 10px;">มีพฤติกรรมต้องสงสัย: หยุดนิ่งนานในพื้นที่เฝ้าระวัง, เคลื่อนที่เร็วผิดปกติ, พบกับผู้สมรู้ร่วมคิด TARGET-002</div>
+            </div>
+        </div>
+
+        <div class="suspect-card">
+            <div class="suspect-header">
+                <div>
+                    <div class="suspect-name">นาง เอมมี่ อีอี</div>
+                    <span class="suspect-id">TARGET-002</span>
+                    <span class="threat-badge threat-medium">MEDIUM RISK</span>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">📱 หมายเลขโทรศัพท์</div>
+                    <div class="info-value">66987654321</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📁 หมายเลขคดี</div>
+                    <div class="info-value">CASE-2026-001</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">⚖️ ประเภทคดี</div>
+                    <div class="info-value">ยาเสพติด</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📊 สถานะ</div>
+                    <div class="info-value">Active</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🗓️ เริ่มติดตาม</div>
+                    <div class="info-value">2026-01-13 08:00:00</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🕐 อัพเดทล่าสุด</div>
+                    <div class="info-value">2026-01-13 17:00:00</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📍 จุดติดตาม</div>
+                    <div class="info-value">10 จุด</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🛣️ ระยะทาง</div>
+                    <div class="info-value">42.4 กม.</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">⚡ ความเร็วสูงสุด</div>
+                    <div class="info-value">71.2 กม./ชม.</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🚶 เคลื่อนที่</div>
+                    <div class="info-value">6 ครั้ง</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🛑 หยุดนิ่ง</div>
+                    <div class="info-value">4 ครั้ง</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">⚠️ พื้นที่เสี่ยง</div>
+                    <div class="info-value">2 จุด</div>
+                </div>
+            </div>
+
+            <div style="margin: 20px 0; padding: 15px; background: white; border-radius: 10px; border-left: 4px solid #48bb78;">
+                <div class="info-label">📍 ตำแหน่งปัจจุบัน</div>
+                <div class="info-value" style="font-size: 18px; margin-top: 10px;">ถนนพหลโยธิน ตำบลประชาธิปัตย์ อำเภอธัญบุรี ปทุมธานี 12130</div>
+                <div style="margin-top: 10px;">
+                    <span style="color: #718096;">สถานะ:</span> 
+                    <span style="font-weight: bold; color: #2d3748;">Stationary</span>
+                </div>
+                <a href="https://www.google.com/maps/search/13.959562,100.598045" 
+                   target="_blank" class="map-link">🗺️ ดูบน Google Maps</a>
+            </div>
+
+            <div class="alert-section">
+                <div class="alert-title">🚨 พื้นที่เสี่ยงสูง (2 จุด)</div>
+
+                <div class="alert-item">
+                    <div class="alert-time">⏰ 2026-01-13 12:15:00</div>
+                    <div class="alert-location">📍 ถนนพระราม 1 แขวงวังใหม่ เขตปทุมวัน กรุงเทพมหานคร 10330</div>
+                    <div class="alert-remark">⚠️ แยกทางกับ TARGET-001! เคลื่อนที่เร็วกลับย่านสยาม</div>
+                </div>
+
+                <div class="alert-item">
+                    <div class="alert-time">⏰ 2026-01-13 17:00:00</div>
+                    <div class="alert-location">📍 ถนนพหลโยธิน ตำบลประชาธิปัตย์ อำเภอธัญบุรี ปทุมธานี 12130</div>
+                    <div class="alert-remark">🚨 หยุดนิ่งในปทุมธานี - สงสัยที่พักอาศัย</div>
+                </div>
+
+            </div>
+
+            <div style="margin-top: 20px; padding: 15px; background: #fffef0; border-left: 4px solid #f6ad55; border-radius: 10px;">
+                <div class="info-label">📝 หมายเหตุจากเจ้าหน้าที่</div>
+                <div class="info-value" style="margin-top: 10px;">เคลื่อนที่คู่กับ TARGET-001 ในช่วงเช้า, แยกทางตอนบ่าย, หยุดนิ่งใน ปทุมธานี สงสัยที่พักอาศัย</div>
+            </div>
+        </div>
+
+        <div class="suspect-card">
+            <div class="suspect-header">
+                <div>
+                    <div class="suspect-name">นาย สมชาย ทดสอบ</div>
+                    <span class="suspect-id">TARGET-003</span>
+                    <span class="threat-badge threat-critical">CRITICAL RISK</span>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">📱 หมายเลขโทรศัพท์</div>
+                    <div class="info-value">66812345678</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📁 หมายเลขคดี</div>
+                    <div class="info-value">CASE-2026-002</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">⚖️ ประเภทคดี</div>
+                    <div class="info-value">ลักลอบชายแดน</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📊 สถานะ</div>
+                    <div class="info-value">Active</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🗓️ เริ่มติดตาม</div>
+                    <div class="info-value">2026-01-13 10:00:00</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🕐 อัพเดทล่าสุด</div>
+                    <div class="info-value">2026-01-13 16:00:00</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📍 จุดติดตาม</div>
+                    <div class="info-value">4 จุด</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🛣️ ระยะทาง</div>
+                    <div class="info-value">110.9 กม.</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">⚡ ความเร็วสูงสุด</div>
+                    <div class="info-value">51.3 กม./ชม.</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🚶 เคลื่อนที่</div>
+                    <div class="info-value">2 ครั้ง</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🛑 หยุดนิ่ง</div>
+                    <div class="info-value">2 ครั้ง</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">⚠️ พื้นที่เสี่ยง</div>
+                    <div class="info-value">2 จุด</div>
+                </div>
+            </div>
+
+            <div style="margin: 20px 0; padding: 15px; background: white; border-radius: 10px; border-left: 4px solid #48bb78;">
+                <div class="info-label">📍 ตำแหน่งปัจจุบัน</div>
+                <div class="info-value" style="font-size: 18px; margin-top: 10px;">ตำบลท่าเรือ อำเภอเมืองกาญจนบุรี จังหวัดกาญจนบุรี 71000</div>
+                <div style="margin-top: 10px;">
+                    <span style="color: #718096;">สถานะ:</span> 
+                    <span style="font-weight: bold; color: #e53e3e;">Moving</span>
+                </div>
+                <a href="https://www.google.com/maps/search/13.823836,99.836029" 
+                   target="_blank" class="map-link">🗺️ ดูบน Google Maps</a>
+            </div>
+
+            <div class="alert-section">
+                <div class="alert-title">🚨 พื้นที่เสี่ยงสูง (2 จุด)</div>
+
+                <div class="alert-item">
+                    <div class="alert-time">⏰ 2026-01-13 10:00:00</div>
+                    <div class="alert-location">📍 ตำบลไทรโยค อำเภอไทรโยค จังหวัดกาญจนบุรี 71150</div>
+                    <div class="alert-remark">🚨 CRITICAL: พบที่พื้นที่ชายแดน - ห่างจากเมือง 180 กม.</div>
+                </div>
+
+                <div class="alert-item">
+                    <div class="alert-time">⏰ 2026-01-13 16:00:00</div>
+                    <div class="alert-location">📍 ตำบลท่าเรือ อำเภอเมืองกาญจนบุรี จังหวัดกาญจนบุรี 71000</div>
+                    <div class="alert-remark">🚨 เคลื่อนที่กลับเข้าเมือง - ความเร็วปกติ</div>
+                </div>
+
+            </div>
+
+            <div style="margin-top: 20px; padding: 15px; background: #fffef0; border-left: 4px solid #f6ad55; border-radius: 10px;">
+                <div class="info-label">📝 หมายเหตุจากเจ้าหน้าที่</div>
+                <div class="info-value" style="margin-top: 10px;">⚠️ พบในพื้นที่ชายแดนไทย-เมียนมา, หยุดนิ่งนานในพื้นที่ห่างไกล, สงสัยกิจกรรมลักลอบ, ต้องประสานชายแดนทหาร</div>
+            </div>
+        </div>
+
+        <div class="suspect-card">
+            <div class="suspect-header">
+                <div>
+                    <div class="suspect-name">น.ส. สมหญิง ผู้สงสัย</div>
+                    <span class="suspect-id">TARGET-004</span>
+                    <span class="threat-badge threat-high">HIGH RISK</span>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">📱 หมายเลขโทรศัพท์</div>
+                    <div class="info-value">66923456789</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📁 หมายเลขคดี</div>
+                    <div class="info-value">CASE-2026-003</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">⚖️ ประเภทคดี</div>
+                    <div class="info-value">ค้ามนุษย์</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📊 สถานะ</div>
+                    <div class="info-value">Active</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🗓️ เริ่มติดตาม</div>
+                    <div class="info-value">2026-01-13 09:00:00</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🕐 อัพเดทล่าสุด</div>
+                    <div class="info-value">2026-01-13 16:00:00</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📍 จุดติดตาม</div>
+                    <div class="info-value">5 จุด</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🛣️ ระยะทาง</div>
+                    <div class="info-value">61.3 กม.</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">⚡ ความเร็วสูงสุด</div>
+                    <div class="info-value">23.1 กม./ชม.</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🚶 เคลื่อนที่</div>
+                    <div class="info-value">4 ครั้ง</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🛑 หยุดนิ่ง</div>
+                    <div class="info-value">1 ครั้ง</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">⚠️ พื้นที่เสี่ยง</div>
+                    <div class="info-value">2 จุด</div>
+                </div>
+            </div>
+
+            <div style="margin: 20px 0; padding: 15px; background: white; border-radius: 10px; border-left: 4px solid #48bb78;">
+                <div class="info-label">📍 ตำแหน่งปัจจุบัน</div>
+                <div class="info-value" style="font-size: 18px; margin-top: 10px;">ตำบลป่าแป๋ อำเภอแม่แตง เชียงใหม่ 50150</div>
+                <div style="margin-top: 10px;">
+                    <span style="color: #718096;">สถานะ:</span> 
+                    <span style="font-weight: bold; color: #2d3748;">Stationary</span>
+                </div>
+                <a href="https://www.google.com/maps/search/19.158442,98.432422" 
+                   target="_blank" class="map-link">🗺️ ดูบน Google Maps</a>
+            </div>
+
+            <div class="alert-section">
+                <div class="alert-title">🚨 พื้นที่เสี่ยงสูง (2 จุด)</div>
+
+                <div class="alert-item">
+                    <div class="alert-time">⏰ 2026-01-13 15:00:00</div>
+                    <div class="alert-location">📍 ตำบลป่าแป๋ อำเภอแม่แตง เชียงใหม่ 50150</div>
+                    <div class="alert-remark">⚠️ เข้าพื้นที่ภูเขาห่างไกล - ต้องเฝ้าระวัง</div>
+                </div>
+
+                <div class="alert-item">
+                    <div class="alert-time">⏰ 2026-01-13 16:00:00</div>
+                    <div class="alert-location">📍 ตำบลป่าแป๋ อำเภอแม่แตง เชียงใหม่ 50150</div>
+                    <div class="alert-remark">🚨 ALERT: หยุดนิ่งในพื้นที่ห่างไกล - สัญญาณเสี่ยงสูง</div>
+                </div>
+
+            </div>
+
+            <div style="margin-top: 20px; padding: 15px; background: #fffef0; border-left: 4px solid #f6ad55; border-radius: 10px;">
+                <div class="info-label">📝 หมายเหตุจากเจ้าหน้าที่</div>
+                <div class="info-value" style="margin-top: 10px;">เคลื่อนที่จากในเมืองสู่พื้นที่ภูเขาห่างไกล, หยุดนิ่งในพื้นที่เสี่ยง, สงสัยกิจกรรมค้ามนุษย์, ต้องส่งทีมติดตาม</div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 50px; padding-top: 30px; border-top: 3px solid #e2e8f0;">
+            <p style="color: #718096; font-size: 18px;">🔒 เอกสารนี้เป็นความลับ - สำหรับเจ้าหน้าที่ผู้มีอำนาจเท่านั้น</p>
+            <p style="color: #718096; margin-top: 15px; font-size: 16px;">Developer: Gittisak Wannakeeree | 2026</p>
+        </div>
+    </div>
+</body>
+</html>

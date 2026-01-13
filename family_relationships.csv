@@ -1,0 +1,13 @@
+family_id,family_name,relationship_tree,total_members,address,province,suspect_list,high_risk_level,investigation_notes
+FAMILY-001,ครอบครัว ศรีสัมพันธ์,ปู่-พ่อ-แม่-ลูก,4,กระบี่/บุรีรัมย์,กระบี่,SUSPECT-001|SUSPECT-002|SUSPECT-003|SUSPECT-004,High,"ครอบครัวทั้งหมด 4 คน มีความสัมพันธ์เชื่อมโยงกัน: (1) ปู่: นาย เจือม (84 ปี) - มีประวัติลมครึ่ง, (2) พ่อ: นาย ทองสุข (58 ปี) - มีใบขับขี่สากล, (3) แม่: นาง จำป่อน (55 ปี), (4) ลูก: นาง กัญญรัตน์ (22 ปี) - วัยรุ่น อาจมีส่วนเกี่ยวข้องในเครือข่าย"
+
+person_id,full_name,role_in_family,relationship_to_suspect_001,relationship_to_suspect_002,relationship_to_suspect_003,relationship_to_suspect_004,age,id_card,address_primary,phone
+SUSPECT-003,นาย เจือม ศรีสัมพันธ์,ปู่ (Generation 1),พ่อของสามี,พ่อ,ตัวเอง,ปู่,84,5-7206-00052-89-8,กระบี่,0891681020
+SUSPECT-002,นาย ทองสุข ศรีสัมพันธ์,พ่อ (Generation 2),สามี,ตัวเอง,ลูกชาย,พ่อ,58,3-7206-00043-53-1,กระบี่,0865923257
+SUSPECT-001,นาง จำป่อน ปัญญดี,แม่ (Generation 2),ตัวเอง,ภริยา,ลูกสะใภ้,แม่,55,3-3405-00013-29-4,บุรีรัมย์,0949247343
+SUSPECT-004,นาง กัญญรัตน์ ศรีสัมพันธ์,ลูก (Generation 3),ลูก,ลูก,หลานสาว,ตัวเอง,22,1-7098-00400-82-8,บุรีรัมย์,
+
+family_id,generation,member_count,names,ages,living_location
+FAMILY-001,Generation 1 (ปู่ย่า),1,นาย เจือม ศรีสัมพันธ์,84,กระบี่
+FAMILY-001,Generation 2 (พ่อแม่),2,นาย ทองสุข + นาง จำป่อน,"58, 55",กระบี่ + บุรีรัมย์
+FAMILY-001,Generation 3 (ลูก),1,นาง กัญญรัตน์ ศรีสัมพันธ์,22,บุรีรัมย์

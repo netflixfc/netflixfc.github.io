@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายงานการสืบสวนครอบครัวผู้ต้องหา</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Sarabun', 'Cordia New', Arial, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            padding: 20px;
+            color: #2d3748;
+        }
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.5);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 5px solid #e74c3c;
+        }
+        .header h1 {
+            font-size: 48px;
+            color: #e74c3c;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.1);
+        }
+        .header .subtitle {
+            font-size: 24px;
+            color: #34495e;
+            font-weight: bold;
+        }
+        .confidential-banner {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            border-radius: 15px;
+            margin: 30px 0;
+            font-size: 22px;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+        }
+        .family-tree {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 30px 0;
+            border: 3px solid #3498db;
+        }
+        .family-tree h2 {
+            color: #2c3e50;
+            font-size: 32px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .generation {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            border-left: 6px solid #3498db;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .generation-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+        .suspect-card {
+            background: white;
+            border-radius: 15px;
+            padding: 35px;
+            margin: 25px 0;
+            border: 3px solid #e74c3c;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .suspect-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #ecf0f1;
+        }
+        .suspect-name-section {
+            flex: 1;
+        }
+        .suspect-name {
+            font-size: 36px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .suspect-name-en {
+            font-size: 22px;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+        .suspect-id {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .suspect-photo {
+            width: 200px;
+            height: 200px;
+            border-radius: 15px;
+            border: 5px solid #e74c3c;
+            object-fit: cover;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        .info-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 5px solid #3498db;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #34495e;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        .info-value {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .highlight-danger {
+            background: #fee;
+            border-left-color: #e74c3c;
+        }
+        .highlight-warning {
+            background: #fffef0;
+            border-left-color: #f39c12;
+        }
+        .highlight-info {
+            background: #e8f5e9;
+            border-left-color: #27ae60;
+        }
+        .relationships {
+            background: #fff9e6;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #f39c12;
+        }
+        .relationships h3 {
+            color: #d68910;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        .relationship-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #f39c12;
+        }
+        .notes-section {
+            background: linear-gradient(135deg, #fee 0%, #fdd 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 3px solid #e74c3c;
+        }
+        .notes-section h3 {
+            color: #c0392b;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+        .note-item {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #e74c3c;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+        }
+        th {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 18px;
+            text-align: left;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        td {
+            padding: 15px 18px;
+            border-bottom: 2px solid #ecf0f1;
+            font-size: 16px;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 4px solid #ecf0f1;
+        }
+        .footer p {
+            color: #7f8c8d;
+            font-size: 18px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔒 รายงานการสืบสวนครอบครัวผู้ต้องหา</h1>
+            <p class="subtitle">Family Investigation Report</p>
+            <p style="color: #7f8c8d; margin-top: 15px; font-size: 18px;">
+                สร้างรายงาน: 13/01/2026 10:16:41
+            </p>
+        </div>
+
+        <div class="confidential-banner">
+            ⚠️ เอกสารลับสุดยอด - TOP SECRET ⚠️<br/>
+            สำหรับเจ้าหน้าที่ผู้มีอำนาจเท่านั้น - For Authorized Personnel Only
+        </div>
+
+        <div class="family-tree">
+            <h2>🌳 โครงสร้างครอบครัว FAMILY-001: ครอบครัว ศรีสัมพันธ์</h2>
+            
+            <div class="generation">
+                <div class="generation-title">👴 Generation 1: ปู่ (84 ปี)</div>
+                <div style="padding: 15px; background: #e8f5e9; border-radius: 8px; margin-top: 10px;">
+                    <strong style="font-size: 20px; color: #27ae60;">SUSPECT-003: นาย เจือม ศรีสัมพันธ์</strong><br/>
+                    <span style="color: #7f8c8d;">อายุ 84 ปี | เลขบัตร: 5-7206-00052-89-8</span>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 20px 0;">
+                <div style="font-size: 48px; color: #3498db;">↓</div>
+            </div>
+
+            <div class="generation">
+                <div class="generation-title">👨‍👩 Generation 2: พ่อ-แม่ (58 และ 55 ปี)</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px;">
+                    <div style="padding: 15px; background: #e3f2fd; border-radius: 8px;">
+                        <strong style="font-size: 20px; color: #2980b9;">👨 SUSPECT-002: นาย ทองสุข ศรีสัมพันธ์</strong><br/>
+                        <span style="color: #7f8c8d;">อายุ 58 ปี | พ่อ (ลูกของ SUSPECT-003)</span>
+                    </div>
+                    <div style="padding: 15px; background: #fce4ec; border-radius: 8px;">
+                        <strong style="font-size: 20px; color: #c2185b;">👩 SUSPECT-001: นาง จำป่อน ปัญญดี</strong><br/>
+                        <span style="color: #7f8c8d;">อายุ 55 ปี | แม่ (ภริยาของ SUSPECT-002)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 20px 0;">
+                <div style="font-size: 48px; color: #3498db;">↓</div>
+            </div>
+
+            <div class="generation">
+                <div class="generation-title">👧 Generation 3: ลูก (22 ปี)</div>
+                <div style="padding: 15px; background: #fff9e6; border-radius: 8px; margin-top: 10px;">
+                    <strong style="font-size: 20px; color: #f39c12;">SUSPECT-004: นาง กัญญรัตน์ ศรีสัมพันธ์</strong><br/>
+                    <span style="color: #7f8c8d;">อายุ 22 ปี | ลูกสาวของ SUSPECT-001 และ SUSPECT-002</span>
+                </div>
+            </div>
+        </div>
+
+        <h2 style="color: #2c3e50; margin: 50px 0 30px; font-size: 36px; text-align: center;">
+            📋 รายละเอียดผู้ต้องหาทั้งหมด (4 ราย)
+        </h2>
+
+        <div class="suspect-card">
+            <div class="suspect-header">
+                <div class="suspect-name-section">
+                    <div class="suspect-name">นาง จำป่อน ปัญญดี</div>
+                    <div class="suspect-name-en">MissJampon Panyadee</div>
+                    <span class="suspect-id">SUSPECT-001</span>
+                    <span class="suspect-id" style="background: #3498db; margin-left: 10px;">
+                        บทบาท: แม่
+                    </span>
+                </div>
+                <div>
+                    <img src="/mnt/user-data/uploads/S__33456474_0.jpg" 
+                         class="suspect-photo" 
+                         alt="รูปถ่าย นาง จำป่อน ปัญญดี"
+                         onerror="this.style.display='none'">
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item highlight-danger">
+                    <div class="info-label">🆔 เลขบัตรประชาชน</div>
+                    <div class="info-value">3-3405-00013-29-4</div>
+                </div>
+                <div class="info-item highlight-danger">
+                    <div class="info-label">📊 Laser Code</div>
+                    <div class="info-value">3469-000508-7</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">👤 เพศ</div>
+                    <div class="info-value">หญิง</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🎂 วันเกิด</div>
+                    <div class="info-value">15 มีนาคม 2513</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📅 อายุ</div>
+                    <div class="info-value">55 ปี</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🇹🇭 สัญชาติ</div>
+                    <div class="info-value">ไทย</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📱 เบอร์โทร</div>
+                    <div class="info-value">0949247343</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🩸 กรุ๊ปเลือด</div>
+                    <div class="info-value">ไม่ระบุ</div>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item" style="grid-column: 1 / -1;">
+                    <div class="info-label">🏠 ที่อยู่</div>
+                    <div class="info-value">213 หมู่ที่ 4, ตำบลหอมป้อม, อำเภอเฉลิมราช, จังหวัดบุรีรัมย์</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📍 ตำบล</div>
+                    <div class="info-value">หอมป้อม</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🏙️ อำเภอ</div>
+                    <div class="info-value">เฉลิมราช</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🗺️ จังหวัด</div>
+                    <div class="info-value">บุรีรัมย์</div>
+                </div>
+            </div>
+
+            <div class="relationships">
+                <h3>👨‍👩‍👧‍👦 ความสัมพันธ์ในครอบครัว</h3>
+
+                <div class="relationship-item">
+                    <strong>👨 บิดา:</strong> นาย มิตร
+                </div>
+
+                <div class="relationship-item">
+                    <strong>👩 มารดา:</strong> นาง วันที่ 23 มีนาคม 2558
+                </div>
+
+                <div class="relationship-item">
+                    <strong>💍 สถานภาพ:</strong> Married
+                </div>
+            </div>
+
+            <div class="notes-section">
+                <h3>📝 หมายเหตุสำคัญ</h3>
+                <div class="note-item">
+                    รูปถ่ายประจำตัว: แม่ / เลขประจำตัว 0502425690110
+                </div>
+            </div>
+
+        </div>
+
+        <div class="suspect-card">
+            <div class="suspect-header">
+                <div class="suspect-name-section">
+                    <div class="suspect-name">นาย ทองสุข ศรีสัมพันธ์</div>
+                    <div class="suspect-name-en">Mr.Thongsuk Srisamphan</div>
+                    <span class="suspect-id">SUSPECT-002</span>
+                    <span class="suspect-id" style="background: #3498db; margin-left: 10px;">
+                        บทบาท: พ่อ
+                    </span>
+                </div>
+                <div>
+                    <img src="/mnt/user-data/uploads/S__33456475_0.jpg" 
+                         class="suspect-photo" 
+                         alt="รูปถ่าย นาย ทองสุข ศรีสัมพันธ์"
+                         onerror="this.style.display='none'">
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item highlight-warning">
+                    <div class="info-label">🆔 เลขบัตรประชาชน</div>
+                    <div class="info-value">3-7206-00043-53-1</div>
+                </div>
+                <div class="info-item highlight-warning">
+                    <div class="info-label">📊 Laser Code</div>
+                    <div class="info-value">7086-000224-1</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">👤 เพศ</div>
+                    <div class="info-value">ชาย</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🎂 วันเกิด</div>
+                    <div class="info-value">23 มีนาคม 2510</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📅 อายุ</div>
+                    <div class="info-value">58 ปี</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🇹🇭 สัญชาติ</div>
+                    <div class="info-value">ไทย</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📱 เบอร์โทร</div>
+                    <div class="info-value">0865923257</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🩸 กรุ๊ปเลือด</div>
+                    <div class="info-value">A</div>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item" style="grid-column: 1 / -1;">
+                    <div class="info-label">🏠 ที่อยู่</div>
+                    <div class="info-value">46/7 หมู่ที่ 6, ตำบลสากาด, อำเภอท่าโป่ง, จังหวัดกระบี่</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📍 ตำบล</div>
+                    <div class="info-value">สากาด</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🏙️ อำเภอ</div>
+                    <div class="info-value">ท่าโป่ง</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🗺️ จังหวัด</div>
+                    <div class="info-value">กระบี่</div>
+                </div>
+            </div>
+
+            <div style="background: #e8f5e9; padding: 20px; border-radius: 12px; margin: 20px 0; border-left: 5px solid #27ae60;">
+                <h3 style="color: #27ae60; margin-bottom: 15px;">🛂 ข้อมูล Passport</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">📕 Passport Number</div>
+                        <div class="info-value">J929454</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">🌍 ประเทศที่ออก</div>
+                        <div class="info-value">SUPHAN BURI</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">📅 วันออกบัตร</div>
+                        <div class="info-value">24 มกราคม 2554</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">⏰ วันหมดอายุ</div>
+                        <div class="info-value">23 มกราคม 2559</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relationships">
+                <h3>👨‍👩‍👧‍👦 ความสัมพันธ์ในครอบครัว</h3>
+
+                <div class="relationship-item">
+                    <strong>💑 คู่สมรส:</strong> นาย วิสุทธิ์ ศรีสัมพันธ์
+                </div>
+
+                <div class="relationship-item">
+                    <strong>💍 สถานภาพ:</strong> Married
+                </div>
+            </div>
+
+            <div class="notes-section">
+                <h3>📝 หมายเหตุสำคัญ</h3>
+                <div class="note-item">
+                    รูปถ่ายประจำตัว: พ่อ / เลขประจำตัว 0502425690110 / สิทธิบัตรต่างประเทศสากล (สิทธิบัตรขับรถสากล)
+                </div>
+            </div>
+
+        </div>
+
+        <div class="suspect-card">
+            <div class="suspect-header">
+                <div class="suspect-name-section">
+                    <div class="suspect-name">นาย เจือม ศรีสัมพันธ์</div>
+                    <div class="suspect-name-en">Mr.Chuam Srisamphan</div>
+                    <span class="suspect-id">SUSPECT-003</span>
+                    <span class="suspect-id" style="background: #3498db; margin-left: 10px;">
+                        บทบาท: พ่อของพ่อ
+                    </span>
+                </div>
+                <div>
+                    <img src="/mnt/user-data/uploads/S__33456476_0.jpg" 
+                         class="suspect-photo" 
+                         alt="รูปถ่าย นาย เจือม ศรีสัมพันธ์"
+                         onerror="this.style.display='none'">
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item highlight-info">
+                    <div class="info-label">🆔 เลขบัตรประชาชน</div>
+                    <div class="info-value">5-7206-00052-89-8</div>
+                </div>
+                <div class="info-item highlight-info">
+                    <div class="info-label">📊 Laser Code</div>
+                    <div class="info-value">7102-005615-1</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">👤 เพศ</div>
+                    <div class="info-value">ชาย</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🎂 วันเกิด</div>
+                    <div class="info-value">5 กรกฎาคม 2484</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📅 อายุ</div>
+                    <div class="info-value">84 ปี</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🇹🇭 สัญชาติ</div>
+                    <div class="info-value">ไทย</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📱 เบอร์โทร</div>
+                    <div class="info-value">0891681020</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🩸 กรุ๊ปเลือด</div>
+                    <div class="info-value">A</div>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item" style="grid-column: 1 / -1;">
+                    <div class="info-label">🏠 ที่อยู่</div>
+                    <div class="info-value">33/12 หมู่ที่ 3, ตำบลโคกเป็ด, อำเภอโคกเป็ด, จังหวัดกระบี่</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📍 ตำบล</div>
+                    <div class="info-value">โคกเป็ด</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🏙️ อำเภอ</div>
+                    <div class="info-value">โคกเป็ด</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🗺️ จังหวัด</div>
+                    <div class="info-value">กระบี่</div>
+                </div>
+            </div>
+
+            <div style="background: #e8f5e9; padding: 20px; border-radius: 12px; margin: 20px 0; border-left: 5px solid #27ae60;">
+                <h3 style="color: #27ae60; margin-bottom: 15px;">🛂 ข้อมูล Passport</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">📕 Passport Number</div>
+                        <div class="info-value">Y308683</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">🌍 ประเทศที่ออก</div>
+                        <div class="info-value">SUPHAN BURI</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">📅 วันออกบัตร</div>
+                        <div class="info-value">19 ตุลาคม 2541</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">⏰ วันหมดอายุ</div>
+                        <div class="info-value">18 ตุลาคม 2546</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relationships">
+                <h3>👨‍👩‍👧‍👦 ความสัมพันธ์ในครอบครัว</h3>
+
+                <div class="relationship-item">
+                    <strong>👨 บิดา:</strong> นาย บุญดี เอี่ยมทอง
+                </div>
+
+                <div class="relationship-item">
+                    <strong>👩 มารดา:</strong> นาง มอล ศรีสัมพันธ์
+                </div>
+
+                <div class="relationship-item">
+                    <strong>💍 สถานภาพ:</strong> Married
+                </div>
+            </div>
+
+            <div class="notes-section">
+                <h3>📝 หมายเหตุสำคัญ</h3>
+                <div class="note-item">
+                    รูปถ่ายประจำตัว: พ่อของพ่อ / เลขประจำตัว 0502425690110 / สถานะผิดปกติ: ลมครึ่ง สมาชิกครอบครัวที่ผิดปกติ (ลมครึ่ง-ช่วยเหลือตนเองได้) / สถานะสมัครรับบริการ: รพ.สมเจริญระเปิมบารทอนซ์/กระบี่
+                </div>
+            </div>
+
+        </div>
+
+        <div class="suspect-card">
+            <div class="suspect-header">
+                <div class="suspect-name-section">
+                    <div class="suspect-name">นาง กัญญรัตน์ ศรีสัมพันธ์</div>
+                    <div class="suspect-name-en">Miss.Kanyarat Srisamphan</div>
+                    <span class="suspect-id">SUSPECT-004</span>
+                    <span class="suspect-id" style="background: #3498db; margin-left: 10px;">
+                        บทบาท: ลูก
+                    </span>
+                </div>
+                <div>
+                    <img src="/mnt/user-data/uploads/S__33456478_0.jpg" 
+                         class="suspect-photo" 
+                         alt="รูปถ่าย นาง กัญญรัตน์ ศรีสัมพันธ์"
+                         onerror="this.style.display='none'">
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item highlight-warning">
+                    <div class="info-label">🆔 เลขบัตรประชาชน</div>
+                    <div class="info-value">1-7098-00400-82-8</div>
+                </div>
+                <div class="info-item highlight-warning">
+                    <div class="info-label">📊 Laser Code</div>
+                    <div class="info-value">3469-000508-7</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">👤 เพศ</div>
+                    <div class="info-value">หญิง</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🎂 วันเกิด</div>
+                    <div class="info-value">16 เมษายน 2546</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📅 อายุ</div>
+                    <div class="info-value">22 ปี</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🇹🇭 สัญชาติ</div>
+                    <div class="info-value">ไทย</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📱 เบอร์โทร</div>
+                    <div class="info-value">ไม่ระบุ</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🩸 กรุ๊ปเลือด</div>
+                    <div class="info-value">ไม่ระบุ</div>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item" style="grid-column: 1 / -1;">
+                    <div class="info-label">🏠 ที่อยู่</div>
+                    <div class="info-value">บ้านเลขที่ 213, จังหวัดบุรีรัมย์</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">📍 ตำบล</div>
+                    <div class="info-value">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🏙️ อำเภอ</div>
+                    <div class="info-value">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">🗺️ จังหวัด</div>
+                    <div class="info-value">บุรีรัมย์</div>
+                </div>
+            </div>
+
+            <div class="relationships">
+                <h3>👨‍👩‍👧‍👦 ความสัมพันธ์ในครอบครัว</h3>
+
+                <div class="relationship-item">
+                    <strong>👨 บิดา:</strong> นาง จำป่อน ปัญญดี
+                </div>
+
+                <div class="relationship-item">
+                    <strong>👩 มารดา:</strong> นาย ทองสุข ศรีสัมพันธ์
+                </div>
+
+                <div class="relationship-item">
+                    <strong>💍 สถานภาพ:</strong> Single
+                </div>
+            </div>
+
+            <div class="notes-section">
+                <h3>📝 หมายเหตุสำคัญ</h3>
+                <div class="note-item">
+                    รูปถ่ายประจำตัว: ข้อมูลบนเทปบัญชา / เลขประจำตัว 1709800400828 / วันเกิด 16 เมษายน 2546
+                </div>
+            </div>
+
+        </div>
+
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                    padding: 40px; border-radius: 20px; color: white; margin: 50px 0;">
+            <h2 style="font-size: 36px; margin-bottom: 30px; text-align: center;">
+                🔍 สรุปการวิเคราะห์
+            </h2>
+            <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 12px; margin: 20px 0;">
+                <h3 style="font-size: 24px; margin-bottom: 15px;">📊 สถิติครอบครัว</h3>
+                <ul style="list-style-position: inside; font-size: 18px; line-height: 1.8;">
+                    <li>จำนวนสมาชิกทั้งหมด: <strong>4 ราย</strong></li>
+                    <li>จำนวน Generation: <strong>3 ชั่วอายุคน</strong></li>
+                    <li>พื้นที่ที่พำนัก: <strong>กระบี่ (3 ราย), บุรีรัมย์ (2 ราย)</strong></li>
+                    <li>ช่วงอายุ: <strong>22-84 ปี</strong></li>
+                    <li>มีใบขับขี่สากล: <strong>2 ราย (SUSPECT-002, SUSPECT-003)</strong></li>
+                </ul>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 12px; margin: 20px 0;">
+                <h3 style="font-size: 24px; margin-bottom: 15px;">⚠️ จุดที่ต้องเฝ้าระวัง</h3>
+                <ul style="list-style-position: inside; font-size: 18px; line-height: 1.8;">
+                    <li>ครอบครัวมีการกระจายพื้นที่ในหลายจังหวัด (กระบี่-บุรีรัมย์)</li>
+                    <li>SUSPECT-002 และ SUSPECT-003 มีใบขับขี่สากล - สามารถเดินทางข้ามประเทศ</li>
+                    <li>SUSPECT-004 อายุ 22 ปี - วัยหนุ่มสาว อาจถูกใช้เป็นตัวกลาง</li>
+                    <li>SUSPECT-003 อายุ 84 ปี มีประวัติลมครึ่ง - ควรพิจารณาสุขภาพในการสอบสวน</li>
+                </ul>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 12px; margin: 20px 0;">
+                <h3 style="font-size: 24px; margin-bottom: 15px;">💡 ข้อเสนอแนะ</h3>
+                <ul style="list-style-position: inside; font-size: 18px; line-height: 1.8;">
+                    <li>ติดตามพฤติกรรมการเดินทางระหว่างกระบี่-บุรีรัมย์</li>
+                    <li>ตรวจสอบประวัติการเดินทางข้ามแดนของผู้มีใบขับขี่สากล</li>
+                    <li>เฝ้าระวัง SUSPECT-004 ซึ่งอาจถูกใช้เป็นตัวกลางเนื่องจากอายุน้อย</li>
+                    <li>ประสานงานกับหน่วยงานในพื้นที่ทั้ง 2 จังหวัด</li>
+                    <li>ติดตามการติดต่อสื่อสารผ่านหมายเลขโทรศัพท์ที่ระบุ</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p style="font-size: 22px; font-weight: bold; color: #e74c3c;">
+                🔒 เอกสารนี้เป็นความลับสูงสุด - TOP SECRET
+            </p>
+            <p>สำหรับเจ้าหน้าที่ผู้มีอำนาจเท่านั้น - For Authorized Personnel Only</p>
+            <p style="margin-top: 30px;">
+                ผู้จัดทำรายงาน: Gittisak Wannakeeree | 2026
+            </p>
+        </div>
+    </div>
+</body>
+</html>
